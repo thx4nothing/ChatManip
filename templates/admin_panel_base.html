@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" type="text/css" href="../static/admin_panel_style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Admin Panel</h1>
+
+    <div class="persona-section">
+        <h2>Persona Definitions</h2>
+        <select id="personaDropdown">
+            <option value="-1" style="display:none;">Create New</option>
+        </select>
+        <div class="buttons">
+            <button id="createNewBtn">Create New</button>
+            <button id="editSelectedBtn" disabled>Edit Selected</button>
+            <button id="deleteSelectedBtn" disabled>Delete Selected</button>
+        </div>
+        <div id="personaForm" class="hidden">
+            <input type="text" id="personaName" placeholder="Name">
+            <input type="text" id="systemInstruction" placeholder="System Instruction">
+            <input type="text" id="instructionBefore" placeholder="Instruction before User Message">
+            <input type="text" id="instructionAfter" placeholder="Instruction after User Message">
+            <button id="savePersonaBtn">Save Persona</button>
+        </div>
+        <div id="personaDetails">
+            <h3>Persona Details</h3>
+            <p><strong>Name:</strong> <span id="personaNameD"></span></p>
+            <p><strong>System Instruction:</strong> <span id="personaSystemInstruction"></span></p>
+            <p><strong>Instruction Before:</strong> <span id="personaInstructionBefore"></span></p>
+            <p><strong>Instruction After:</strong> <span id="personaInstructionAfter"></span></p>
+        </div>
+    </div>
+
+    <div class="invite-codes-section">
+        <h2>Invite Codes</h2>
+    </div>
+
+    <div class="user-management-section">
+        <h2>User Management</h2>
+        <div id="userList"></div>
+    </div>
+</div>
+<script src="../static/admin_panel_script.js"></script>
+</body>
+</html>
