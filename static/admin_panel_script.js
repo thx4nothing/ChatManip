@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     initializePersonaSection();
     initializeUserManagementSection();
-
+    initializeInviteCodeSection();
 });
 
 function initializePersonaSection() {
@@ -35,6 +35,7 @@ function initializePersonaSection() {
                     option.textContent = persona.name;
                     personaDropdown.appendChild(option);
                 });
+                handlePersonaDropdownChange();
             })
             .catch(error => {
                 console.error("Error fetching personas:", error);
@@ -158,28 +159,30 @@ function initializePersonaSection() {
 
 
     populatePersonaDropdown();
-    handlePersonaDropdownChange();
 }
 
 function initializeUserManagementSection() {
 
-    function listAllUsers() {
+    function populateUserTable() {
+        const userTableDiv = document.getElementById("userTable");
+
+        while (userTableDiv.rows.length > 1) {
+            userTableDiv.deleteRow(1);
+        }
         fetch("/admin/users/")
             .then(response => response.json())
             .then(users => {
-                // Display the users on the admin panel
-                const userListDiv = document.getElementById("userList");
-                userListDiv.innerHTML = "";
                 users.forEach(user => {
-                    const userDiv = document.createElement("div");
-                    userDiv.textContent = `${user.first_name} ${user.last_name} (ID: ${user.user_id}) - API Calls: ${user.api_calls}`;
+                    const row = userTableDiv.insertRow();
+                    row.insertCell().textContent = user.first_name;
+                    row.insertCell().textContent = user.last_name;
+                    row.insertCell().textContent = user.user_id;
+                    row.insertCell().textContent = user.api_calls;
 
                     const deleteBtn = document.createElement("button");
                     deleteBtn.textContent = "Delete";
                     deleteBtn.addEventListener("click", () => deleteUser(user.user_id));
-
-                    userDiv.appendChild(deleteBtn);
-                    userListDiv.appendChild(userDiv);
+                    row.insertCell().appendChild(deleteBtn);
                 });
             })
             .catch(error => {
@@ -195,7 +198,7 @@ function initializeUserManagementSection() {
             .then(response => response.json())
             .then(data => {
                 console.log(data.message);
-                listAllUsers(); // Refresh the user list after deletion
+                populateUserTable(); // Refresh the user list after deletion
             })
             .catch(error => {
                 console.error("Error deleting user:", error);
@@ -203,5 +206,76 @@ function initializeUserManagementSection() {
     }
 
     // Call the functions when the page loads
-    listAllUsers();
+    populateUserTable();
+}
+
+function initializeInviteCodeSection() {
+    const generateCodesBtn = document.getElementById("generateCodesBtn");
+    const numCodesInput = document.getElementById("numCodes");
+    const inviteCodesTable = document.getElementById("inviteCodesTable");
+
+    function populateInviteCodesTable(inviteCodes) {
+        while (inviteCodesTable.rows.length > 1) {
+            inviteCodesTable.deleteRow(1);
+        }
+
+        inviteCodes.forEach(inviteCode => {
+            const row = inviteCodesTable.insertRow();
+            row.insertCell().textContent = inviteCode.invite_code;
+            row.insertCell().textContent = inviteCode.user_id === -1 ? "Not used" : inviteCode.user_id;
+            row.insertCell().textContent = inviteCode.used ? "Yes" : "No";
+            if (!inviteCode.used) {
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+                deleteBtn.addEventListener("click", () => deleteInviteCode(inviteCode.invite_code));
+                row.insertCell().appendChild(deleteBtn);
+            } else {
+                row.insertCell();
+            }
+        });
+    }
+
+    function generateInviteCodes() {
+        const numCodes = numCodesInput.value;
+        fetch(`/admin/invite_codes/?num_codes=${numCodes}`, {
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Generated codes:", data);
+                getInviteCodes();
+            })
+            .catch(error => {
+                console.error("Error generating codes:", error);
+            });
+    }
+
+    function deleteInviteCode(inviteCode) {
+        fetch(`/admin/invite_codes/${inviteCode}`, {
+            method: "DELETE"
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Deleted code:", data);
+                getInviteCodes();
+            })
+            .catch(error => {
+                console.error("Error deleting code:", error);
+            });
+    }
+
+    function getInviteCodes() {
+        fetch("/admin/invite_codes/")
+            .then(response => response.json())
+            .then(data => {
+                console.log("Invite codes:", data);
+                populateInviteCodesTable(data);
+            })
+            .catch(error => {
+                console.error("Error fetching invite codes:", error);
+            });
+    }
+
+    generateCodesBtn.addEventListener("click", generateInviteCodes);
+    getInviteCodes();
 }

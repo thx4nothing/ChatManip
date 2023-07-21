@@ -5,12 +5,14 @@ document.getElementById("userForm").addEventListener("submit", function (event) 
     var first_name = document.getElementById("firstName").value;
     var last_name = document.getElementById("lastName").value;
     var age = document.getElementById("age").value;
+    var invite_code = document.getElementById("invite_code").value;
 
     // Create JSON object with user information
     var userInfo = {
         first_name: first_name,
         last_name: last_name,
-        age: age
+        age: age,
+        invite_code: invite_code
     };
 
     fetch("/create_user", {

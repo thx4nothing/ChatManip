@@ -1,13 +1,15 @@
-from uuid import uuid4 as uuid4
 from typing import Optional
-from utcnow import utcnow
+import random
+import string
 
 from datetime import datetime
+
+from sqlalchemy import Column, Boolean
 from sqlmodel import Field, SQLModel, create_engine
 import sqlalchemy as sa
 
-
 engine = create_engine("sqlite:///database.db")
+
 
 class User(SQLModel, table=True):
     user_id: Optional[int] = Field(
@@ -50,3 +52,18 @@ class Persona(SQLModel, table=True):
     system_instruction: str = ''
     before_instruction: str = ''
     after_instruction: str = ''
+
+
+def generate_invite_code():
+    length = 8
+    characters = ''.join(
+        c for c in string.ascii_letters + string.digits if c not in ['0', 'O', 'I', 'l'])
+
+    invite_code = ''.join(random.choice(characters) for _ in range(length))
+    return invite_code
+
+
+class InviteCode(SQLModel, table=True):
+    invite_code: str = Field(unique=True, primary_key=True)
+    user_id: int = Field(default=-1)
+    used: bool = Field(sa_column=Column(Boolean), default=False)

@@ -2,30 +2,38 @@
 <html>
 <head>
     <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+          integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+          crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../static/admin_panel_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<div class="container">
-    <h1>Admin Panel</h1>
+<div class="container pure-g">
+    <h1 class="pure-u-1">Admin Panel</h1>
 
-    <div class="persona-section">
+    <div class="persona-section pure-u-1">
         <h2>Persona Definitions</h2>
-        <select id="personaDropdown">
+        <select id="personaDropdown" class="pure-u-1-4">
             <option value="-1" style="display:none;">Create New</option>
         </select>
-        <div class="buttons">
-            <button id="createNewBtn">Create New</button>
-            <button id="editSelectedBtn" disabled>Edit Selected</button>
-            <button id="deleteSelectedBtn" disabled>Delete Selected</button>
+        <div class="buttons pure-u-1-4">
+            <button id="createNewBtn" class="pure-button">Create New</button>
+            <button id="editSelectedBtn" class="pure-button" disabled>Edit Selected</button>
+            <button id="deleteSelectedBtn" class="pure-button" disabled>Delete Selected</button>
         </div>
-        <div id="personaForm" class="hidden">
-            <input type="text" id="personaName" placeholder="Name">
-            <input type="text" id="systemInstruction" placeholder="System Instruction">
-            <input type="text" id="instructionBefore" placeholder="Instruction before User Message">
-            <input type="text" id="instructionAfter" placeholder="Instruction after User Message">
-            <button id="savePersonaBtn">Save Persona</button>
+        <div id="personaForm" class="hidden pure-u-1">
+            <input type="text" id="personaName" class="pure-u-1-4" placeholder="Name">
+            <input type="text" id="systemInstruction" class="pure-u-1-4"
+                   placeholder="System Instruction">
+            <input type="text" id="instructionBefore" class="pure-u-1-4"
+                   placeholder="Instruction before User Message">
+            <input type="text" id="instructionAfter" class="pure-u-1-4"
+                   placeholder="Instruction after User Message">
+            <button id="savePersonaBtn" class="pure-button pure-button-primary">Save Persona
+            </button>
         </div>
-        <div id="personaDetails">
+        <div id="personaDetails" class="pure-u-1">
             <h3>Persona Details</h3>
             <p><strong>Name:</strong> <span id="personaNameD"></span></p>
             <p><strong>System Instruction:</strong> <span id="personaSystemInstruction"></span></p>
@@ -34,13 +42,41 @@
         </div>
     </div>
 
-    <div class="invite-codes-section">
+    <div class="invite-code-section pure-u-1">
         <h2>Invite Codes</h2>
+        <input type="number" id="numCodes" class="pure-u-1-4" min="1" value="1">
+        <button id="generateCodesBtn" class="pure-button pure-button-primary">Generate Codes
+        </button>
+        <table id="inviteCodesTable" class="pure-table pure-table-bordered pure-table-striped">
+            <thead>
+            <tr>
+                <th>Invite Code</th>
+                <th>User ID</th>
+                <th>Used</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 
-    <div class="user-management-section">
+
+    <div class="user-management-section pure-u-1">
         <h2>User Management</h2>
-        <div id="userList"></div>
+        <table id="userTable" class="pure-table pure-table-bordered pure-table-striped">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>ID</th>
+                <th>API Calls</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
 <script src="../static/admin_panel_script.js"></script>

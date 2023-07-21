@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Request, HTTPException
 
-from api_server.database import User, Persona, engine
+from api_server.database import User, Persona, engine, InviteCode, generate_invite_code
 from sqlmodel import Session, select
 
 from api_server.templates import templates
@@ -98,3 +98,36 @@ async def delete_persona(persona_id: int):
         db_session.delete(persona)
         db_session.commit()
         return {"message": "Persona deleted successfully"}
+
+
+@router.post("/admin/invite_codes/")
+async def generate_invite_codes(num_codes: int = 1):
+    with Session(engine) as db_session:
+        invite_codes = []
+        for _ in range(num_codes):
+            new_invite_code_str = generate_invite_code()
+            new_invite_code = InviteCode(invite_code=new_invite_code_str)
+            db_session.add(new_invite_code)
+            invite_codes.append(new_invite_code_str)
+        db_session.commit()
+        return invite_codes
+
+
+@router.get("/admin/invite_codes/", response_model=List[InviteCode])
+async def list_invite_codes():
+    with Session(engine) as db_session:
+        statement = select(InviteCode)
+        invite_codes = db_session.exec(statement).all()
+        return invite_codes
+
+
+@router.delete("/admin/invite_codes/{invite_code}", response_model=InviteCode)
+async def delete_invite_code(invite_code: str):
+    with Session(engine) as db_session:
+        statement = select(InviteCode).where(InviteCode.invite_code == invite_code)
+        invite_code_obj = db_session.exec(statement).first()
+        if not invite_code_obj:
+            raise HTTPException(status_code=404, detail="Invite code not found")
+        db_session.delete(invite_code_obj)
+        db_session.commit()
+        return invite_code_obj
