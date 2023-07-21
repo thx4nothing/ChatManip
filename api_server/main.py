@@ -20,5 +20,3 @@ app.include_router(user_creation.router)
 def on_startup():
     SQLModel.metadata.create_all(database.engine)
 
-# openai.api_key = os.getenv("OPENAI_API_KEY")
-# openai.Model.list()

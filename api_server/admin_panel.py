@@ -5,6 +5,8 @@ from fastapi import APIRouter, Request, HTTPException
 from api_server.database import User, Persona, engine, InviteCode, generate_invite_code
 from sqlmodel import Session, select
 
+from api_server.models import RuleResponse
+from api_server.rule import Rule
 from api_server.templates import templates
 
 router = APIRouter()
@@ -131,3 +133,31 @@ async def delete_invite_code(invite_code: str):
         db_session.delete(invite_code_obj)
         db_session.commit()
         return invite_code_obj
+
+
+@router.patch("/admin/invite_codes/{invite_code}", response_model=InviteCode)
+async def update_invite_code(invite_code: str, persona_id: int, rules: str):
+    with Session(engine) as db_session:
+        invite_code_obj = db_session.get(InviteCode, invite_code)
+        if not invite_code_obj:
+            raise HTTPException(status_code=404, detail="Invite code not found")
+        invite_code_obj.persona_id = persona_id
+        invite_code_obj.rules = rules
+        db_session.add(invite_code_obj)
+        db_session.commit()
+        db_session.refresh(invite_code_obj)
+        return invite_code_obj
+
+
+@router.get("/admin/rules/", response_model=List[RuleResponse])
+async def get_rules():
+    # Get all the subclasses of the Rule base class
+    rule_classes = Rule.__subclasses__()
+    rules = []
+
+    for rule_class in rule_classes:
+        rules.append({
+            "name": rule_class.name,
+            "description": rule_class.description
+        })
+    return rules

@@ -1,6 +1,6 @@
+import os
+import openai
 from fastapi import APIRouter, Request
-from pydantic import BaseModel
-
 from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
 
@@ -8,8 +8,14 @@ from api_server.database import engine, ChatSession
 from api_server.templates import templates
 from api_server.models import Message
 
+# FastAPI Routing
 router = APIRouter()
 
+# OpenAI Init
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+
+# openai.Model.list()
 
 @router.get("/session/{session_id}")
 async def session(session_id: int, request: Request):
@@ -31,4 +37,10 @@ async def chat(message: Message):
 
 
 def process_chat_message(message: str):
+    # post system instruction if its first time
+    # pre process message
+    # send message to api
+    # post process response
+
+    # add message and response into database
     return "Antwort"

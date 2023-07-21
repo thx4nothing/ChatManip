@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initializePersonaSection();
     initializeUserManagementSection();
     initializeInviteCodeSection();
+    initializeRulesSection();
 });
 
 function initializePersonaSection() {
@@ -98,11 +99,9 @@ function initializePersonaSection() {
 
         if (selectedPersonaId) {
             fetch(`/admin/personas/${selectedPersonaId}/`, {
-                method: "PUT",
-                headers: {
+                method: "PUT", headers: {
                     "Content-Type": "application/json"
-                },
-                body: JSON.stringify(personaData)
+                }, body: JSON.stringify(personaData)
             })
                 .then(response => response.json())
                 .then(data => {
@@ -115,11 +114,9 @@ function initializePersonaSection() {
                 });
         } else {
             fetch("/admin/personas/", {
-                method: "POST",
-                headers: {
+                method: "POST", headers: {
                     "Content-Type": "application/json"
-                },
-                body: JSON.stringify(personaData)
+                }, body: JSON.stringify(personaData)
             })
                 .then(response => response.json())
                 .then(data => {
@@ -223,14 +220,53 @@ function initializeInviteCodeSection() {
             const row = inviteCodesTable.insertRow();
             row.insertCell().textContent = inviteCode.invite_code;
             row.insertCell().textContent = inviteCode.user_id === -1 ? "Not used" : inviteCode.user_id;
-            row.insertCell().textContent = inviteCode.used ? "Yes" : "No";
+            const personaCell = row.insertCell();
+            const rulesCell = row.insertCell();
+            const saveCell = row.insertCell();
+            const deleteCell = row.insertCell();
+
+            // Create dropdown for Persona
+            const personaDropdown = document.createElement("select");
+            fetch("/admin/personas/")
+                .then(response => response.json())
+                .then(personas => {
+                    personas.forEach(persona => {
+                        const option = document.createElement("option");
+                        option.value = persona.persona_id;
+                        option.textContent = persona.name;
+                        personaDropdown.appendChild(option);
+                    });
+                    personaDropdown.value = inviteCode.persona_id || "";
+                })
+                .catch(error => {
+                    console.error("Error fetching personas:", error);
+                });
+            personaCell.appendChild(personaDropdown);
+
+            // Create textbox for Rules
+            const rulesTextbox = document.createElement("input");
+            rulesTextbox.type = "text";
+            rulesTextbox.placeholder = "Enter a comma separated list of rules";
+            rulesTextbox.value = inviteCode.rules ? inviteCode.rules : "";
+            rulesCell.appendChild(rulesTextbox);
+
+            // Create save button
+            if (!inviteCode.used) {
+                const saveBtn = document.createElement("button");
+                saveBtn.textContent = "Save";
+                saveBtn.addEventListener("click", () => {
+                    const rules = rulesTextbox.value.trim();
+                    updateInviteCode(inviteCode.invite_code, personaDropdown.value, rules);
+                });
+                saveCell.appendChild(saveBtn);
+            }
+
+            // Create delete button
             if (!inviteCode.used) {
                 const deleteBtn = document.createElement("button");
                 deleteBtn.textContent = "Delete";
                 deleteBtn.addEventListener("click", () => deleteInviteCode(inviteCode.invite_code));
-                row.insertCell().appendChild(deleteBtn);
-            } else {
-                row.insertCell();
+                deleteCell.appendChild(deleteBtn);
             }
         });
     }
@@ -276,6 +312,54 @@ function initializeInviteCodeSection() {
             });
     }
 
+    function updateInviteCode(inviteCode, persona_id, rules) {
+        const queryParams = new URLSearchParams({
+            persona_id: parseInt(persona_id), rules: rules
+        });
+        fetch(`/admin/invite_codes/${inviteCode}?${queryParams}`, {
+            method: "PATCH", headers: {
+                "Content-Type": "application/json"
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Updated invite code:", data);
+                getInviteCodes();
+            })
+            .catch(error => {
+                console.error("Error updating invite code:", error);
+            });
+    }
+
     generateCodesBtn.addEventListener("click", generateInviteCodes);
     getInviteCodes();
+}
+
+function initializeRulesSection() {
+    function populateRulesTable(rules) {
+        const rulesTable = document.getElementById("rulesTable");
+        while (rulesTable.rows.length > 1) {
+            rulesTable.deleteRow(1);
+        }
+
+        rules.forEach(rule => {
+            const row = rulesTable.insertRow();
+            row.insertCell().textContent = rule.name;
+            row.insertCell().textContent = rule.description;
+        });
+    }
+
+    function getRules() {
+        fetch("/admin/rules/")
+            .then(response => response.json())
+            .then(data => {
+                console.log("Rules:", data);
+                populateRulesTable(data);
+            })
+            .catch(error => {
+                console.error("Error fetching rules:", error);
+            });
+    }
+
+    getRules();
 }

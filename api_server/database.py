@@ -28,8 +28,8 @@ class ChatSession(SQLModel, table=True):
     user_id: int
     start_time: datetime = Field(default_factory=datetime.now, nullable=False)
     end_time: Optional[datetime] = Field(default=None, nullable=True)
-    system_instruction: str = ''
-    system_rules: str = ''
+    persona_id: Optional[int] = Field(default=None, nullable=True)
+    rules: str = Field(default='')
 
 
 class Messages(SQLModel, table=True):
@@ -48,7 +48,7 @@ class Persona(SQLModel, table=True):
     persona_id: Optional[int] = Field(
         sa_column=sa.Column(sa.Integer, primary_key=True, autoincrement=True, unique=True,
                             nullable=False))
-    name: str
+    name: str = ''
     system_instruction: str = ''
     before_instruction: str = ''
     after_instruction: str = ''
@@ -67,3 +67,5 @@ class InviteCode(SQLModel, table=True):
     invite_code: str = Field(unique=True, primary_key=True)
     user_id: int = Field(default=-1)
     used: bool = Field(sa_column=Column(Boolean), default=False)
+    persona_id: Optional[int] = Field(default=None, nullable=True)
+    rules: str = Field(default='')

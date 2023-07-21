@@ -10,3 +10,8 @@ class UserInformation(BaseModel):
 
 class Message(BaseModel):
     content: str
+
+
+class RuleResponse(BaseModel):
+    name: str
+    description: str
