@@ -9,7 +9,7 @@ const sendButton = document.getElementById("send-button");
 sendButton.addEventListener("click", sendMessage);
 
 // Event listener for Enter key press
-userInput.addEventListener("keyup", function(event) {
+userInput.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
         sendMessage();
     }
@@ -41,20 +41,32 @@ function displayMessage(sender, message) {
 
 // Function to send the message to the server for processing
 function sendToServer(message) {
+    const session_id = getSessionIdFromUrl()
     // Make an HTTP request to the server
-    fetch("/chat", {
+    fetch(`/chat/${session_id}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ content: message })
+        body: JSON.stringify({content: message})
     })
-    .then(response => response.json())
-    .then(data => {
-        const response = data.response;
-        displayMessage("bot", response);
-    })
-    .catch(error => {
-        console.error("Error:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            const response = data.response;
+            displayMessage("bot", response);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
+function getSessionIdFromUrl() {
+    const path = window.location.pathname;
+    const parts = path.split('/');
+    const sessionIdIndex = parts.indexOf('session'); // Find the index of 'session' in the path
+    if (sessionIdIndex !== -1 && sessionIdIndex < parts.length - 1) {
+        // If 'session' is found and the session_id is present in the next part of the path
+        return parseInt(parts[sessionIdIndex + 1]); // Return the session_id
+    }
+    return null; // If session_id is not found, return null
 }
