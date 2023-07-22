@@ -18,13 +18,13 @@ class User(SQLModel, table=True):
     first_name: str
     last_name: str
     age: Optional[int] = None
-    api_calls: int = Field(default=0)
+    api_prompt_tokens: int = Field(default=0)
+    api_completion_tokens: int = Field(default=0)
+    api_total_tokens: int = Field(default=0)
 
 
 class ChatSession(SQLModel, table=True):
-    session_id: Optional[int] = Field(
-        sa_column=sa.Column(sa.Integer, primary_key=True, autoincrement=True, unique=True,
-                            nullable=False))
+    session_id: Optional[str] = Field(unique=True, primary_key=True)
     user_id: int
     start_time: datetime = Field(default_factory=datetime.now, nullable=False)
     end_time: Optional[datetime] = Field(default=None, nullable=True)
@@ -41,7 +41,7 @@ class Messages(SQLModel, table=True):
     response: str
     altered_response: str
     time_stamp: datetime = Field(default_factory=datetime.now, nullable=False)
-    session_id: int
+    session_id: str
 
 
 class Persona(SQLModel, table=True):
