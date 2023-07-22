@@ -31,6 +31,17 @@ async def session(session_id: str, request: Request):
     return templates.TemplateResponse("chat_base.html", {"request": request})
 
 
+@router.get("/session/{session_id}/history")
+async def history(session_id: str):
+    with Session(engine) as db_session:
+        statement = select(ChatSession).where(ChatSession.session_id == session_id)
+        current_session = db_session.exec(statement).first()
+        if current_session is not None:
+            persona = get_session_persona(db_session, current_session)
+            messages = get_chat_history(db_session, current_session, persona, altered=False)
+            return messages
+
+
 @router.post("/chat/{session_id}")
 async def chat(session_id: str, message: Message):
     # Process the chat message
@@ -47,16 +58,10 @@ def process_chat_message(message: str, session_id: str):
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()
         if current_session is not None:
-            statement = select(Persona).where(Persona.persona_id == current_session.persona_id)
-            persona = db_session.exec(statement).first()
+            persona = get_session_persona(db_session, current_session)
 
-            # post system instruction if its first time
-            statement = select(Messages).where(Messages.session_id == session_id)
-            all_messages = db_session.exec(statement).all()
-            messages = [{"role": "system", "content": persona.system_instruction}]
-            for db_message in all_messages:
-                messages.append({"role": "user", "content": db_message.altered_message})
-                messages.append({"role": "system", "content": db_message.response})
+            # get chat history
+            messages = get_chat_history(db_session, current_session, persona)
 
             # pre process message
 
@@ -112,3 +117,23 @@ def process_chat_message(message: str, session_id: str):
             db_session.commit()
 
             return altered_response
+
+
+def get_session_persona(db_session: Session, current_session: ChatSession):
+    statement = select(Persona).where(Persona.persona_id == current_session.persona_id)
+    persona = db_session.exec(statement).first()
+    return persona
+
+
+def get_chat_history(db_session: Session, current_session: ChatSession, persona: Persona,
+                     altered=True):
+    statement = select(Messages).where(Messages.session_id == current_session.session_id)
+    all_messages = db_session.exec(statement).all()
+    messages = []
+    if persona:
+        messages.append({"role": "system", "content": persona.system_instruction})
+    for db_message in all_messages:
+        message = db_message.altered_message if altered else db_message.message
+        messages.append({"role": "user", "content": message})
+        messages.append({"role": "assistant", "content": db_message.response})
+    return messages

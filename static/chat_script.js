@@ -1,5 +1,27 @@
 // JavaScript code for chat functionality
 
+document.addEventListener("DOMContentLoaded", function () {
+
+    function loadChatHistory() {
+        const session_id = getSessionIdFromUrl()
+        // Make an HTTP request to the server
+        fetch(`/session/${session_id}/history`, {})
+            .then(response => response.json())
+            .then(history => {
+                history.forEach(chat => {
+                    const response = chat.content;
+                    const sender = chat.role;
+                    displayMessage(sender, response);
+                });
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+
+    loadChatHistory();
+});
+
 // Get DOM elements
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
@@ -31,6 +53,7 @@ function sendMessage() {
 // Function to display a message in the chat
 function displayMessage(sender, message) {
     const messageElement = document.createElement("div");
+    if (sender === "system") return
     messageElement.classList.add("message");
     messageElement.classList.add(sender === "user" ? "user-message" : "bot-message");
     messageElement.textContent = (sender === "user" ? "You: " : "ChatGPT: ") + message;
@@ -44,16 +67,14 @@ function sendToServer(message) {
     const session_id = getSessionIdFromUrl()
     // Make an HTTP request to the server
     fetch(`/chat/${session_id}`, {
-        method: "POST",
-        headers: {
+        method: "POST", headers: {
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify({content: message})
+        }, body: JSON.stringify({content: message})
     })
         .then(response => response.json())
         .then(data => {
             const response = data.response;
-            displayMessage("bot", response);
+            displayMessage("assistant", response);
         })
         .catch(error => {
             console.error("Error:", error);
