@@ -256,7 +256,9 @@ function initializeInviteCodeSection() {
                 saveBtn.textContent = "Save";
                 saveBtn.addEventListener("click", () => {
                     const rules = rulesTextbox.value.trim();
-                    updateInviteCode(inviteCode.invite_code, personaDropdown.value, rules);
+                    let personaDropdownValue = parseInt(personaDropdown.value)
+                    let persona_id = isNaN(personaDropdownValue) ? -1 : personaDropdownValue
+                    updateInviteCode(inviteCode.invite_code, persona_id, rules);
                 });
                 saveCell.appendChild(saveBtn);
             }

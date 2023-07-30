@@ -141,7 +141,8 @@ async def update_invite_code(invite_code: str, persona_id: int, rules: str):
         invite_code_obj = db_session.get(InviteCode, invite_code)
         if not invite_code_obj:
             raise HTTPException(status_code=404, detail="Invite code not found")
-        invite_code_obj.persona_id = persona_id
+        if persona_id >= 0:
+            invite_code_obj.persona_id = persona_id
         invite_code_obj.rules = rules
         db_session.add(invite_code_obj)
         db_session.commit()
