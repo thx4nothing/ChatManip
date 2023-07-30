@@ -56,7 +56,7 @@ function displayMessage(sender, message) {
     if (sender === "system") return
     messageElement.classList.add("message");
     messageElement.classList.add(sender === "user" ? "user-message" : "bot-message");
-    messageElement.textContent = (sender === "user" ? "You: " : "ChatGPT: ") + message;
+    messageElement.innerHTML = (sender === "user" ? "<strong>You:</strong> " : "<strong>ChatGPT:</strong> ") + DOMPurify.sanitize(marked.parse(message));
 
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
