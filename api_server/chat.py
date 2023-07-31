@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
 
 from api_server.database import engine, ChatSession, Persona, User, Messages
-from api_server.rule import Rule
+from api_server.rule import *
 from api_server.templates import templates
 from api_server.models import Message
 
@@ -50,7 +50,9 @@ async def chat(session_id: str, message: Message):
     return {"response": response}
 
 
-def process_chat_message(message: str, session_id: str):
+def process_chat_message(message: str, session_id: str) -> str:
+    # DEBUG
+    debug = True
     # set variables
     altered_message = message
 
@@ -73,6 +75,8 @@ def process_chat_message(message: str, session_id: str):
                         altered_message = rule_instance.preprocessing(altered_message)
                 except AttributeError:
                     print(f"{rule} is not a defined class.")
+                except Exception as e:
+                    print(f"An unexpected error occurred: {e}")
 
             # apply persona
             if persona:
@@ -81,6 +85,8 @@ def process_chat_message(message: str, session_id: str):
                 if persona.after_instruction:
                     altered_message = altered_message + "\n" + persona.after_instruction
 
+            if debug:
+                return "DEBUG RESPONSE"
             # send message to api
             messages.append({"role": "user", "content": altered_message})
             completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)

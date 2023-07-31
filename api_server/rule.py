@@ -1,6 +1,15 @@
 import random
 from textblob import TextBlob
 
+import nltk
+from nltk import pos_tag
+from nltk.tokenize import word_tokenize
+
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('punkt')
+from nltk.corpus import wordnet
+
 
 class Rule:
     name = "Rule"
@@ -13,32 +22,80 @@ class Rule:
         return response
 
 
+def get_unique_synonyms(word):
+    # Get synsets for the word
+    synsets = wordnet.synsets(word)
+
+    # Get lemmas for each synset and extract unique synonyms
+    synonyms = set(
+        lemma.replace("_", " ") for synset in synsets for lemma in synset.lemma_names())
+
+    # Remove the original word from the set of synonyms
+    synonyms.discard(word)
+
+    return list(synonyms)
+
+
+def find_adjectives_and_nouns(message):
+    # Tokenize the message into words
+    words = word_tokenize(message)
+
+    # Use nltk's part-of-speech tagging to tag each word with its POS
+    tagged_words = pos_tag(words)
+
+    # Initialize lists to store adjectives and nouns
+    adjectives = []
+    nouns = []
+
+    # Iterate over each tagged word
+    for word, pos in tagged_words:
+        # Check if the word is an adjective or a noun
+        if pos.startswith("JJ"):
+            adjectives.append(word)
+        elif pos.startswith("NN"):
+            nouns.append(word)
+
+    return adjectives, nouns
+
+
 class SynonymRule(Rule):
     name = "SynonymRule"
     description = "Replaces words with words"
 
     def __init__(self):
-        self.synonyms = {"hello": "hi", "world": "earth"}
+        self.synonyms_percentage = 1
 
     def preprocessing(self, message):
-        for word, synonym in self.synonyms.items():
+        adjectives, nouns = find_adjectives_and_nouns(message)
+
+        # Get x% of adjectives and nouns (rounded to the nearest integer)
+        num_adjectives_to_replace = int(len(adjectives) * self.synonyms_percentage)
+        num_nouns_to_replace = int(len(nouns) * self.synonyms_percentage)
+
+        synonyms = {}
+        while num_adjectives_to_replace > 0:
+            adj = random.choice(adjectives)
+            adjectives.remove(adj)
+            synonym = random.choice(get_unique_synonyms(adj))
+            synonyms[adj] = synonym
+            num_adjectives_to_replace -= 1
+
+        while num_nouns_to_replace > 0:
+            noun = random.choice(nouns)
+            nouns.remove(noun)
+            synonym = random.choice(get_unique_synonyms(noun))
+            synonyms[noun] = synonym
+            num_nouns_to_replace -= 1
+
+        for word, synonym in synonyms.items():
+            print(word, synonym)
             message = message.replace(word, synonym)
         return message
-
-    def postprocessing(self, response):
-        for word, synonym in self.synonyms.items():
-            response = response.replace(word, synonym)
-        print(response)
-        print(self.synonyms)
-        return response
 
 
 class EmojiRule(Rule):
     name = "EmojiRule"
     description = "Inserts emojis to make responses more expressive and engaging"  # sentimental analysis, place some emojis, resond with alot emojis
-
-    def __init__(self):
-        self.emojis = ["😀", "😂"]
 
     def preprocessing(self, message):
         blob = TextBlob(message)
@@ -50,12 +107,8 @@ class EmojiRule(Rule):
         else:
             sentiment = "negative"
         print(sentiment_polarity)
-        message = message + "\n" + "This is a " + sentiment + " message. Please use a lot of emojis in your response!!"
+        message = message + "\n" + "This is a " + sentiment + " message. Please use a lot of " + sentiment + " emojis in your response!!"
         return message
-
-    def postprocessing(self, response):
-        response = response + "\n" + random.choice(self.emojis)
-        return response
 
 
 class ShortRule(Rule):
