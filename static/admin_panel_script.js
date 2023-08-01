@@ -154,13 +154,13 @@ function initializePersonaSection() {
         })
             .then(response => response.json())
             .then(data => {
-                const json = JSON.stringify(data);
-                const blob = new Blob([json], {type: 'application/json'});
+                const beautifiedJson = JSON.stringify(data, null, 2);
+                const blob = new Blob([beautifiedJson], {type: 'application/json'});
                 const url = URL.createObjectURL(blob);
 
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'persona_database.json';
+                a.download = 'personas_export.json';
                 a.click();
 
                 URL.revokeObjectURL(url);

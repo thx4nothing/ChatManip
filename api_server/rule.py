@@ -67,9 +67,11 @@ class SynonymRule(Rule):
     description = "Replaces words with words"
 
     def __init__(self):
-        self.synonyms_percentage = 1
+        self.synonyms_percentage = 0.8
 
     def preprocessing(self, message):
+        print(self.name + ": Starting Preprocessing")
+
         adjectives, nouns = find_adjectives_and_nouns(message)
 
         # Get x% of adjectives and nouns (rounded to the nearest integer)
@@ -94,6 +96,8 @@ class SynonymRule(Rule):
         for word, synonym in synonyms.items():
             print(word, synonym)
             message = message.replace(word, synonym)
+
+        print(self.name + ": Finished Preprocessing. Preprocessed message: " + message)
         return message
 
 
@@ -102,6 +106,8 @@ class EmojiRule(Rule):
     description = "Inserts emojis to make responses more expressive and engaging"  # sentimental analysis, place some emojis, resond with alot emojis
 
     def preprocessing(self, message):
+        print(self.name + ": Starting Preprocessing")
+
         blob = TextBlob(message)
         sentiment_polarity = blob.sentiment.polarity
         if sentiment_polarity > 0:
@@ -112,6 +118,8 @@ class EmojiRule(Rule):
             sentiment = "negative"
         print(sentiment_polarity)
         message = message + "\n" + "This is a " + sentiment + " message. Please use a lot of " + sentiment + " emojis in your response!!"
+
+        print(self.name + ": Finished Preprocessing. Preprocessed message: " + message)
         return message
 
 
@@ -120,32 +128,16 @@ class SummarizeRule(Rule):
     description = "Summarizes the user message and sends it to ChatGPT"
 
     def preprocessing(self, message):
+        print(self.name + ": Starting Preprocessing")
+
         system_instruction = "Your goal is to summarize the text the user provides. Do not send any other response, only the summarized text."
         messages = [{"role": "system", "content": system_instruction},
                     {"role": "user", "content": message}]
         completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
         summary = completion.choices[0].message.content
+
+        print(self.name + ": Finished Preprocessing. Preprocessed message: " + summary)
         return summary
-
-
-class ShortRule(Rule):
-    name = "ShortRule"
-    description = "Attempts to generate a really short answer"
-
-    def preprocessing(self, message):
-        message = (message + "\n" +
-                   "Please make your answer as short as possible. I mean really REALLY short!")
-        return message
-
-
-class LongRule(Rule):
-    name = "LongRule"
-    description = "Attempts to generate a really long and detailed answer"
-
-    def preprocessing(self, message):
-        message = (message + "\n" +
-                   "Please make your answer as long and detailed as possible. I mean really REALLY long!")
-        return message
 
 
 class HumorRule(Rule):
@@ -153,8 +145,12 @@ class HumorRule(Rule):
     description = "Randomly makes the response contain a joke about the discussed topic"
 
     def preprocessing(self, message):
+        print(self.name + ": Starting Preprocessing")
+
         if random.random() < 0.8:
             message = message + "\n" + "Append a joke about this topic at the end of your response."
+
+        print(self.name + ": Finished Preprocessing. Preprocessed message: " + message)
         return message
 
 
@@ -163,19 +159,27 @@ class StorytellingRule(Rule):
     description = "Responds in a storytelling format to engage the user with narrative driven respones"
 
     def preprocessing(self, message):
-        message = "Once upon a time, this topic was to be discussed: " + "\n" + message + "\n" "What happened next? Tell me about it in a story telling style. like a folk tale."
+        print(self.name + ": Starting Preprocessing")
+
+        message = ("Once upon a time, this topic was to be discussed: " + "\n" + message +
+                   "\n" + "What happened next? Tell me about it in a story telling style, like a folk tale.")
+
+        print(self.name + ": Finished Preprocessing. Preprocessed message: " + message)
         return message
 
 
-class DetectMistakesRule(Rule):
-    name = "DetectMistakesRule"
-    description = "Detects Mistakes"
-
-
-class SarcasmRule(Rule):
-    name = "SarcasmRule"
-    description = "Makes the response contain sarcasm"
+class MakeMistakesRule(Rule):
+    name = "MakeMistakesRule"
+    description = "Asks another instance of ChatGPT to input mistakes into the message."
 
     def preprocessing(self, message):
-        message = message + "\n" + "Make your response as sarcastic as possible."
-        return message
+        print(self.name + ": Starting Preprocessing")
+
+        system_instruction = "You are an anti proof reader. You will put mistakes into the given message and reply with that."
+        messages = [{"role": "system", "content": system_instruction},
+                    {"role": "user", "content": message}]
+        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+        response = completion.choices[0].message.content
+
+        print(self.name + ": Finished Preprocessing. Preprocessed message: " + response)
+        return response
