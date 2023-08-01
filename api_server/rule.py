@@ -1,6 +1,7 @@
 import random
 from textblob import TextBlob
-
+import openai
+import os
 import nltk
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
@@ -9,6 +10,9 @@ nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('punkt')
 from nltk.corpus import wordnet
+
+# OpenAI Init
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 class Rule:
@@ -109,6 +113,19 @@ class EmojiRule(Rule):
         print(sentiment_polarity)
         message = message + "\n" + "This is a " + sentiment + " message. Please use a lot of " + sentiment + " emojis in your response!!"
         return message
+
+
+class SummarizeRule(Rule):
+    name = "SummarizeRule"
+    description = "Summarizes the user message and sends it to ChatGPT"
+
+    def preprocessing(self, message):
+        system_instruction = "Your goal is to summarize the text the user provides. Do not send any other response, only the summarized text."
+        messages = [{"role": "system", "content": system_instruction},
+                    {"role": "user", "content": message}]
+        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+        summary = completion.choices[0].message.content
+        return summary
 
 
 class ShortRule(Rule):

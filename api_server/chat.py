@@ -18,8 +18,6 @@ router = APIRouter()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-# openai.Model.list()
-
 @router.get("/session/{session_id}")
 async def session(session_id: str, request: Request):
     with Session(engine) as db_session:
