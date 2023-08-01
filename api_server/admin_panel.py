@@ -1,6 +1,7 @@
+import json
 from typing import List
 
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, UploadFile, File
 
 from api_server.database import User, Persona, engine, InviteCode, generate_invite_code
 from sqlmodel import Session, select
@@ -55,8 +56,10 @@ async def create_persona(persona: Persona):
             before_instruction=persona.before_instruction,
             after_instruction=persona.after_instruction
         )
-        db_session.add(new_persona)
-        db_session.commit()
+
+        if not does_persona_exist(db_session, new_persona):
+            db_session.add(new_persona)
+            db_session.commit()
         return persona
 
 
@@ -162,3 +165,41 @@ async def get_rules():
             "description": rule_class.description
         })
     return rules
+
+
+@router.get("/admin/personas/export")
+async def export_persona_database():
+    with Session(engine) as db_session:
+        statement = select(Persona)
+        personas = db_session.exec(statement).all()
+        persona_data = [{"name": persona.name,
+                         "system_instruction": persona.system_instruction,
+                         "before_instruction": persona.before_instruction,
+                         "after_instruction": persona.after_instruction} for persona in personas]
+        return persona_data
+
+
+@router.post("/admin/personas/import")
+async def import_persona_database(file: UploadFile = File(...)):
+    data = await file.read()
+    personas_to_import = json.loads(data)
+
+    with Session(engine) as db_session:
+        for imported_persona in personas_to_import:
+            persona = Persona(**imported_persona)
+            if not does_persona_exist(db_session, persona):
+                db_session.add(persona)
+        db_session.commit()
+        return {"message": "Import successful"}
+
+
+def does_persona_exist(db_session: Session, new_persona: Persona) -> bool:
+    statement = select(Persona).filter(Persona.name == new_persona.name)
+    existing_personas = db_session.exec(statement).all()
+
+    for existing_persona in existing_personas:
+        if (existing_persona.system_instruction == new_persona.system_instruction and
+                existing_persona.before_instruction == new_persona.before_instruction and
+                existing_persona.after_instruction == new_persona.after_instruction):
+            return True
+    return False

@@ -148,12 +148,65 @@ function initializePersonaSection() {
         }
     }
 
+    function exportPersonaDatabase() {
+        fetch('/admin/personas/export', {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                const json = JSON.stringify(data);
+                const blob = new Blob([json], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'persona_database.json';
+                a.click();
+
+                URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error('Error exporting persona database:', error);
+            });
+    }
+
+    function importPersonaDatabase(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch('/admin/personas/import', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Import successful:', data);
+                populatePersonaDropdown();
+            })
+            .catch(error => {
+                console.error('Error importing persona database:', error);
+            });
+    }
+
     createNewBtn.addEventListener("click", handleCreateNewClick);
     editSelectedBtn.addEventListener("click", handleEditSelectedClick);
     deleteSelectedBtn.addEventListener("click", handleDeleteSelectedClick);
     savePersonaBtn.addEventListener("click", handleSavePersonaClick);
     personaDropdown.addEventListener("change", handlePersonaDropdownChange);
 
+    document.getElementById('exportPersonaBtn').addEventListener('click', exportPersonaDatabase);
+
+    document.getElementById('importPersonaBtn').addEventListener('click', () => {
+        const importPersonaInput = document.getElementById('importPersonaInput');
+        importPersonaInput.click();
+    });
+
+    document.getElementById('importPersonaInput').addEventListener('change', event => {
+        const file = event.target.files[0];
+        if (file) {
+            importPersonaDatabase(file);
+        }
+    });
 
     populatePersonaDropdown();
 }
