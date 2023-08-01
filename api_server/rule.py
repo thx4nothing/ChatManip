@@ -175,7 +175,7 @@ class MakeMistakesRule(Rule):
     def preprocessing(self, message):
         print(self.name + ": Starting Preprocessing")
 
-        system_instruction = "You are an anti proof reader. You will put mistakes into the given message and reply with that."
+        system_instruction = "You will put mistakes into the given user message and return that mistake ridden message."
         messages = [{"role": "system", "content": system_instruction},
                     {"role": "user", "content": message}]
         completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)

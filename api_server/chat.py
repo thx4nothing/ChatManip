@@ -50,7 +50,7 @@ async def chat(session_id: str, message: Message):
 
 def process_chat_message(message: str, session_id: str) -> str:
     # DEBUG
-    debug = True
+    debug = False
     # set variables
     altered_message = message
 
@@ -73,27 +73,31 @@ def process_chat_message(message: str, session_id: str) -> str:
                         altered_message = rule_instance.preprocessing(altered_message)
                 except AttributeError:
                     print(f"{rule} is not a defined class.")
-                except Exception as e:
-                    print(f"An unexpected error occurred: {e}")
 
             # apply persona
+            print("Start of Persona:")
             if persona:
+                print(persona.name)
                 if persona.before_instruction:
                     altered_message = persona.before_instruction + "\n" + altered_message
                 if persona.after_instruction:
                     altered_message = altered_message + "\n" + persona.after_instruction
+                print("Altered Message:")
+                print(altered_message)
+            print("End of Persona.")
 
             if debug:
                 return "DEBUG RESPONSE"
+
             # send message to api
             messages.append({"role": "user", "content": altered_message})
             completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
             chat_response = completion.choices[0].message.content
-            altered_response = chat_response
             print(chat_response)
 
             # post process response
 
+            altered_response = chat_response
             for rule in current_session.rules.split(","):
                 try:
                     rule_class = getattr(sys.modules["api_server.rule"], rule)
@@ -136,6 +140,8 @@ def get_chat_history(db_session: Session, current_session: ChatSession, persona:
     messages = []
     if persona:
         messages.append({"role": "system", "content": persona.system_instruction})
+        print("Persona system instruction:")
+        print(persona.system_instruction)
     for db_message in all_messages:
         message = db_message.altered_message if altered else db_message.message
         messages.append({"role": "user", "content": message})
