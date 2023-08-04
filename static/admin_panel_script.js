@@ -227,7 +227,9 @@ function initializeUserManagementSection() {
                     row.insertCell().textContent = user.first_name;
                     row.insertCell().textContent = user.last_name;
                     row.insertCell().textContent = user.user_id;
-                    row.insertCell().textContent = user.api_calls;
+                    row.insertCell().textContent = user.api_prompt_tokens;
+                    row.insertCell().textContent = user.api_completion_tokens;
+                    row.insertCell().textContent = user.api_total_tokens;
 
                     const deleteBtn = document.createElement("button");
                     deleteBtn.textContent = "Delete";
