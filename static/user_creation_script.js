@@ -6,17 +6,19 @@ document.getElementById("userForm").addEventListener("submit", function (event) 
         return false;
     }
 
-    // Get form values
-    var first_name = document.getElementById("firstName").value;
-    var last_name = document.getElementById("lastName").value;
     var age = document.getElementById("age").value;
+    var gender = document.getElementById("gender").value;
+    var occupation = document.getElementById("occupation").value;
+    var location = document.getElementById("location").value;
+    var language = document.querySelector('input[name="language"]:checked').value;
     var invite_code = document.getElementById("invite_code").value;
 
-    // Create JSON object with user information
     var userInfo = {
-        first_name: first_name,
-        last_name: last_name,
         age: age,
+        gender: gender,
+        occupation: occupation,
+        location: location,
+        language: language,
         invite_code: invite_code
     };
 

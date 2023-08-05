@@ -15,9 +15,11 @@ class User(SQLModel, table=True):
     user_id: Optional[int] = Field(
         sa_column=sa.Column(sa.Integer, primary_key=True, autoincrement=True, unique=True,
                             nullable=False))
-    first_name: str
-    last_name: str
     age: Optional[int] = None
+    gender: str
+    occupation: str
+    location: str
+    language: str
     api_prompt_tokens: int = Field(default=0)
     api_completion_tokens: int = Field(default=0)
     api_total_tokens: int = Field(default=0)

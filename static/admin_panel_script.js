@@ -224,8 +224,11 @@ function initializeUserManagementSection() {
             .then(users => {
                 users.forEach(user => {
                     const row = userTableDiv.insertRow();
-                    row.insertCell().textContent = user.first_name;
-                    row.insertCell().textContent = user.last_name;
+                    row.insertCell().textContent = user.age;
+                    row.insertCell().textContent = user.gender;
+                    row.insertCell().textContent = user.occupation;
+                    row.insertCell().textContent = user.location;
+                    row.insertCell().textContent = user.language;
                     row.insertCell().textContent = user.user_id;
                     row.insertCell().textContent = user.api_prompt_tokens;
                     row.insertCell().textContent = user.api_completion_tokens;
@@ -241,6 +244,7 @@ function initializeUserManagementSection() {
                 console.error("Error fetching users:", error);
             });
     }
+
 
     // Button to handle user deletion
     function deleteUser(userId) {
