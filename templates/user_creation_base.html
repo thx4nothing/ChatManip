@@ -3,6 +3,10 @@
 <head>
     <title>User Creation</title>
     <link rel="stylesheet" href="../static/user_creation_styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+          integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"/>
 </head>
 <body>
 <h1>User Creation</h1>
@@ -18,9 +22,105 @@
 
     <label for="invite_code">Invite Code:</label>
     <input type="text" id="invite_code" name="invite_code" required>
-
-    <button type="submit">Create User</button>
+    <label for="dataCollectionCheckbox">
+        <input type="checkbox" id="dataCollectionCheckbox" name="dataCollectionCheckbox">
+        I hereby grant my explicit consent for the collection and processing of my personal data in accordance with the
+        <a href="#" id="privacyPolicyLink">privacy policy</a>.
+    </label>
+    <br>
+    <button type="submit" id="createUserButton">Create User</button>
 </form>
+
+<div id="privacyPolicyModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2>Privacy Policy</h2>
+            </header>
+            <div class="modal-body">
+                <p>
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Privacy Policy</title>
+                    </head>
+                    <body>
+
+                    <h1>Privacy Policy</h1>
+
+                    <p>Thank you for using <strong>our ChatManip</strong>. This
+                        Privacy Policy is designed to help you understand how we collect, use, and safeguard your
+                        personal information. By using our services, you consent to the practices described herein.</p>
+
+                    <h2>Information We Collect</h2>
+
+                    <p>We collect and store certain information to enhance your experience and improve our services.
+                        This includes:</p>
+
+                    <ul>
+                        <li>Chat logs: We may save chat logs to analyze and improve user interactions. These logs are
+                            stored anonymously and are not linked to identifiable personal information.
+                        </li>
+                        <li>Demographic Information: We collect age, gender, and occupation to better understand our
+                            user base. This information is anonymized and aggregated for statistical analysis.
+                        </li>
+                        <li>IP Address: We may collect your IP address for security purposes and to analyze usage
+                            patterns. IP addresses are stored in an anonymized format.
+                        </li>
+                        <li>Language Preference: We record your language preference for tailored user experiences. This
+                            information is kept separate from your personal data.
+                        </li>
+                        <li>Survey Answers: If you participate in surveys, we may collect your responses anonymously to
+                            gain insights into user opinions and preferences.
+                        </li>
+                        <li>Metadata: We collect metadata, such as timestamps, to analyze usage patterns and improve our
+                            services. This data is anonymized and used for statistical purposes.
+                        </li>
+                    </ul>
+
+                    <h2>How We Use Your Data</h2>
+
+                    <p>The data we collect is used to enhance and personalize our services. We analyze anonymized
+                        information to improve user experiences, troubleshoot technical issues, and develop new
+                        features. Your data is never sold or shared with third parties in a personally identifiable
+                        manner.</p>
+
+                    <h2>Data Security</h2>
+
+                    <p>We take data security seriously. We use industry-standard measures to protect your information
+                        from unauthorized access, alteration, or disclosure.</p>
+
+                    <h2>Your Choices</h2>
+
+                    <p>You can choose not to provide certain information or opt-out of data collection. However, please
+                        note that this might affect your experience and limit the availability of certain features.</p>
+
+                    <h2>Changes to this Policy</h2>
+
+                    <p>We may update this Privacy Policy from time to time. Please review it periodically for any
+                        changes.</p>
+
+                    <h2>Contact Us</h2>
+
+                    <p>If you have any questions about our Privacy Policy or how your data is handled, please contact us
+                        at <a href="mailto:m.beck@uni-bielefeld.de">m.beck@uni-bielefeld.de</a>.</p>
+
+                    <p><em>Effective Date: 2023-08-05</em></p>
+
+                    </body>
+                    </html>
+
+                </p>
+            </div>
+            <footer class="modal-footer">
+                <button id="agreeButton" class="pure-button pure-button-primary">Agree</button>
+                <button id="disagreeButton" class="pure-button">Disagree</button>
+            </footer>
+        </div>
+    </div>
+</div>
+
+
 <script src="../static/user_creation_script.js"></script>
 </body>
 </html>

@@ -1,6 +1,11 @@
 document.getElementById("userForm").addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent form submission
 
+    if (!document.getElementById('dataCollectionCheckbox').checked) {
+        alert("Please agree to the data collection terms.");
+        return false;
+    }
+
     // Get form values
     var first_name = document.getElementById("firstName").value;
     var last_name = document.getElementById("lastName").value;
@@ -22,19 +27,39 @@ document.getElementById("userForm").addEventListener("submit", function (event) 
         },
         body: JSON.stringify(userInfo)
     })
-    .then(response => {
-        if (response.redirected) {
-            // Get the redirect URL from the response headers
-            const redirectUrl = response.url;
+        .then(response => {
+            if (response.redirected) {
+                // Get the redirect URL from the response headers
+                const redirectUrl = response.url;
 
-            // Manually redirect the user to the new URL
-            window.location.href = redirectUrl;
-        }
-    })
-    .catch(error => {
-        console.error("Error creating user:", error);
-    });
+                // Manually redirect the user to the new URL
+                window.location.href = redirectUrl;
+            }
+        })
+        .catch(error => {
+            console.error("Error creating user:", error);
+        });
 
     // Reset the form
     document.getElementById("userForm").reset();
+});
+
+const privacyPolicyLink = document.getElementById('privacyPolicyLink');
+const privacyPolicyModal = document.getElementById('privacyPolicyModal');
+const agreeButton = document.getElementById('agreeButton');
+const disagreeButton = document.getElementById('disagreeButton');
+const dataCollectionCheckbox = document.getElementById('dataCollectionCheckbox');
+
+privacyPolicyLink.addEventListener('click', function () {
+    privacyPolicyModal.classList.add('is-visible');
+});
+
+agreeButton.addEventListener('click', function () {
+    dataCollectionCheckbox.checked = true;
+    privacyPolicyModal.classList.remove('is-visible');
+});
+
+disagreeButton.addEventListener('click', function () {
+    dataCollectionCheckbox.checked = false;
+    privacyPolicyModal.classList.remove('is-visible');
 });
