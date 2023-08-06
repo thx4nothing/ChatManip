@@ -19,4 +19,3 @@ app.include_router(user_creation.router)
 @app.on_event("startup")
 def on_startup():
     SQLModel.metadata.create_all(database.engine)
-

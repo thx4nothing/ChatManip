@@ -1,7 +1,7 @@
 import random
 from textblob import TextBlob
-import openai
-import os
+from api_server.chatgpt_interface import request_system_response
+
 import nltk
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
@@ -10,9 +10,6 @@ nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('punkt')
 from nltk.corpus import wordnet
-
-# OpenAI Init
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 class Rule:
@@ -133,9 +130,9 @@ class SummarizeRule(Rule):
         system_instruction = "Your goal is to summarize the text the user provides. Do not send any other response, only the summarized text."
         messages = [{"role": "system", "content": system_instruction},
                     {"role": "user", "content": message}]
-        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
-        summary = completion.choices[0].message.content
-
+        # completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+        # summary = completion.choices[0].message.content
+        summary = request_system_response(messages)
         print(self.name + ": Finished Preprocessing. Preprocessed message: " + summary)
         return summary
 
@@ -178,8 +175,7 @@ class MakeMistakesRule(Rule):
         system_instruction = "You will put mistakes into the given user message and return that mistake ridden message."
         messages = [{"role": "system", "content": system_instruction},
                     {"role": "user", "content": message}]
-        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
-        response = completion.choices[0].message.content
+        response = request_system_response(messages)
 
         print(self.name + ": Finished Preprocessing. Preprocessed message: " + response)
         return response

@@ -1,7 +1,5 @@
-import os
 import sys
 
-import openai
 from fastapi import APIRouter, Request
 from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
@@ -10,12 +8,10 @@ from api_server.database import engine, ChatSession, Persona, User, Messages
 from api_server.rule import *
 from api_server.templates import templates
 from api_server.models import Message
+from api_server.chatgpt_interface import request_response, Ok, Err
 
 # FastAPI Routing
 router = APIRouter()
-
-# OpenAI Init
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 @router.get("/session/{session_id}")
@@ -29,6 +25,14 @@ async def session(session_id: str, request: Request):
     return templates.TemplateResponse("chat_base.html", {"request": request})
 
 
+def add_message_to_database(db_session, session_id, message, altered_message, chat_response, altered_response):
+    db_message = Messages(message=message, altered_message=altered_message,
+                          response=chat_response, altered_response=altered_response,
+                          session_id=session_id)
+    db_session.add(db_message)
+    db_session.commit()
+
+
 @router.get("/chat/{session_id}/greetings")
 async def greetings(session_id: str):
     print("Greetings requested.")
@@ -40,15 +44,14 @@ async def greetings(session_id: str):
             messages = []
             if persona:
                 messages.append({"role": "system", "content": persona.system_instruction})
-            messages.append({"role": "user", "content": "Greet me please."})
-            completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
-            chat_response = completion.choices[0].message.content
-            db_message = Messages(message="", altered_message="",
-                                  response=chat_response, altered_response=chat_response,
-                                  session_id=session_id)
-            db_session.add(db_message)
-            db_session.commit()
-            return {"response": chat_response}
+            greetings_request = "Greet me please."
+            messages.append({"role": "user", "content": greetings_request})
+            chat_response = request_response(session_id, messages)
+            if isinstance(chat_response, Ok):
+                add_message_to_database(db_session, session_id, "", "", chat_response.value, "")
+                return {"response": chat_response.value}
+            else:
+                print(chat_response.error_message)
 
 
 @router.get("/session/{session_id}/history")
@@ -64,91 +67,75 @@ async def history(session_id: str):
 
 @router.post("/chat/{session_id}")
 async def chat(session_id: str, message: Message):
-    # Process the chat message
-    print(session_id)
-    response = process_user_chat_message(message.content, session_id)
-    # process user input
-    # process response
-    return {"response": response}
-
-
-def process_user_chat_message(message: str, session_id: str) -> str:
-    # DEBUG
-    debug = False
-    # set variables
-    altered_message = message
-
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()
         if current_session is not None:
-            persona = get_session_persona(db_session, current_session)
+            # Process the chat message
+            print(session_id)
+            response = process_user_chat_message(db_session, current_session, message.content)
+            # process user input
+            # process response
+            return {"response": response}
 
-            # get chat history
-            messages = get_chat_history(db_session, current_session, persona)
 
-            # pre process message
+def process_user_chat_message(db_session: Session, current_session: ChatSession, message: str) -> str:
+    # get persona
+    persona = get_session_persona(db_session, current_session)
 
-            for rule in current_session.rules.split(","):
-                try:
-                    rule_class = getattr(sys.modules["api_server.rule"], rule)
-                    if issubclass(rule_class, Rule):
-                        rule_instance = rule_class()
-                        altered_message = rule_instance.preprocessing(altered_message)
-                except AttributeError:
-                    print(f"{rule} is not a defined class.")
+    # get chat history
+    messages = get_chat_history(db_session, current_session, persona)
 
-            # apply persona
-            print("Start of Persona:")
-            if persona:
-                print(persona.name)
-                if persona.before_instruction:
-                    altered_message = persona.before_instruction + "\n" + altered_message
-                if persona.after_instruction:
-                    altered_message = altered_message + "\n" + persona.after_instruction
-                print("Altered Message:")
-                print(altered_message)
-            print("End of Persona.")
+    # pre process message
 
-            if debug:
-                return "DEBUG RESPONSE"
+    altered_message = message
+    for rule in current_session.rules.split(","):
+        try:
+            rule_class = getattr(sys.modules["api_server.rule"], rule)
+            if issubclass(rule_class, Rule):
+                rule_instance = rule_class()
+                altered_message = rule_instance.preprocessing(altered_message)
+        except AttributeError:
+            print(f"{rule} is not a defined class.")
 
-            # send message to api
-            messages.append({"role": "user", "content": altered_message})
-            completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
-            chat_response = completion.choices[0].message.content
-            print(chat_response)
+    # apply persona
+    print("Start of Persona:")
+    if persona:
+        print(persona.name)
+        if persona.before_instruction:
+            altered_message = persona.before_instruction + "\n" + altered_message
+        if persona.after_instruction:
+            altered_message = altered_message + "\n" + persona.after_instruction
+        print("Altered Message:")
+        print(altered_message)
+    print("End of Persona.")
 
-            # post process response
+    # send message to api
+    messages.append({"role": "user", "content": altered_message})
+    chat_response = request_response(current_session.session_id, messages)
+    if isinstance(chat_response, Err):
+        print(chat_response.error_message)
+    else:
+        chat_response = chat_response.value
+    print(chat_response)
 
-            altered_response = chat_response
-            for rule in current_session.rules.split(","):
-                try:
-                    rule_class = getattr(sys.modules["api_server.rule"], rule)
-                    if issubclass(rule_class, Rule):
-                        rule_instance = rule_class()
-                        altered_response = rule_instance.postprocessing(altered_response)
-                except AttributeError:
-                    print(f"{rule} is not a defined class.")
+    # post process response
 
-            # add message and response into database
-            db_message = Messages(message=message, altered_message=altered_message,
-                                  response=chat_response, altered_response=altered_response,
-                                  session_id=session_id)
-            db_session.add(db_message)
+    altered_response = chat_response
+    for rule in current_session.rules.split(","):
+        try:
+            rule_class = getattr(sys.modules["api_server.rule"], rule)
+            if issubclass(rule_class, Rule):
+                rule_instance = rule_class()
+                altered_response = rule_instance.postprocessing(altered_response)
+        except AttributeError:
+            print(f"{rule} is not a defined class.")
 
-            # add api calls to database
-            statement = select(User).where(User.user_id == current_session.user_id)
-            current_user = db_session.exec(statement).first()
-            current_user.api_prompt_tokens += completion.usage.prompt_tokens
-            current_user.api_completion_tokens += completion.usage.completion_tokens
-            current_user.api_total_tokens += completion.usage.total_tokens
-            db_session.add(current_user)
+    # add message and response into database
+    add_message_to_database(db_session, current_session.session_id, message, altered_message, chat_response,
+                            altered_response)
 
-            # commit
-            db_session.commit()
-
-            return altered_response
+    return altered_response
 
 
 def get_session_persona(db_session: Session, current_session: ChatSession):

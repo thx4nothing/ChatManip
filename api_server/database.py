@@ -23,6 +23,10 @@ class User(SQLModel, table=True):
     api_prompt_tokens: int = Field(default=0)
     api_completion_tokens: int = Field(default=0)
     api_total_tokens: int = Field(default=0)
+    # Token bucket variables
+    last_token_update_time: datetime = Field(default_factory=datetime.now, nullable=False)
+    available_tokens: int = Field(default=0)
+    last_request_time: datetime = Field(default_factory=datetime.now, nullable=False)
 
 
 class ChatSession(SQLModel, table=True):
@@ -36,8 +40,7 @@ class ChatSession(SQLModel, table=True):
 
 class Messages(SQLModel, table=True):
     message_id: Optional[int] = Field(
-        sa_column=sa.Column(sa.Integer, primary_key=True, autoincrement=True, unique=True,
-                            nullable=False))
+        sa_column=sa.Column(sa.Integer, primary_key=True, autoincrement=True, unique=True, nullable=False))
     message: str
     altered_message: str
     response: str
