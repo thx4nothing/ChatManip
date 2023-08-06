@@ -158,3 +158,8 @@ def get_chat_history(db_session: Session, current_session: ChatSession, persona:
         messages.append({"role": "user", "content": message})
         messages.append({"role": "assistant", "content": db_message.response})
     return messages
+
+
+@router.get("/session/{session_id}/disclaimer")
+async def disclaimer(session_id: str):
+    return "Hey this is a disclaimer"

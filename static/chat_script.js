@@ -25,7 +25,27 @@ document.addEventListener("DOMContentLoaded", function () {
         return first_time;
     }
 
-    let first_time = loadChatHistory();
+    function showModal() {
+        var modal = document.getElementById('disclaimerModal');
+        const session_id = getSessionIdFromUrl()
+
+        fetch(`/session/${session_id}/disclaimer`)
+            .then(response => response.text())
+            .then(data => {
+                var modalContent = document.querySelector('.modal-body');
+                modalContent.innerHTML = "<p>" + data + "</p>";
+            });
+
+        modal.classList.add('is-visible');
+
+        var closeButton = document.getElementById('modalCloseButton');
+        closeButton.addEventListener('click', function () {
+            modal.classList.remove('is-visible');
+        });
+    }
+
+    loadChatHistory();
+    showModal();
 });
 
 // Get DOM elements
