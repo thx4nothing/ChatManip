@@ -30,6 +30,7 @@ async def create_user(user: UserInformation):
                         location=user.location, language=user.language)
         db_session.add(new_user)
         db_session.commit()
+        statement = select(User).where(user.invite_code == invite_code_obj.invite_code)
         current_user = db_session.exec(statement).first()
         new_invite_code_str = user.invite_code
         new_session = ChatSession(session_id=new_invite_code_str, user_id=current_user.user_id,

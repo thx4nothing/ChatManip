@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function loadChatHistory() {
         const session_id = getSessionIdFromUrl()
+        let first_time = true;
         // Make an HTTP request to the server
         fetch(`/session/${session_id}/history`, {})
             .then(response => response.json())
@@ -12,14 +13,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     const response = chat.content;
                     const sender = chat.role;
                     displayMessage(sender, response);
+                    first_time = false;
                 });
+                if (first_time) {
+                    request_greeting();
+                }
             })
             .catch(error => {
                 console.error("Error:", error);
             });
+        return first_time;
     }
 
-    loadChatHistory();
+    let first_time = loadChatHistory();
 });
 
 // Get DOM elements
@@ -71,6 +77,20 @@ function sendToServer(message) {
             "Content-Type": "application/json"
         }, body: JSON.stringify({content: message})
     })
+        .then(response => response.json())
+        .then(data => {
+            const response = data.response;
+            displayMessage("assistant", response);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
+function request_greeting() {
+    const session_id = getSessionIdFromUrl()
+    // Make an HTTP request to the server
+    fetch(`/chat/${session_id}/greetings`)
         .then(response => response.json())
         .then(data => {
             const response = data.response;

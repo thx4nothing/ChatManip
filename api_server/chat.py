@@ -29,6 +29,28 @@ async def session(session_id: str, request: Request):
     return templates.TemplateResponse("chat_base.html", {"request": request})
 
 
+@router.get("/chat/{session_id}/greetings")
+async def greetings(session_id: str):
+    print("Greetings requested.")
+    with Session(engine) as db_session:
+        statement = select(ChatSession).where(ChatSession.session_id == session_id)
+        current_session = db_session.exec(statement).first()
+        if current_session is not None:
+            persona = get_session_persona(db_session, current_session)
+            messages = []
+            if persona:
+                messages.append({"role": "system", "content": persona.system_instruction})
+            messages.append({"role": "user", "content": "Greet me please."})
+            completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+            chat_response = completion.choices[0].message.content
+            db_message = Messages(message="", altered_message="",
+                                  response=chat_response, altered_response=chat_response,
+                                  session_id=session_id)
+            db_session.add(db_message)
+            db_session.commit()
+            return {"response": chat_response}
+
+
 @router.get("/session/{session_id}/history")
 async def history(session_id: str):
     with Session(engine) as db_session:
@@ -44,11 +66,13 @@ async def history(session_id: str):
 async def chat(session_id: str, message: Message):
     # Process the chat message
     print(session_id)
-    response = process_chat_message(message.content, session_id)
+    response = process_user_chat_message(message.content, session_id)
+    # process user input
+    # process response
     return {"response": response}
 
 
-def process_chat_message(message: str, session_id: str) -> str:
+def process_user_chat_message(message: str, session_id: str) -> str:
     # DEBUG
     debug = False
     # set variables
