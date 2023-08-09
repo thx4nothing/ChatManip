@@ -1,7 +1,7 @@
 import json
-from typing import List
+from typing import List, Annotated
 
-from fastapi import APIRouter, Request, HTTPException, UploadFile, File
+from fastapi import APIRouter, Request, HTTPException, UploadFile, File, Depends, Query, status
 
 from api_server.database import User, Persona, engine, InviteCode, generate_invite_code
 from sqlmodel import Session, select
@@ -13,13 +13,24 @@ from api_server.templates import templates
 router = APIRouter()
 
 
+async def check_authentication(token: str):
+    if not token == "1234":
+        credentials_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )
+        raise credentials_exception
+
+
 @router.get("/admin")
-async def read_root(request: Request):
+async def read_root(request: Request, token: str = Query(...)):
+    await check_authentication(token)
     return templates.TemplateResponse("admin_panel_base.html", {"request": request})
 
 
 @router.get("/admin/users/", response_model=List[User])
-async def list_users():
+async def list_users(token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         statement = select(User)
         users = db_session.exec(statement).all()
@@ -27,7 +38,8 @@ async def list_users():
 
 
 @router.delete("/admin/users/delete/{user_id}/")
-async def delete_user(user_id: int):
+async def delete_user(user_id: int, token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         statement = select(User).where(User.user_id == user_id)
         user = db_session.exec(statement).first()
@@ -39,7 +51,8 @@ async def delete_user(user_id: int):
 
 
 @router.get("/admin/personas/", response_model=List[Persona])
-async def list_personas():
+async def list_personas(token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         statement = select(Persona)
         personas = db_session.exec(statement).all()
@@ -48,7 +61,8 @@ async def list_personas():
 
 # Route to create a new persona
 @router.post("/admin/personas/", response_model=Persona)
-async def create_persona(persona: Persona):
+async def create_persona(persona: Persona, token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         new_persona = Persona(
             name=persona.name,
@@ -65,7 +79,8 @@ async def create_persona(persona: Persona):
 
 # Route to get a persona by ID
 @router.get("/admin/personas/{persona_id}/", response_model=Persona)
-async def get_persona(persona_id: int):
+async def get_persona(persona_id: int, token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         statement = select(Persona).where(Persona.persona_id == persona_id)
         persona = db_session.exec(statement).first()
@@ -76,7 +91,8 @@ async def get_persona(persona_id: int):
 
 # Route to update a persona by ID
 @router.put("/admin/personas/{persona_id}/", response_model=Persona)
-async def update_persona(persona_id: int, persona: Persona):
+async def update_persona(persona_id: int, persona: Persona, token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         existing_persona = db_session.get(Persona, persona_id)
         if not existing_persona:
@@ -94,7 +110,8 @@ async def update_persona(persona_id: int, persona: Persona):
 
 # Route to delete a persona by ID
 @router.delete("/admin/personas/{persona_id}/", response_model=dict)
-async def delete_persona(persona_id: int):
+async def delete_persona(persona_id: int, token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         statement = select(Persona).where(Persona.persona_id == persona_id)
         persona = db_session.exec(statement).first()
@@ -106,7 +123,8 @@ async def delete_persona(persona_id: int):
 
 
 @router.post("/admin/invite_codes/")
-async def generate_invite_codes(num_codes: int = 1):
+async def generate_invite_codes(num_codes: int = 1, token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         invite_codes = []
         for _ in range(num_codes):
@@ -119,7 +137,8 @@ async def generate_invite_codes(num_codes: int = 1):
 
 
 @router.get("/admin/invite_codes/", response_model=List[InviteCode])
-async def list_invite_codes():
+async def list_invite_codes(token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         statement = select(InviteCode)
         invite_codes = db_session.exec(statement).all()
@@ -127,7 +146,8 @@ async def list_invite_codes():
 
 
 @router.delete("/admin/invite_codes/{invite_code}", response_model=InviteCode)
-async def delete_invite_code(invite_code: str):
+async def delete_invite_code(invite_code: str, token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         statement = select(InviteCode).where(InviteCode.invite_code == invite_code)
         invite_code_obj = db_session.exec(statement).first()
@@ -139,7 +159,8 @@ async def delete_invite_code(invite_code: str):
 
 
 @router.patch("/admin/invite_codes/{invite_code}", response_model=InviteCode)
-async def update_invite_code(invite_code: str, persona_id: int, rules: str):
+async def update_invite_code(invite_code: str, persona_id: int, rules: str, token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         invite_code_obj = db_session.get(InviteCode, invite_code)
         if not invite_code_obj:
@@ -154,7 +175,8 @@ async def update_invite_code(invite_code: str, persona_id: int, rules: str):
 
 
 @router.get("/admin/rules/", response_model=List[RuleResponse])
-async def get_rules():
+async def get_rules(token: str = Query(...)):
+    await check_authentication(token)
     # Get all the subclasses of the Rule base class
     rule_classes = Rule.__subclasses__()
     rules = []
@@ -168,7 +190,8 @@ async def get_rules():
 
 
 @router.get("/admin/personas/export")
-async def export_persona_database():
+async def export_persona_database(token: str = Query(...)):
+    await check_authentication(token)
     with Session(engine) as db_session:
         statement = select(Persona)
         personas = db_session.exec(statement).all()
@@ -180,7 +203,8 @@ async def export_persona_database():
 
 
 @router.post("/admin/personas/import")
-async def import_persona_database(file: UploadFile = File(...)):
+async def import_persona_database(file: UploadFile = File(...), token: str = Query(...)):
+    await check_authentication(token)
     data = await file.read()
     personas_to_import = json.loads(data)
 

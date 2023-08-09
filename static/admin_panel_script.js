@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeRulesSection();
 });
 
+function getToken() {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    return urlSearchParams.get("token")
+}
+
 function initializePersonaSection() {
     const personaDropdown = document.getElementById("personaDropdown");
     const createNewBtn = document.getElementById("createNewBtn");
@@ -26,7 +31,7 @@ function initializePersonaSection() {
     }
 
     function populatePersonaDropdown() {
-        fetch("/admin/personas/")
+        fetch(`/admin/personas?token=${getToken()}`)
             .then(response => response.json())
             .then(personas => {
                 personaDropdown.innerHTML = "";
@@ -55,7 +60,7 @@ function initializePersonaSection() {
     function handleEditSelectedClick() {
         const selectedPersonaId = personaDropdown.value;
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}/`)
+            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`)
                 .then(response => response.json())
                 .then(persona => {
                     personaName.value = persona.name;
@@ -73,7 +78,7 @@ function initializePersonaSection() {
     function handleDeleteSelectedClick() {
         const selectedPersonaId = personaDropdown.value;
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}/`, {
+            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`, {
                 method: "DELETE"
             })
                 .then(response => response.json())
@@ -98,7 +103,7 @@ function initializePersonaSection() {
         };
 
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}/`, {
+            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`, {
                 method: "PUT", headers: {
                     "Content-Type": "application/json"
                 }, body: JSON.stringify(personaData)
@@ -113,7 +118,7 @@ function initializePersonaSection() {
                     console.error("Error updating persona:", error);
                 });
         } else {
-            fetch("/admin/personas/", {
+            fetch(`/admin/personas?token=${getToken()}`, {
                 method: "POST", headers: {
                     "Content-Type": "application/json"
                 }, body: JSON.stringify(personaData)
@@ -136,7 +141,7 @@ function initializePersonaSection() {
         editSelectedBtn.disabled = !isPersonaSelected; // Enable/disable "Edit Selected" button
         deleteSelectedBtn.disabled = !isPersonaSelected; // Enable/disable "Delete Selected" button
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}/`)
+            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`)
                 .then(response => response.json())
                 .then(persona => {
                     populatePersonaDetails(persona);
@@ -149,7 +154,7 @@ function initializePersonaSection() {
     }
 
     function exportPersonaDatabase() {
-        fetch('/admin/personas/export', {
+        fetch('/admin/personas/export?token=${getToken()}', {
             method: 'GET',
         })
             .then(response => response.json())
@@ -174,7 +179,7 @@ function initializePersonaSection() {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch('/admin/personas/import', {
+        fetch(`/admin/personas/import?token=${getToken()}`, {
             method: 'POST',
             body: formData,
         })
@@ -219,7 +224,8 @@ function initializeUserManagementSection() {
         while (userTableDiv.rows.length > 1) {
             userTableDiv.deleteRow(1);
         }
-        fetch("/admin/users/")
+
+        fetch(`/admin/users?token=${getToken()}`)
             .then(response => response.json())
             .then(users => {
                 users.forEach(user => {
@@ -248,7 +254,7 @@ function initializeUserManagementSection() {
 
     // Button to handle user deletion
     function deleteUser(userId) {
-        fetch(`/admin/users/delete/${userId}/`, {
+        fetch(`/admin/users/delete/${userId}?token=${getToken()}`, {
             method: "DELETE"
         })
             .then(response => response.json())
@@ -286,7 +292,7 @@ function initializeInviteCodeSection() {
 
             // Create dropdown for Persona
             const personaDropdown = document.createElement("select");
-            fetch("/admin/personas/")
+            fetch(`/admin/personas?token=${getToken()}`)
                 .then(response => response.json())
                 .then(personas => {
                     personas.forEach(persona => {
@@ -334,7 +340,7 @@ function initializeInviteCodeSection() {
 
     function generateInviteCodes() {
         const numCodes = numCodesInput.value;
-        fetch(`/admin/invite_codes/?num_codes=${numCodes}`, {
+        fetch(`/admin/invite_codes?num_codes=${numCodes}&token=${getToken()}`, {
             method: "POST"
         })
             .then(response => response.json())
@@ -348,7 +354,7 @@ function initializeInviteCodeSection() {
     }
 
     function deleteInviteCode(inviteCode) {
-        fetch(`/admin/invite_codes/${inviteCode}`, {
+        fetch(`/admin/invite_codes/${inviteCode}/?token=${getToken()}`, {
             method: "DELETE"
         })
             .then(response => response.json())
@@ -362,7 +368,7 @@ function initializeInviteCodeSection() {
     }
 
     function getInviteCodes() {
-        fetch("/admin/invite_codes/")
+        fetch(`/admin/invite_codes?token=${getToken()}`)
             .then(response => response.json())
             .then(data => {
                 console.log("Invite codes:", data);
@@ -377,7 +383,7 @@ function initializeInviteCodeSection() {
         const queryParams = new URLSearchParams({
             persona_id: parseInt(persona_id), rules: rules
         });
-        fetch(`/admin/invite_codes/${inviteCode}?${queryParams}`, {
+        fetch(`/admin/invite_codes/${inviteCode}?${queryParams}&token=${getToken()}`, {
             method: "PATCH", headers: {
                 "Content-Type": "application/json"
             },
@@ -411,7 +417,7 @@ function initializeRulesSection() {
     }
 
     function getRules() {
-        fetch("/admin/rules/")
+        fetch(`/admin/rules?token=${getToken()}`)
             .then(response => response.json())
             .then(data => {
                 console.log("Rules:", data);

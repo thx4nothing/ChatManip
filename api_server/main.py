@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from api_server import admin_panel, chat, database, user_creation
+from api_server import admin_panel, chat, database, user_creation, security
 from sqlmodel import SQLModel
 
 # Create the FastAPI app
@@ -14,6 +14,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(admin_panel.router)
 app.include_router(chat.router)
 app.include_router(user_creation.router)
+
+
+# app.include_router(security.router)
 
 
 @app.on_event("startup")
