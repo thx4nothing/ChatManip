@@ -2,7 +2,7 @@ from typing import Optional
 import random
 import string
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy import Column, Boolean, JSON, Integer
 from sqlmodel import Field, SQLModel, create_engine
@@ -35,6 +35,9 @@ class ChatSession(SQLModel, table=True):
     end_time: Optional[datetime] = Field(default=None, nullable=True)
     persona_id: Optional[int] = Field(default=None, nullable=True)
     rules: str = Field(default='')
+    done: bool = Field(default=False)
+    message_limit: int = Field(default=20)
+    time_limit: timedelta = Field(default=timedelta(minutes=10))
 
 
 class Messages(SQLModel, table=True):

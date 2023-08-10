@@ -48,24 +48,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadChatHistory();
     showModal();
+    setInterval(checkSessionEnd, 5000);
 });
 
 // Get DOM elements
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
+const doneButton = document.getElementById('done-button');
+const timerDisplay = document.getElementById('timer-display');
+const messageCounter = document.getElementById('message-counter');
 
-// Event listener for send button
+// Event listeners
 sendButton.addEventListener("click", sendMessage);
-
-// Event listener for Enter key press
+doneButton.addEventListener("click", endSession)
 userInput.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
         sendMessage();
     }
 });
 
-// Function to send a message
 function sendMessage() {
     const message = userInput.value.trim();
     if (message !== "") {
@@ -78,7 +80,6 @@ function sendMessage() {
     }
 }
 
-// Function to display a message in the chat
 function displayMessage(sender, message) {
     const messageElement = document.createElement("div");
     if (sender === "system") return
@@ -90,9 +91,8 @@ function displayMessage(sender, message) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Function to send the message to the server for processing
 function sendToServer(message) {
-    const session_id = getSessionIdFromUrl()
+    const session_id = getSessionIdFromUrl();
     // Make an HTTP request to the server
     fetch(`/chat/${session_id}`, {
         method: "POST", headers: {
@@ -132,4 +132,36 @@ function getSessionIdFromUrl() {
         return parts[sessionIdIndex + 1]; // Return the session_id
     }
     return null; // If session_id is not found, return null
+}
+
+function endSession() {
+    const session_id = getSessionIdFromUrl();
+    userInput.disabled = true;
+    sendButton.disabled = true;
+    doneButton.disabled = true;
+    timerDisplay.textContent = "Chat session ended.";
+    window.location.href = `/session/${session_id}/end`;
+}
+
+async function checkSessionEnd() {
+    try {
+        const session_id = getSessionIdFromUrl();
+        const response = await fetch(`/session/${session_id}/check_done`);
+        const data = await response.json();
+        if (data.session_end) {
+            endSession();
+        } else {
+            // Update timer display
+            const timeLeft = data.time_left;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = Math.floor(timeLeft % 60);
+            timerDisplay.textContent = `Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            // Update messages left display
+            const messagesLeft = data.messages_left;
+            messageCounter.textContent = `Messages left: ${messagesLeft}`;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }

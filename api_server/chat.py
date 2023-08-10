@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 
 from fastapi import APIRouter, Request
 from sqlmodel import Session, select
@@ -45,7 +46,7 @@ async def greetings(session_id: str):
             language = get_session_language(db_session, current_session)
             if persona:
                 messages.append({"role": "system", "content": persona.system_instruction[language]})
-            if language is "english":
+            if language == "english":
                 greetings_request = "Greet me please."
             else:
                 greetings_request = "Begrüße mich, bitte."
@@ -67,6 +68,39 @@ async def history(session_id: str):
             persona = get_session_persona(db_session, current_session)
             messages = get_chat_history(db_session, current_session, persona, altered=False)
             return messages
+
+
+@router.get("/session/{session_id}/check_done")
+def check_session_end(session_id: str):
+    with Session(engine) as db_session:
+        statement = select(ChatSession).where(ChatSession.session_id == session_id)
+        current_session = db_session.exec(statement).first()
+        if current_session is not None:
+            elapsed_time = datetime.now() - current_session.start_time
+            time_limit_reached = elapsed_time >= current_session.time_limit
+            statement = select(Messages).where(Messages.session_id == session_id)
+            message_count = len(db_session.exec(statement).all())
+            message_limit_reached = message_count >= current_session.message_limit
+
+            time_left = (current_session.time_limit - elapsed_time).total_seconds()
+            messages_left = current_session.message_limit - message_count
+
+            if time_limit_reached or message_limit_reached:
+                return {"session_end": True, "time_left": 0, "messages_left": 0}
+            else:
+                return {"session_end": False, "time_left": time_left, "messages_left": messages_left}
+        else:
+            return {"error": "Session not found."}
+
+
+@router.get("/session/{session_id}/end")
+def end_session(session_id: str):
+    with Session(engine) as db_session:
+        statement = select(ChatSession).where(ChatSession.session_id == session_id)
+        current_session = db_session.exec(statement).first()
+        if current_session is not None:
+            current_session.done = True
+            return {"message": "Chat session ended."}
 
 
 @router.post("/chat/{session_id}")

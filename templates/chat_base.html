@@ -5,6 +5,9 @@
     <link rel="stylesheet" href="../static/chat_style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/purify.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+          integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+          crossorigin="anonymous">
 
 </head>
 <body>
@@ -12,8 +15,12 @@
     <div id="chat-messages" class="chat-messages"></div>
     <div class="chat-input">
         <input type="text" id="user-input" placeholder="Type your message..."/>
-        <button id="send-button">Send</button>
+        <button id="send-button" class="pure-button pure-button-primary">Send</button>
+        <button id="done-button" class="pure-button pure-button-error" style="background-color: #e53935;">I'm done
+        </button>
     </div>
+    <div id="timer-display" class="timer-display">Time remaining: mm:ss</div>
+    <div id="message-counter" class="message-counter">Messages sent: 0</div>
 </div>
 <div id="disclaimerModal" class="modal">
     <div class="modal-dialog">
