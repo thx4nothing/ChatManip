@@ -5,7 +5,7 @@ from fastapi import APIRouter, Request
 from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
 
-from api_server.database import engine, ChatSession, Persona, User, Messages
+from api_server.database import engine, ChatSession, Persona, User, Messages, Task
 from api_server.rule import *
 from api_server.templates import templates
 from api_server.models import Message
@@ -34,6 +34,25 @@ def add_message_to_database(db_session, session_id, message, altered_message, ch
     db_session.commit()
 
 
+@router.get("/session/{session_id}/disclaimer")
+async def disclaimer(session_id: str):
+    return get_task(session_id)
+
+
+def get_task(session_id: str):
+    with Session(engine) as db_session:
+        statement = select(ChatSession).where(ChatSession.session_id == session_id)
+        current_session = db_session.exec(statement).first()
+        if current_session is not None:
+            statement = select(Task).where(Task.task_id == current_session.task_id)
+            current_task = db_session.exec(statement).first()
+            if current_task:
+                language = get_session_language(db_session, current_session)
+                return current_task.task_instruction[language]
+            else:
+                return "Enjoy!"
+
+
 @router.get("/chat/{session_id}/greetings")
 async def greetings(session_id: str):
     print("Greetings requested.")
@@ -46,11 +65,19 @@ async def greetings(session_id: str):
             language = get_session_language(db_session, current_session)
             if persona:
                 messages.append({"role": "system", "content": persona.system_instruction[language]})
-            if language == "english":
-                greetings_request = "Greet me please."
+
+            task = get_task(session_id)
+            if task != "Enjoy!":
+                if language == "english":
+                    message = "I was given this task, please greet me accordingly:\n" + task
+                else:
+                    message = "Mir wurde diese Aufgabe gegeben, bitte begrüße mich entsprechend:\n" + task
             else:
-                greetings_request = "Begrüße mich, bitte."
-            messages.append({"role": "user", "content": greetings_request})
+                if language == "english":
+                    message = "Greet me please."
+                else:
+                    message = "Begrüße mich, bitte."
+            messages.append({"role": "user", "content": message})
             chat_response = request_response(session_id, messages)
             if isinstance(chat_response, Ok):
                 add_message_to_database(db_session, session_id, "", "", chat_response.value, "")
@@ -205,8 +232,3 @@ def get_chat_history(db_session: Session, current_session: ChatSession, persona:
         messages.append({"role": "user", "content": message})
         messages.append({"role": "assistant", "content": db_message.response})
     return messages
-
-
-@router.get("/session/{session_id}/disclaimer")
-async def disclaimer(session_id: str):
-    return "Hey this is a disclaimer"

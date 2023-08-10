@@ -3,7 +3,7 @@ from typing import List, Annotated
 
 from fastapi import APIRouter, Request, HTTPException, UploadFile, File, Depends, Query, status
 
-from api_server.database import User, Persona, engine, InviteCode, generate_invite_code
+from api_server.database import User, Persona, engine, InviteCode, generate_invite_code, Task
 from sqlmodel import Session, select
 
 from api_server.models import RuleResponse
@@ -159,7 +159,7 @@ async def delete_invite_code(invite_code: str, token: str = Query(...)):
 
 
 @router.patch("/admin/invite_codes/{invite_code}", response_model=InviteCode)
-async def update_invite_code(invite_code: str, persona_id: int, rules: str, token: str = Query(...)):
+async def update_invite_code(invite_code: str, persona_id: int, task_id: int, rules: str, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
         invite_code_obj = db_session.get(InviteCode, invite_code)
@@ -167,6 +167,8 @@ async def update_invite_code(invite_code: str, persona_id: int, rules: str, toke
             raise HTTPException(status_code=404, detail="Invite code not found")
         if persona_id >= 0:
             invite_code_obj.persona_id = persona_id
+        if task_id >= 0:
+            invite_code_obj.task_id = task_id
         invite_code_obj.rules = rules
         db_session.add(invite_code_obj)
         db_session.commit()
@@ -215,6 +217,93 @@ async def import_persona_database(file: UploadFile = File(...), token: str = Que
                 db_session.add(persona)
         db_session.commit()
         return {"message": "Import successful"}
+
+
+@router.get("/admin/tasks/export")
+async def export_tasks_database(token: str = Query(...)):
+    await check_authentication(token)
+    with Session(engine) as db_session:
+        statement = select(Task)
+        tasks = db_session.exec(statement).all()
+        task_data = [{"name": task.name,
+                      "task_instruction": task.task_instruction} for task in tasks]
+        return task_data
+
+
+@router.post("/admin/tasks/import")
+async def import_tasks_database(file: UploadFile = File(...), token: str = Query(...)):
+    await check_authentication(token)
+    data = await file.read()
+    tasks_to_import = json.loads(data)
+
+    with Session(engine) as db_session:
+        for imported_task in tasks_to_import:
+            task = Task(**imported_task)
+            db_session.add(task)
+        db_session.commit()
+        return {"message": "Import successful"}
+
+
+@router.get("/admin/tasks/", response_model=List[Task])
+async def list_tasks(token: str = Query(...)):
+    await check_authentication(token)
+    with Session(engine) as db_session:
+        statement = select(Task)
+        tasks = db_session.exec(statement).all()
+        return tasks
+
+
+@router.post("/admin/tasks/", response_model=Task)
+async def create_task(task: Task, token: str = Query(...)):
+    await check_authentication(token)
+    with Session(engine) as db_session:
+        new_task = Task(name=task.name, task_instruction=task.task_instruction)
+        db_session.add(new_task)
+        db_session.commit()
+        return task
+
+
+@router.get("/admin/tasks/{task_id}/", response_model=Task)
+async def get_task(task_id: int, token: str = Query(...)):
+    await check_authentication(token)
+    with Session(engine) as db_session:
+        statement = select(Task).where(Task.task_id == task_id)
+        task = db_session.exec(statement).first()
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+        return task
+
+
+@router.put("/admin/tasks/{task_id}/", response_model=Task)
+async def update_task(task_id: int, task: Task, token: str = Query(...)):
+    await check_authentication(token)
+    with Session(engine) as db_session:
+        statement = select(Task).where(Task.task_id == task_id)
+        existing_task = db_session.exec(statement).first()
+        if not existing_task:
+            raise HTTPException(status_code=404, detail="Task not found")
+
+        task_data = task.dict(exclude_unset=True)
+        for key, value in task_data.items():
+            setattr(existing_task, key, value)
+
+        db_session.add(existing_task)
+        db_session.commit()
+        db_session.refresh(existing_task)
+        return existing_task
+
+
+@router.delete("/admin/tasks/{task_id}/", response_model=dict)
+async def delete_task(task_id: int, token: str = Query(...)):
+    await check_authentication(token)
+    with Session(engine) as db_session:
+        statement = select(Task).where(Task.task_id == task_id)
+        task = db_session.exec(statement).first()
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+        db_session.delete(task)
+        db_session.commit()
+        return {"message": "Task deleted successfully"}
 
 
 def does_persona_exist(db_session: Session, new_persona: Persona) -> bool:

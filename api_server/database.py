@@ -25,7 +25,7 @@ class User(SQLModel, table=True):
     # Token bucket variables
     last_token_update_time: datetime = Field(default_factory=datetime.now, nullable=False)
     available_tokens: int = Field(default=500)
-    last_request_time: datetime = Field(default_factory=datetime.now, nullable=False)
+    last_request_time: datetime = Field(default_factory=lambda: datetime.now() - timedelta(seconds=5), nullable=False)
 
 
 class ChatSession(SQLModel, table=True):
@@ -34,6 +34,7 @@ class ChatSession(SQLModel, table=True):
     start_time: datetime = Field(default_factory=datetime.now, nullable=False)
     end_time: Optional[datetime] = Field(default=None, nullable=True)
     persona_id: Optional[int] = Field(default=None, nullable=True)
+    task_id: Optional[int] = Field(default=None, nullable=True)
     rules: str = Field(default='')
     done: bool = Field(default=False)
     message_limit: int = Field(default=20)
@@ -61,6 +62,14 @@ class Persona(SQLModel, table=True):
     after_instruction: dict = Field(sa_column=Column(JSON, default={}))
 
 
+class Task(SQLModel, table=True):
+    task_id: Optional[int] = Field(
+        sa_column=Column(Integer, primary_key=True, autoincrement=True, unique=True,
+                         nullable=False))
+    name: str = Field("")
+    task_instruction: dict = Field(sa_column=Column(JSON, default={}))
+
+
 def generate_invite_code():
     length = 8
     characters = ''.join(
@@ -75,4 +84,5 @@ class InviteCode(SQLModel, table=True):
     user_id: int = Field(default=-1)
     used: bool = Field(sa_column=Column(Boolean), default=False)
     persona_id: Optional[int] = Field(default=None, nullable=True)
+    task_id: Optional[int] = Field(default=None, nullable=True)
     rules: str = Field(default='')
