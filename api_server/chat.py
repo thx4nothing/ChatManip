@@ -118,9 +118,9 @@ def process_user_chat_message(db_session: Session, current_session: ChatSession,
     chat_response = request_response(current_session.session_id, messages)
     if isinstance(chat_response, Err):
         print(chat_response.error_message)
+        return chat_response.error_message
     else:
         chat_response = chat_response.value
-    print(chat_response)
 
     # post process response
 
