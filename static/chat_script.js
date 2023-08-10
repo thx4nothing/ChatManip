@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     const response = chat.content;
                     const sender = chat.role;
                     displayMessage(sender, response);
-                    first_time = false;
+                    if (sender !== "system") {
+                        first_time = false;
+                    }
                 });
                 if (first_time) {
                     request_greeting();

@@ -16,19 +16,45 @@ function initializePersonaSection() {
     const editSelectedBtn = document.getElementById("editSelectedBtn");
     const deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
     const personaForm = document.getElementById("personaForm");
+    const personaName = document.getElementById("personaName");
     const savePersonaBtn = document.getElementById("savePersonaBtn");
+    const addLanguageBtn = document.getElementById("addLanguageBtn");
+    const languageInputs = document.getElementById("languageInputs");
 
     function populatePersonaDetails(persona) {
         const personaNameSpan = document.getElementById("personaNameD");
-        const personaSystemInstructionSpan = document.getElementById("personaSystemInstruction");
-        const personaInstructionBeforeSpan = document.getElementById("personaInstructionBefore");
-        const personaInstructionAfterSpan = document.getElementById("personaInstructionAfter");
+        const personaDetailsContainer = document.getElementById("personaDetails");
 
         personaNameSpan.textContent = persona.name;
-        personaSystemInstructionSpan.textContent = persona.system_instruction;
-        personaInstructionBeforeSpan.textContent = persona.before_instruction;
-        personaInstructionAfterSpan.textContent = persona.after_instruction;
+
+        while (personaDetailsContainer.children.length > 2) {
+            personaDetailsContainer.removeChild(personaDetailsContainer.lastChild);
+        }
+        console.log(persona)
+        for (const language in persona.system_instruction) {
+            const languageDiv = document.createElement("div");
+            languageDiv.classList.add("language-row");
+
+            const languageName = document.createElement("p");
+            languageName.textContent = "Language: " + language;
+            languageDiv.appendChild(languageName);
+
+            const systemInstruction = document.createElement("p");
+            systemInstruction.textContent = `System Instruction: ${persona.system_instruction[language] || ""}`;
+            languageDiv.appendChild(systemInstruction);
+
+            const instructionBefore = document.createElement("p");
+            instructionBefore.textContent = `Instruction Before: ${persona.before_instruction[language] || ""}`;
+            languageDiv.appendChild(instructionBefore);
+
+            const instructionAfter = document.createElement("p");
+            instructionAfter.textContent = `Instruction After: ${persona.after_instruction[language] || ""}`;
+            languageDiv.appendChild(instructionAfter);
+
+            personaDetailsContainer.appendChild(languageDiv);
+        }
     }
+
 
     function populatePersonaDropdown() {
         fetch(`/admin/personas?token=${getToken()}`)
@@ -52,9 +78,41 @@ function initializePersonaSection() {
         personaDropdown.selectedIndex = -1;
         personaForm.classList.remove("hidden");
         personaName.value = "";
-        systemInstruction.value = "";
-        instructionBefore.value = "";
-        instructionAfter.value = "";
+
+        // Clear existing language rows
+        const languageContainer = document.getElementById("languageInputs");
+        languageContainer.innerHTML = '';
+
+        // Create a single row for the language
+        const row = document.createElement("div");
+        row.classList.add("language-input-row");
+
+        const languageInput = document.createElement("input");
+        languageInput.type = "text";
+        languageInput.classList.add("language-name");
+        languageInput.placeholder = "english or german";
+
+        const systemInstructionInput = document.createElement("input");
+        systemInstructionInput.type = "text";
+        systemInstructionInput.classList.add("system-instruction");
+        systemInstructionInput.placeholder = "System Instruction";
+
+        const instructionBeforeInput = document.createElement("input");
+        instructionBeforeInput.type = "text";
+        instructionBeforeInput.classList.add("instruction-before");
+        instructionBeforeInput.placeholder = "Instruction before User Message";
+
+        const instructionAfterInput = document.createElement("input");
+        instructionAfterInput.type = "text";
+        instructionAfterInput.classList.add("instruction-after");
+        instructionAfterInput.placeholder = "Instruction after User Message";
+
+        row.appendChild(languageInput);
+        row.appendChild(systemInstructionInput);
+        row.appendChild(instructionBeforeInput);
+        row.appendChild(instructionAfterInput);
+
+        languageContainer.appendChild(row);
     }
 
     function handleEditSelectedClick() {
@@ -64,9 +122,45 @@ function initializePersonaSection() {
                 .then(response => response.json())
                 .then(persona => {
                     personaName.value = persona.name;
-                    systemInstruction.value = persona.system_instruction;
-                    instructionBefore.value = persona.before_instruction;
-                    instructionAfter.value = persona.after_instruction;
+                    const availableLanguages = Object.keys(persona.system_instruction);
+                    const languageContainer = document.getElementById("languageInputs");
+                    languageContainer.innerHTML = '';
+                    availableLanguages.forEach(language => {
+                        const row = document.createElement("div");
+                        row.classList.add("language-input-row");
+
+                        const languageInput = document.createElement("input");
+                        languageInput.type = "text";
+                        languageInput.classList.add("language-name");
+                        languageInput.placeholder = "english or german";
+                        languageInput.value = language;
+
+                        const systemInstructionInput = document.createElement("input");
+                        systemInstructionInput.type = "text";
+                        systemInstructionInput.classList.add("system-instruction");
+                        systemInstructionInput.placeholder = "System Instruction";
+                        systemInstructionInput.value = persona.system_instruction[language] || "";
+
+                        const instructionBeforeInput = document.createElement("input");
+                        instructionBeforeInput.type = "text";
+                        instructionBeforeInput.classList.add("instruction-before");
+                        instructionBeforeInput.placeholder = "Instruction before User Message";
+                        instructionBeforeInput.value = persona.before_instruction[language] || "";
+
+                        const instructionAfterInput = document.createElement("input");
+                        instructionAfterInput.type = "text";
+                        instructionAfterInput.classList.add("instruction-after");
+                        instructionAfterInput.placeholder = "Instruction after User Message";
+                        instructionAfterInput.value = persona.after_instruction[language] || "";
+
+                        row.appendChild(languageInput);
+                        row.appendChild(systemInstructionInput);
+                        row.appendChild(instructionBeforeInput);
+                        row.appendChild(instructionAfterInput);
+
+                        languageContainer.appendChild(row);
+                    });
+
                     personaForm.classList.remove("hidden");
                 })
                 .catch(error => {
@@ -97,42 +191,43 @@ function initializePersonaSection() {
         const selectedPersonaId = personaDropdown.value;
         const personaData = {
             name: personaName.value,
-            system_instruction: systemInstruction.value,
-            before_instruction: instructionBefore.value,
-            after_instruction: instructionAfter.value
+            system_instruction: {},
+            before_instruction: {},
+            after_instruction: {}
         };
 
-        if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`, {
-                method: "PUT", headers: {
-                    "Content-Type": "application/json"
-                }, body: JSON.stringify(personaData)
+        const languageRows = document.querySelectorAll(".language-input-row");
+        languageRows.forEach(row => {
+            const language = row.querySelector(".language-name").value;
+            const systemInstruction = row.querySelector(".system-instruction").value;
+            const instructionBefore = row.querySelector(".instruction-before").value;
+            const instructionAfter = row.querySelector(".instruction-after").value;
+
+            personaData.system_instruction[language] = systemInstruction;
+            personaData.before_instruction[language] = instructionBefore;
+            personaData.after_instruction[language] = instructionAfter;
+        });
+
+        const fetchOptions = {
+            method: selectedPersonaId ? "PUT" : "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(personaData)
+        };
+
+        const url = selectedPersonaId ? `/admin/personas/${selectedPersonaId}?token=${getToken()}` : `/admin/personas?token=${getToken()}`;
+
+        fetch(url, fetchOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                populatePersonaDropdown();
+                personaForm.classList.add("hidden");
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.message);
-                    populatePersonaDropdown();
-                    personaForm.classList.add("hidden");
-                })
-                .catch(error => {
-                    console.error("Error updating persona:", error);
-                });
-        } else {
-            fetch(`/admin/personas?token=${getToken()}`, {
-                method: "POST", headers: {
-                    "Content-Type": "application/json"
-                }, body: JSON.stringify(personaData)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.message);
-                    populatePersonaDropdown();
-                    personaForm.classList.add("hidden");
-                })
-                .catch(error => {
-                    console.error("Error creating persona:", error);
-                });
-        }
+            .catch(error => {
+                console.error(selectedPersonaId ? "Error updating persona:" : "Error creating persona:", error);
+            });
     }
 
     function handlePersonaDropdownChange() {
@@ -154,7 +249,7 @@ function initializePersonaSection() {
     }
 
     function exportPersonaDatabase() {
-        fetch('/admin/personas/export?token=${getToken()}', {
+        fetch(`/admin/personas/export?token=${getToken()}`, {
             method: 'GET',
         })
             .then(response => response.json())
@@ -193,6 +288,39 @@ function initializePersonaSection() {
             });
     }
 
+    function handleAddLanguageClick() {
+        const newRow = document.createElement("div");
+        newRow.classList.add("language-input-row");
+
+        const languageNameInput = document.createElement("input");
+        languageNameInput.type = "text";
+        languageNameInput.classList.add("language-name");
+        languageNameInput.placeholder = "english or german";
+
+        const systemInstructionInput = document.createElement("input");
+        systemInstructionInput.type = "text";
+        systemInstructionInput.classList.add("system-instruction");
+        systemInstructionInput.placeholder = "System Instruction";
+
+        const instructionBeforeInput = document.createElement("input");
+        instructionBeforeInput.type = "text";
+        instructionBeforeInput.classList.add("instruction-before");
+        instructionBeforeInput.placeholder = "Instruction before User Message";
+
+        const instructionAfterInput = document.createElement("input");
+        instructionAfterInput.type = "text";
+        instructionAfterInput.classList.add("instruction-after");
+        instructionAfterInput.placeholder = "Instruction after User Message";
+
+        newRow.appendChild(languageNameInput);
+        newRow.appendChild(systemInstructionInput);
+        newRow.appendChild(instructionBeforeInput);
+        newRow.appendChild(instructionAfterInput);
+
+        languageInputs.appendChild(newRow);
+    }
+
+    addLanguageBtn.addEventListener("click", handleAddLanguageClick);
     createNewBtn.addEventListener("click", handleCreateNewClick);
     editSelectedBtn.addEventListener("click", handleEditSelectedClick);
     deleteSelectedBtn.addEventListener("click", handleDeleteSelectedClick);

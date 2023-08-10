@@ -43,7 +43,8 @@ async def greetings(session_id: str):
             persona = get_session_persona(db_session, current_session)
             messages = []
             if persona:
-                messages.append({"role": "system", "content": persona.system_instruction})
+                messages.append({"role": "system", "content": persona.system_instruction[
+                    get_session_language(db_session, current_session)]})
             greetings_request = "Greet me please."
             messages.append({"role": "user", "content": greetings_request})
             chat_response = request_response(session_id, messages)
@@ -102,10 +103,12 @@ def process_user_chat_message(db_session: Session, current_session: ChatSession,
     print("Start of Persona:")
     if persona:
         print(persona.name)
-        if persona.before_instruction:
-            altered_message = persona.before_instruction + "\n" + altered_message
-        if persona.after_instruction:
-            altered_message = altered_message + "\n" + persona.after_instruction
+        if persona.before_instruction[get_session_language(db_session, current_session)]:
+            altered_message = persona.before_instruction[
+                                  get_session_language(db_session, current_session)] + "\n" + altered_message
+        if persona.after_instruction[get_session_language(db_session, current_session)]:
+            altered_message = altered_message + "\n" + persona.after_instruction[
+                get_session_language(db_session, current_session)]
         print("Altered Message:")
         print(altered_message)
     print("End of Persona.")
@@ -138,6 +141,12 @@ def process_user_chat_message(db_session: Session, current_session: ChatSession,
     return altered_response
 
 
+def get_session_language(db_session: Session, current_session: ChatSession):
+    statement = select(User).where(User.user_id == current_session.user_id)
+    user = db_session.exec(statement).first()
+    return user.language
+
+
 def get_session_persona(db_session: Session, current_session: ChatSession):
     statement = select(Persona).where(Persona.persona_id == current_session.persona_id)
     persona = db_session.exec(statement).first()
@@ -150,9 +159,10 @@ def get_chat_history(db_session: Session, current_session: ChatSession, persona:
     all_messages = db_session.exec(statement).all()
     messages = []
     if persona:
-        messages.append({"role": "system", "content": persona.system_instruction})
+        messages.append({"role": "system",
+                         "content": persona.system_instruction[get_session_language(db_session, current_session)]})
         print("Persona system instruction:")
-        print(persona.system_instruction)
+        print(persona.system_instruction[get_session_language(db_session, current_session)])
     for db_message in all_messages:
         message = db_message.altered_message if altered else db_message.message
         messages.append({"role": "user", "content": message})

@@ -57,7 +57,8 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
             tokens_to_add = token_rate * time_since_last_request
 
             # Update the available tokens in the bucket
-            current_user.available_tokens = min(current_user.available_tokens + tokens_to_add, bucket_capacity)
+            if tokens_to_add > 0:
+                current_user.available_tokens = min(current_user.available_tokens + tokens_to_add, bucket_capacity)
 
             # Check if there are enough tokens available for the request
             # (only using min_tokens_required instead of calculating api calls before hand,

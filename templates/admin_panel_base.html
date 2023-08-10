@@ -27,18 +27,21 @@
         </div>
         <div id="personaForm" class="hidden pure-u-1">
             <input type="text" id="personaName" class="pure-u-1-4" placeholder="Name (internal)">
-            <input type="text" id="systemInstruction" class="pure-u-1-4"
-                   placeholder="System Instruction">
-            <input type="text" id="instructionBefore" class="pure-u-1-4"
-                   placeholder="Instruction before User Message">
-            <input type="text" id="instructionAfter" class="pure-u-1-4"
-                   placeholder="Instruction after User Message">
-            <button id="savePersonaBtn" class="pure-button pure-button-primary">Save Persona
-            </button>
+            <div id="languageInputs">
+                <div class="language-input-row">
+                    <input type="text" class="language-name" placeholder="english or german">
+                    <input type="text" class="system-instruction" placeholder="System Instruction">
+                    <input type="text" class="instruction-before" placeholder="Instruction before User Message">
+                    <input type="text" class="instruction-after" placeholder="Instruction after User Message">
+                </div>
+            </div>
+            <button id="addLanguageBtn" class="pure-button">Add Language</button>
+            <button id="savePersonaBtn" class="pure-button pure-button-primary">Save Persona</button>
         </div>
         <div id="personaDetails" class="pure-u-1">
             <h3>Persona Details</h3>
             <p><strong>Name:</strong> <span id="personaNameD"></span></p>
+            <p><strong>Language:</strong> <span id="personaLanguage"></span></p>
             <p><strong>System Instruction:</strong> <span id="personaSystemInstruction"></span></p>
             <p><strong>Instruction Before:</strong> <span id="personaInstructionBefore"></span></p>
             <p><strong>Instruction After:</strong> <span id="personaInstructionAfter"></span></p>
