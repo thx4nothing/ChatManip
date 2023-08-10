@@ -1,15 +1,5 @@
 import random
-from textblob import TextBlob
 from api_server.chatgpt_interface import request_system_response
-
-import nltk
-from nltk import pos_tag
-from nltk.tokenize import word_tokenize
-
-nltk.download('wordnet')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('punkt')
-from nltk.corpus import wordnet
 
 
 class Rule:

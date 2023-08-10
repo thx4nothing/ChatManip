@@ -42,10 +42,13 @@ async def greetings(session_id: str):
         if current_session is not None:
             persona = get_session_persona(db_session, current_session)
             messages = []
+            language = get_session_language(db_session, current_session)
             if persona:
-                messages.append({"role": "system", "content": persona.system_instruction[
-                    get_session_language(db_session, current_session)]})
-            greetings_request = "Greet me please."
+                messages.append({"role": "system", "content": persona.system_instruction[language]})
+            if language is "english":
+                greetings_request = "Greet me please."
+            else:
+                greetings_request = "Begrüße mich, bitte."
             messages.append({"role": "user", "content": greetings_request})
             chat_response = request_response(session_id, messages)
             if isinstance(chat_response, Ok):
