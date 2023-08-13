@@ -1,8 +1,9 @@
 import os
-import openai
-
 from datetime import datetime
+
+import openai
 from sqlmodel import Session, select
+
 from api_server.database import engine, User, ChatSession
 
 

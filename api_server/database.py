@@ -1,8 +1,7 @@
-from typing import Optional
 import random
 import string
-
 from datetime import datetime, timedelta
+from typing import Optional
 
 from sqlalchemy import Column, Boolean, JSON, Integer
 from sqlmodel import Field, SQLModel, create_engine

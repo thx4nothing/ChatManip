@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Request, HTTPException
+from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
 
-from api_server.database import engine, User, ChatSession, InviteCode, generate_invite_code
-from sqlmodel import Session, select
-
+from api_server.database import engine, User, ChatSession, InviteCode
 from api_server.models import UserInformation
 from api_server.templates import templates
 
@@ -13,7 +12,7 @@ router = APIRouter()
 # Route to serve the index.html template on root URL ("/")
 @router.get("/")
 async def read_root(request: Request):
-    return templates.TemplateResponse("user_creation_base.html", {"request": request})
+    return templates.TemplateResponse("user_creation.html", {"request": request})
 
 
 @router.post("/create_user")

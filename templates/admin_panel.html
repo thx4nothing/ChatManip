@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
           integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
           crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../static/admin_panel_style.css">
+    <link rel="stylesheet" type="text/css" href="../static/admin_panel/admin_panel.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -133,6 +133,9 @@
                 <th>API Prompt Tokens</th>
                 <th>API Completion Tokens</th>
                 <th>API Total Tokens</th>
+                <th>Last Token Update Time</th>
+                <th>Available Tokens</th>
+                <th>Last Request Time</th>
                 <th>Delete</th>
             </tr>
             </thead>
@@ -141,6 +144,11 @@
         </table>
     </div>
 </div>
-<script src="../static/admin_panel_script.js"></script>
+<script type="module" src="../static/admin_panel/admin_panel.js"></script>
+<script type="module" src="../static/admin_panel/tasks.js"></script>
+<script type="module" src="../static/admin_panel/invite_codes.js"></script>
+<script type="module" src="../static/admin_panel/rules.js"></script>
+<script type="module" src="../static/admin_panel/users.js"></script>
+<script type="module" src="../static/admin_panel/personas.js"></script>
 </body>
 </html>

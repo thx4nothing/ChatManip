@@ -5,17 +5,16 @@ from fastapi import APIRouter, Request
 from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
 
+from api_server.chatgpt_interface import request_response, Ok, Err
 from api_server.database import engine, ChatSession, Persona, User, Messages, Task
+from api_server.models import Message
 from api_server.rule import *
 from api_server.templates import templates
-from api_server.models import Message
-from api_server.chatgpt_interface import request_response, Ok, Err
 
-# FastAPI Routing
 router = APIRouter()
 
 
-@router.get("/session/{session_id}")
+@router.get("/{session_id}")
 async def session(session_id: str, request: Request):
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
@@ -23,7 +22,7 @@ async def session(session_id: str, request: Request):
         if current_session is None:
             return RedirectResponse(url="/")
 
-    return templates.TemplateResponse("chat_base.html", {"request": request})
+    return templates.TemplateResponse("chat.html", {"request": request})
 
 
 def add_message_to_database(db_session, session_id, message, altered_message, chat_response, altered_response):
@@ -34,12 +33,12 @@ def add_message_to_database(db_session, session_id, message, altered_message, ch
     db_session.commit()
 
 
-@router.get("/session/{session_id}/disclaimer")
+@router.get("/{session_id}/disclaimer")
 async def disclaimer(session_id: str):
-    return get_task(session_id)
+    return get_session_task(session_id)
 
 
-def get_task(session_id: str):
+def get_session_task(session_id: str):
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()
@@ -53,8 +52,8 @@ def get_task(session_id: str):
                 return "Enjoy!"
 
 
-@router.get("/chat/{session_id}/greetings")
-async def greetings(session_id: str):
+@router.get("/{session_id}/greetings")
+async def get_session_greetings(session_id: str):
     print("Greetings requested.")
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
@@ -66,7 +65,7 @@ async def greetings(session_id: str):
             if persona:
                 messages.append({"role": "system", "content": persona.system_instruction[language]})
 
-            task = get_task(session_id)
+            task = get_session_task(session_id)
             if task != "Enjoy!":
                 if language == "english":
                     message = "I was given this task, please greet me accordingly:\n" + task
@@ -86,8 +85,8 @@ async def greetings(session_id: str):
                 print(chat_response.error_message)
 
 
-@router.get("/session/{session_id}/history")
-async def history(session_id: str):
+@router.get("/{session_id}/history")
+async def get_session_history(session_id: str):
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()
@@ -97,8 +96,8 @@ async def history(session_id: str):
             return messages
 
 
-@router.get("/session/{session_id}/check_done")
-def check_session_end(session_id: str):
+@router.get("/{session_id}/check_done")
+def check_session_done(session_id: str):
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()
@@ -120,7 +119,7 @@ def check_session_end(session_id: str):
             return {"error": "Session not found."}
 
 
-@router.get("/session/{session_id}/end")
+@router.get("/{session_id}/end")
 def end_session(session_id: str):
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
@@ -130,8 +129,8 @@ def end_session(session_id: str):
             return {"message": "Chat session ended."}
 
 
-@router.post("/chat/{session_id}")
-async def chat(session_id: str, message: Message):
+@router.post("/{session_id}")
+async def send_message(session_id: str, message: Message):
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()

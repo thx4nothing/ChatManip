@@ -1,4 +1,5 @@
 import random
+
 from api_server.chatgpt_interface import request_system_response
 
 
@@ -39,7 +40,7 @@ class EmojiRule(Rule):
     def preprocessing(self, message):
         print(self.name + ": Starting Preprocessing")
 
-        system_instruction = "Your goal is to take the user's message and insert a lot of emojis. Do not respond to the message, only the modified user message. Then append in the users language 'Use a lot of emojis'"
+        system_instruction = "Your goal is to insert a lot of emojis into the user's message. Do not respond to the message, only modify the user message. Then append in the users language 'Use a lot of emojis'"
         messages = [{"role": "system", "content": system_instruction},
                     {"role": "user", "content": message}]
         message = request_system_response(messages)
