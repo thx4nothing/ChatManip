@@ -28,7 +28,7 @@ function initializeChat() {
         if (sender === "system") return
         messageElement.classList.add("message");
         messageElement.classList.add(sender === "user" ? "user-message" : "bot-message");
-        messageElement.innerHTML = (sender === "user" ? "<strong>You:</strong> " : "<strong>ChatGPT:</strong> ") + DOMPurify.sanitize(marked.parse(message));
+        messageElement.innerHTML = (sender === "user" ? "<strong>You:</strong> " : "<strong>ChatBot:</strong> ") + DOMPurify.sanitize(marked.parse(message));
 
         chatMessages.appendChild(messageElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -125,7 +125,7 @@ function initializeChat() {
                     }
                 });
                 if (first_time) {
-                    request_greeting();
+                    //request_greeting();
                 }
             })
             .catch(error => {
@@ -134,29 +134,52 @@ function initializeChat() {
         return first_time;
     }
 
-    function showModal() {
-        var modal = document.getElementById('disclaimerModal');
+    function showDisclaimerModal() {
+        const modal = document.getElementById('disclaimerModal');
         const session_id = getSessionIdFromUrl()
 
         fetch(`/chat/${session_id}/disclaimer`)
             .then(response => response.text())
             .then(data => {
-                var modalContent = document.querySelector('.modal-body');
+                const modalContent = document.querySelector('.modal-body');
                 modalContent.innerHTML = "<p>" + data + "</p>";
             });
 
         modal.classList.add('is-visible');
 
-        var closeButton = document.getElementById('modalCloseButton');
+        const closeButton = document.getElementById('modalCloseButton');
         closeButton.addEventListener('click', function () {
             modal.classList.remove('is-visible');
         });
     }
 
+    function showEndChatModal() {
+        const modal = document.getElementById('endChatModal');
+        const session_id = getSessionIdFromUrl()
+
+        fetch(`/chat/${session_id}/check_done`)
+            .then(response => response.json())
+            .then(data => {
+                const modalContent = document.querySelector('.modal-body');
+                if (!data.session_end && data.messages_left > 0) {
+                    const warningMessage = document.createElement('p');
+                    warningMessage.textContent = `Warning: You still have ${data.messages_left} messages left to send.`;
+
+                    modalContent.appendChild(warningMessage);
+                }
+            });
+
+        modal.classList.add('is-visible');
+
+        const closeButton = document.getElementById('modalCloseButton');
+        closeButton.addEventListener('click', function () {
+            modal.classList.remove('is-visible');
+        });
+    }
 
     // Event listeners
     sendButton.addEventListener("click", sendMessage);
-    doneButton.addEventListener("click", endSession)
+    doneButton.addEventListener("click", showEndChatModal)
     userInput.addEventListener("keyup", function (event) {
         if (event.code === 'Enter') {
             sendMessage();
@@ -165,6 +188,6 @@ function initializeChat() {
 
     //Startup functions
     loadChatHistory();
-    showModal();
+    showDisclaimerModal();
     setInterval(checkSessionEnd, 5000);
 }
