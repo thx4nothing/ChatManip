@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+          integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='intermission.css') }}">
+</head>
+<body>
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeGm_1rsEZTM75dikP-Y2F0SmYTWA17KveW2zLgE1h8SeYyiw/viewform?embedded=true"
+        width="640" height="1277" frameborder="0" marginheight="0" marginwidth="0">Loading…
+</iframe>
+<button id="proceedButton" class="pure-button pure-button-primary">Proceed</button>
+
+<div id="warningModal" class="modal">
+    <div class="modal-content pure-form">
+        <h3>Warning</h3>
+        <p>Have you submitted the questionnaire?</p>
+        <label>
+            <input type="checkbox" id="confirmationCheckbox"> Yes, I have submitted the questionnaire
+        </label>
+        <div class="pure-button-group">
+            <button id="confirmButton" class="pure-button pure-button-primary">Confirm</button>
+            <button id="closeButton" class="pure-button">Close</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', path='intermission.js') }}"></script>
+</body>
+</html>

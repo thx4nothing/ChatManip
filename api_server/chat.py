@@ -6,7 +6,7 @@ from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
 
 from api_server.chatgpt_interface import request_response, Ok, Err
-from api_server.database import engine, ChatSession, Persona, User, Messages, Task
+from api_server.database import engine, ChatSession, Persona, User, Messages, Task, InviteCode
 from api_server.models import Message
 from api_server.rule import *
 from api_server.templates import templates
@@ -111,7 +111,7 @@ def check_session_done(session_id: str):
             time_left = (current_session.time_limit - elapsed_time).total_seconds()
             messages_left = current_session.message_limit - message_count
 
-            if time_limit_reached or message_limit_reached:
+            if time_limit_reached or message_limit_reached or current_session.done:
                 return {"session_end": True, "time_left": 0, "messages_left": 0}
             else:
                 return {"session_end": False, "time_left": time_left, "messages_left": messages_left}
@@ -120,13 +120,49 @@ def check_session_done(session_id: str):
 
 
 @router.get("/{session_id}/end")
-def end_session(session_id: str):
+def end_session(session_id: str, request: Request):
+    with Session(engine) as db_session:
+        return templates.TemplateResponse("end.html", {"request": request})
+
+
+@router.get("/{session_id}/intermission")
+def intermission(session_id: str, request: Request):
+    return templates.TemplateResponse("intermission.html", {"request": request})
+
+
+@router.get("/{session_id}/next")
+def next_session(session_id: str):
     with Session(engine) as db_session:
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()
         if current_session is not None:
             current_session.done = True
-            return {"message": "Chat session ended."}
+            statement = select(InviteCode).where(InviteCode.invite_code == session_id)
+            next_invite_code_obj = db_session.exec(statement).first()
+            next_session_id = next_invite_code_obj.next_session_id
+            if next_session_id != "none":
+                statement = select(ChatSession).where(ChatSession.session_id == next_session_id)
+                next_session_obj = db_session.exec(statement).first()
+                if next_session_obj is None:
+                    statement = select(User).where(User.user_id == current_session.user_id)
+                    current_user = db_session.exec(statement).first()
+                    new_session = ChatSession(session_id=next_session_id, user_id=current_user.user_id,
+                                              persona_id=next_invite_code_obj.persona_id,
+                                              task_id=next_invite_code_obj.task_id,
+                                              rules=next_invite_code_obj.rules)
+                    db_session.add(new_session)
+                    db_session.commit()
+
+                    next_invite_code_obj.used = True
+                    next_invite_code_obj.user_id = current_user.user_id
+                    db_session.add(next_invite_code_obj)
+                    db_session.commit()
+
+                redirect_url = f"/chat/{next_session_id}"
+                return RedirectResponse(redirect_url)
+            else:
+                redirect_url = f"/chat/{session_id}/end"
+                return RedirectResponse(redirect_url)
 
 
 @router.post("/{session_id}")

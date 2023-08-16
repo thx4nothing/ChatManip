@@ -47,7 +47,7 @@ async def create_user(user: UserInformation):
         statement = select(ChatSession).where(ChatSession.user_id == current_user.user_id)
         current_session = db_session.exec(statement).first()
         session_id = str(current_session.session_id)
-        redirect_url = f"/session/{session_id}"
+        redirect_url = f"/chat/{session_id}"
         print(redirect_url)
         return RedirectResponse(url=redirect_url, status_code=303)
 

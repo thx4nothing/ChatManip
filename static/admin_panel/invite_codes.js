@@ -17,6 +17,7 @@ export function initializeInviteCodeSection() {
             const personaCell = row.insertCell();
             const taskCell = row.insertCell();
             const rulesCell = row.insertCell();
+            const nextSessionIDCell = row.insertCell();
             const saveCell = row.insertCell();
             const deleteCell = row.insertCell();
 
@@ -63,6 +64,30 @@ export function initializeInviteCodeSection() {
             rulesTextbox.value = inviteCode.rules ? inviteCode.rules : "";
             rulesCell.appendChild(rulesTextbox);
 
+            // Create dropdown for nextSessionID
+            const nextSessionIDDropdown = document.createElement("select");
+            fetch(`/admin/invite_codes?token=${getToken()}`)
+                .then(response => response.json())
+                .then(invite_codes => {
+                    const option = document.createElement("option");
+                    option.value = "none";
+                    option.textContent = "none";
+                    nextSessionIDDropdown.appendChild(option);
+                    invite_codes.forEach(invite_code => {
+                        if (invite_code.invite_code !== inviteCode.invite_code) {
+                            const option = document.createElement("option");
+                            option.value = invite_code.invite_code;
+                            option.textContent = invite_code.invite_code;
+                            nextSessionIDDropdown.appendChild(option);
+                        }
+                    });
+                    nextSessionIDDropdown.value = inviteCode.next_session_id || "";
+                })
+                .catch(error => {
+                    console.error("Error fetching nextSessionID:", error);
+                });
+            nextSessionIDCell.appendChild(nextSessionIDDropdown);
+
             // Create save button
             if (!inviteCode.used) {
                 const saveBtn = document.createElement("button");
@@ -73,7 +98,8 @@ export function initializeInviteCodeSection() {
                     let persona_id = isNaN(personaDropdownValue) ? -1 : personaDropdownValue
                     let taskDropdownValue = parseInt(taskDropdown.value)
                     let task_id = isNaN(taskDropdownValue) ? -1 : taskDropdownValue
-                    updateInviteCode(inviteCode.invite_code, persona_id, task_id, rules);
+                    let next_session_id = nextSessionIDDropdown.value
+                    updateInviteCode(inviteCode.invite_code, persona_id, task_id, rules, next_session_id);
                 });
                 saveCell.appendChild(saveBtn);
             }
@@ -129,9 +155,9 @@ export function initializeInviteCodeSection() {
             });
     }
 
-    function updateInviteCode(inviteCode, persona_id, task_id, rules) {
+    function updateInviteCode(inviteCode, persona_id, task_id, rules, next_session_id) {
         const queryParams = new URLSearchParams({
-            persona_id: parseInt(persona_id), task_id: parseInt(task_id), rules: rules
+            persona_id: parseInt(persona_id), task_id: parseInt(task_id), rules: rules, next_session_id: next_session_id
         });
         fetch(`/admin/invite_codes/${inviteCode}?${queryParams}&token=${getToken()}`, {
             method: "PATCH", headers: {

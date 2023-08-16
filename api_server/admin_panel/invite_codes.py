@@ -43,7 +43,8 @@ async def delete_invite_code(invite_code: str, token: str = Query(...)):
 
 
 @router.patch("/{invite_code}", response_model=InviteCode)
-async def update_invite_code(invite_code: str, persona_id: int, task_id: int, rules: str, token: str = Query(...)):
+async def update_invite_code(invite_code: str, persona_id: int, task_id: int, rules: str, next_session_id: str,
+                             token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
         invite_code_obj = db_session.get(InviteCode, invite_code)
@@ -54,6 +55,7 @@ async def update_invite_code(invite_code: str, persona_id: int, task_id: int, ru
         if task_id >= 0:
             invite_code_obj.task_id = task_id
         invite_code_obj.rules = rules
+        invite_code_obj.next_session_id = next_session_id
         db_session.add(invite_code_obj)
         db_session.commit()
         db_session.refresh(invite_code_obj)

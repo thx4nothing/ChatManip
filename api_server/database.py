@@ -85,3 +85,4 @@ class InviteCode(SQLModel, table=True):
     persona_id: Optional[int] = Field(default=None, nullable=True)
     task_id: Optional[int] = Field(default=None, nullable=True)
     rules: str = Field(default='')
+    next_session_id: Optional[str] = Field(default='none')

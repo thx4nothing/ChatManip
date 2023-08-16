@@ -14,6 +14,7 @@ function initializeChat() {
     function sendMessage() {
         const message = userInput.value.trim();
         if (message !== "") {
+            userInput.disabled = true;
             displayMessage("user", message);
             userInput.value = "";
 
@@ -46,9 +47,11 @@ function initializeChat() {
             .then(data => {
                 const response = data.response;
                 displayMessage("assistant", response);
+                userInput.disabled = false;
             })
             .catch(error => {
                 console.error("Error:", error);
+                userInput.disabled = false;
             });
     }
 
@@ -83,7 +86,7 @@ function initializeChat() {
         sendButton.disabled = true;
         doneButton.disabled = true;
         timerDisplay.textContent = "Chat session ended.";
-        window.location.href = `/chat/${session_id}/end`;
+        window.location.href = `/chat/${session_id}/intermission`;
     }
 
     async function checkSessionEnd() {
@@ -141,7 +144,7 @@ function initializeChat() {
         fetch(`/chat/${session_id}/disclaimer`)
             .then(response => response.text())
             .then(data => {
-                const modalContent = document.querySelector('.modal-body');
+                const modalContent = document.querySelector('#disclaimerModal .modal-body');
                 modalContent.innerHTML = "<p>" + data + "</p>";
             });
 
@@ -160,21 +163,30 @@ function initializeChat() {
         fetch(`/chat/${session_id}/check_done`)
             .then(response => response.json())
             .then(data => {
-                const modalContent = document.querySelector('.modal-body');
+                const modalContent = document.querySelector('#endChatModal .modal-body');
+                modalContent.innerHTML = '';
                 if (!data.session_end && data.messages_left > 0) {
                     const warningMessage = document.createElement('p');
                     warningMessage.textContent = `Warning: You still have ${data.messages_left} messages left to send.`;
-
                     modalContent.appendChild(warningMessage);
+
+                    modal.classList.add('is-visible');
+
+                    const endChatButton = document.getElementById('endChatModalConfirmButton');
+                    endChatButton.addEventListener('click', function () {
+                        modal.classList.remove('is-visible');
+                        endSession();
+                    });
+
+                    const closeButton = document.getElementById('endChatModalCancelButton');
+                    closeButton.addEventListener('click', function () {
+                        modal.classList.remove('is-visible');
+                    });
+                } else if (data.session_end) {
+                    endSession();
                 }
             });
 
-        modal.classList.add('is-visible');
-
-        const closeButton = document.getElementById('modalCloseButton');
-        closeButton.addEventListener('click', function () {
-            modal.classList.remove('is-visible');
-        });
     }
 
     // Event listeners
@@ -189,5 +201,5 @@ function initializeChat() {
     //Startup functions
     loadChatHistory();
     showDisclaimerModal();
-    setInterval(checkSessionEnd, 5000);
+    setInterval(checkSessionEnd, 1000);
 }
