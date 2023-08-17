@@ -57,6 +57,7 @@ class Persona(SQLModel, table=True):
                          nullable=False))
     name: str = Field("")
     system_instruction: dict = Field(sa_column=Column(JSON, default={}))
+    first_message: dict = Field(sa_column=Column(JSON, default={}))
     before_instruction: dict = Field(sa_column=Column(JSON, default={}))
     after_instruction: dict = Field(sa_column=Column(JSON, default={}))
 

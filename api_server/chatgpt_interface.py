@@ -3,6 +3,7 @@ from datetime import datetime
 
 import openai
 from sqlmodel import Session, select
+import tiktoken
 
 from api_server.database import engine, User, ChatSession
 
@@ -26,7 +27,9 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 bucket_capacity: int = 500
 token_rate: float = 0.5
 min_time_between_requests: float = 2.0
-min_tokens_required = 100
+
+
+# min_tokens_required = 100
 
 
 def request_system_response(messages: list[dict[str, str]]) -> str:
@@ -64,12 +67,15 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
             # Check if there are enough tokens available for the request
             # (only using min_tokens_required instead of calculating api calls before hand,
             # because we don't know how many each api call will generate
+            min_tokens_required = num_tokens_from_messages(messages) + 50
+            print("min tokens required: ", min_tokens_required)
+            print("currently available: ", current_user.available_tokens)
             if current_user.available_tokens >= min_tokens_required:
                 # Update the last request time
                 current_user.last_request_time = current_time
 
                 # Make the API request
-                completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+                completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, max_tokens=50)
                 chat_response = completion.choices[0].message.content
 
                 # Update API token counters in the database
@@ -86,3 +92,24 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
             else:
                 # rate limit exceeded
                 return Err("Rate limit exceeded. Please wait before making another request.")
+
+
+def num_tokens_from_string(string: str) -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    # encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
+
+
+def num_tokens_from_messages(messages):
+    """Returns the number of tokens used by a list of messages."""
+    num_tokens = 0
+    for message in messages:
+        num_tokens += 4  # every message follows <im_start>{role/name}\n{content}<im_end>\n
+        for key, value in message.items():
+            num_tokens += num_tokens_from_string(value)
+            if key == "name":  # if there's a name, the role is omitted
+                num_tokens += -1  # role is always required and always 1 token
+    num_tokens += 2  # every reply is primed with <im_start>assistant
+    return num_tokens

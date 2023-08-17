@@ -23,6 +23,7 @@ async def create_persona(persona: Persona, token: str = Query(...)):
         new_persona = Persona(
             name=persona.name,
             system_instruction=persona.system_instruction,
+            first_message=persona.first_message,
             before_instruction=persona.before_instruction,
             after_instruction=persona.after_instruction
         )
@@ -83,6 +84,7 @@ async def export_persona_database(token: str = Query(...)):
         personas = db_session.exec(statement).all()
         persona_data = [{"name": persona.name,
                          "system_instruction": persona.system_instruction,
+                         "first_message": persona.first_message,
                          "before_instruction": persona.before_instruction,
                          "after_instruction": persona.after_instruction} for persona in personas]
         return persona_data

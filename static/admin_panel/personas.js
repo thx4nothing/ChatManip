@@ -33,6 +33,10 @@ export function initializePersonaSection() {
             systemInstruction.textContent = `System Instruction: ${persona.system_instruction[language] || ""}`;
             languageDiv.appendChild(systemInstruction);
 
+            const firstMessage = document.createElement("p");
+            firstMessage.textContent = `First Message: ${persona.first_message[language] || ""}`;
+            languageDiv.appendChild(firstMessage);
+
             const instructionBefore = document.createElement("p");
             instructionBefore.textContent = `Instruction Before: ${persona.before_instruction[language] || ""}`;
             languageDiv.appendChild(instructionBefore);
@@ -64,28 +68,24 @@ export function initializePersonaSection() {
             });
     }
 
-    function handleCreateNewClick() {
-        personaDropdown.selectedIndex = -1;
-        personaForm.classList.remove("hidden");
-        personaName.value = "";
+    function addNewLanguageRow() {
+        const newRow = document.createElement("div");
+        newRow.classList.add("language-input-row");
 
-        // Clear existing language rows
-        const languageContainer = document.getElementById("languageInputs");
-        languageContainer.innerHTML = '';
-
-        // Create a single row for the language
-        const row = document.createElement("div");
-        row.classList.add("language-input-row");
-
-        const languageInput = document.createElement("input");
-        languageInput.type = "text";
-        languageInput.classList.add("language-name");
-        languageInput.placeholder = "english or german";
+        const languageNameInput = document.createElement("input");
+        languageNameInput.type = "text";
+        languageNameInput.classList.add("language-name");
+        languageNameInput.placeholder = "english or german";
 
         const systemInstructionInput = document.createElement("input");
         systemInstructionInput.type = "text";
         systemInstructionInput.classList.add("system-instruction");
         systemInstructionInput.placeholder = "System Instruction";
+
+        const firstMessageInput = document.createElement("input");
+        firstMessageInput.type = "text";
+        firstMessageInput.classList.add("first-message");
+        firstMessageInput.placeholder = "First Message";
 
         const instructionBeforeInput = document.createElement("input");
         instructionBeforeInput.type = "text";
@@ -97,12 +97,23 @@ export function initializePersonaSection() {
         instructionAfterInput.classList.add("instruction-after");
         instructionAfterInput.placeholder = "Instruction after User Message";
 
-        row.appendChild(languageInput);
-        row.appendChild(systemInstructionInput);
-        row.appendChild(instructionBeforeInput);
-        row.appendChild(instructionAfterInput);
+        newRow.appendChild(languageNameInput);
+        newRow.appendChild(systemInstructionInput);
+        newRow.appendChild(firstMessageInput);
+        newRow.appendChild(instructionBeforeInput);
+        newRow.appendChild(instructionAfterInput);
 
-        languageContainer.appendChild(row);
+        languageInputs.appendChild(newRow);
+    }
+
+    function handleCreateNewClick() {
+        personaDropdown.selectedIndex = -1;
+        personaForm.classList.remove("hidden");
+        personaName.value = "";
+
+        // Clear existing language rows
+        languageInputs.innerHTML = '';
+        addNewLanguageRow();
     }
 
     function handleEditSelectedClick() {
@@ -130,6 +141,12 @@ export function initializePersonaSection() {
                         systemInstructionInput.classList.add("system-instruction");
                         systemInstructionInput.placeholder = "System Instruction";
                         systemInstructionInput.value = persona.system_instruction[language] || "";
+
+                        const firstMessageInput = document.createElement("input");
+                        firstMessageInput.type = "text";
+                        firstMessageInput.classList.add("first-message");
+                        firstMessageInput.placeholder = "First Message";
+                        firstMessageInput.value = persona.first_message[language] || "";
 
                         const instructionBeforeInput = document.createElement("input");
                         instructionBeforeInput.type = "text";
@@ -182,6 +199,7 @@ export function initializePersonaSection() {
         const personaData = {
             name: personaName.value,
             system_instruction: {},
+            first_message: {},
             before_instruction: {},
             after_instruction: {}
         };
@@ -190,10 +208,12 @@ export function initializePersonaSection() {
         languageRows.forEach(row => {
             const language = row.querySelector(".language-name").value;
             const systemInstruction = row.querySelector(".system-instruction").value;
+            const firstMessage = row.querySelector(".first-message").value;
             const instructionBefore = row.querySelector(".instruction-before").value;
             const instructionAfter = row.querySelector(".instruction-after").value;
 
             personaData.system_instruction[language] = systemInstruction;
+            personaData.first_message[language] = firstMessage;
             personaData.before_instruction[language] = instructionBefore;
             personaData.after_instruction[language] = instructionAfter;
         });
@@ -278,39 +298,7 @@ export function initializePersonaSection() {
             });
     }
 
-    function handleAddLanguageClick() {
-        const newRow = document.createElement("div");
-        newRow.classList.add("language-input-row");
-
-        const languageNameInput = document.createElement("input");
-        languageNameInput.type = "text";
-        languageNameInput.classList.add("language-name");
-        languageNameInput.placeholder = "english or german";
-
-        const systemInstructionInput = document.createElement("input");
-        systemInstructionInput.type = "text";
-        systemInstructionInput.classList.add("system-instruction");
-        systemInstructionInput.placeholder = "System Instruction";
-
-        const instructionBeforeInput = document.createElement("input");
-        instructionBeforeInput.type = "text";
-        instructionBeforeInput.classList.add("instruction-before");
-        instructionBeforeInput.placeholder = "Instruction before User Message";
-
-        const instructionAfterInput = document.createElement("input");
-        instructionAfterInput.type = "text";
-        instructionAfterInput.classList.add("instruction-after");
-        instructionAfterInput.placeholder = "Instruction after User Message";
-
-        newRow.appendChild(languageNameInput);
-        newRow.appendChild(systemInstructionInput);
-        newRow.appendChild(instructionBeforeInput);
-        newRow.appendChild(instructionAfterInput);
-
-        languageInputs.appendChild(newRow);
-    }
-
-    addLanguageBtn.addEventListener("click", handleAddLanguageClick);
+    addLanguageBtn.addEventListener("click", addNewLanguageRow);
     createNewBtn.addEventListener("click", handleCreateNewClick);
     editSelectedBtn.addEventListener("click", handleEditSelectedClick);
     deleteSelectedBtn.addEventListener("click", handleDeleteSelectedClick);

@@ -11,3 +11,4 @@ python-jose~=3.3.0
 cryptography~=41.0.3
 bcrypt~=4.0.1
 passlib~=1.7.4
+tiktoken~=0.4.0

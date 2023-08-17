@@ -92,7 +92,7 @@ async def get_session_history(session_id: str):
         current_session = db_session.exec(statement).first()
         if current_session is not None:
             persona = get_session_persona(db_session, current_session)
-            messages = get_chat_history(db_session, current_session, persona, altered=False)
+            messages = get_chat_history(db_session, current_session, persona, user=True)
             return messages
 
 
@@ -253,7 +253,7 @@ def get_session_persona(db_session: Session, current_session: ChatSession):
 
 
 def get_chat_history(db_session: Session, current_session: ChatSession, persona: Persona,
-                     altered=True):
+                     user=False):
     statement = select(Messages).where(Messages.session_id == current_session.session_id)
     all_messages = db_session.exec(statement).all()
     messages = []
@@ -262,8 +262,16 @@ def get_chat_history(db_session: Session, current_session: ChatSession, persona:
                          "content": persona.system_instruction[get_session_language(db_session, current_session)]})
         print("Persona system instruction:")
         print(persona.system_instruction[get_session_language(db_session, current_session)])
+
+        if persona.first_message and not user:
+            messages.append({"role": "user",
+                             "content": persona.first_message[get_session_language(db_session, current_session)]})
+            messages.append({"role": "assistant",
+                             "content": "Okay."})
+
     for db_message in all_messages:
-        message = db_message.altered_message if altered else db_message.message
+        message = db_message.altered_message if not user else db_message.message
+        response = db_message.altered_response if user else db_message.response
         messages.append({"role": "user", "content": message})
-        messages.append({"role": "assistant", "content": db_message.response})
+        messages.append({"role": "assistant", "content": response})
     return messages
