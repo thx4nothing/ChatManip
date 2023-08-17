@@ -1,3 +1,21 @@
+"""
+Module: user_router
+
+This module defines an API router for user-related actions using the FastAPI framework.
+It includes routes for creating users and handling user sessions.
+
+Functions:
+    read_root: Serves the index.html template on the root URL ("/").
+    create_user: Handles user creation, checks invite codes, and sets up user sessions.
+
+Usage:
+    The router is integrated with the FastAPI application to
+    handle user-related actions through API endpoints.
+
+Author: Marlon Beck
+Date: 17/08/2023
+"""
+
 from fastapi import APIRouter, Request, HTTPException
 from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
@@ -9,14 +27,31 @@ from api_server.templates import templates
 router = APIRouter()
 
 
-# Route to serve the index.html template on root URL ("/")
 @router.get("/")
 async def read_root(request: Request):
+    """
+    Serves the index.html template on the root URL ("/").
+
+    Args:
+        request (Request): The incoming request.
+
+    Returns:
+        TemplateResponse: The template response containing the "user_creation.html" template.
+    """
     return templates.TemplateResponse("user_creation.html", {"request": request})
 
 
 @router.post("/create_user")
 async def create_user(user: UserInformation):
+    """
+    Handles user creation, checks invite codes, sets up user sessions.
+
+    Args:
+        user (UserInformation): User information received in the POST request.
+
+    Returns:
+        RedirectResponse: Redirects the user to the chat session page or back to the root URL.
+    """
     with Session(engine) as db_session:
         statement = select(InviteCode).where(InviteCode.invite_code == user.invite_code)
         invite_code_obj = db_session.exec(statement).first()
@@ -34,7 +69,8 @@ async def create_user(user: UserInformation):
         current_user = new_user
         new_invite_code_str = user.invite_code
         new_session = ChatSession(session_id=new_invite_code_str, user_id=current_user.user_id,
-                                  persona_id=invite_code_obj.persona_id, task_id=invite_code_obj.task_id,
+                                  persona_id=invite_code_obj.persona_id,
+                                  task_id=invite_code_obj.task_id,
                                   rules=invite_code_obj.rules)
         db_session.add(new_session)
         db_session.commit()

@@ -1,3 +1,20 @@
+"""
+Module: main
+
+This module initializes the FastAPI application and configures routing for various parts
+of the application, including chat, user creation, questionnaire, and admin panel.
+
+Functions:
+    on_startup: Function to be executed during application startup to create SQLModel metadata.
+
+Usage:
+    Run this module to start the FastAPI application and set up
+    routing for different parts of the application.
+
+Author: Marlon Beck
+Date: 17/08/2023
+"""
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from sqlmodel import SQLModel
@@ -23,4 +40,7 @@ app.include_router(user_creation.router)
 
 @app.on_event("startup")
 def on_startup():
+    """
+    Function to be executed during application startup to create SQLModel metadata.
+    """
     SQLModel.metadata.create_all(database.engine)
