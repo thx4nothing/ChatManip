@@ -4,9 +4,9 @@ from typing import List
 from fastapi import Query, HTTPException, UploadFile, File, APIRouter
 from sqlmodel import Session, select
 
-from .common import list_entities
 from api_server.database import Persona, engine
 from .auth import check_authentication
+from .common import list_entities
 
 router = APIRouter()
 

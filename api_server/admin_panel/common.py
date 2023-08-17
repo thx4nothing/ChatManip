@@ -3,8 +3,8 @@ from typing import Type, Any
 from fastapi import Query
 from sqlmodel import Session, select
 
-from .auth import check_authentication
 from api_server.database import engine
+from .auth import check_authentication
 
 
 async def list_entities(entity_type: Type[Any], token: str = Query(...)):

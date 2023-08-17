@@ -87,3 +87,11 @@ class InviteCode(SQLModel, table=True):
     task_id: Optional[int] = Field(default=None, nullable=True)
     rules: str = Field(default='')
     next_session_id: Optional[str] = Field(default='none')
+
+
+class Questionnaire(SQLModel, table=True):
+    questionnaire_id: Optional[int] = Field(
+        sa_column=Column(Integer, primary_key=True, autoincrement=True, unique=True, nullable=False))
+    qa: dict = Field(sa_column=Column(JSON, default={}))
+    time_stamp: datetime = Field(default_factory=datetime.now, nullable=False)
+    session_id: str

@@ -125,11 +125,6 @@ def end_session(session_id: str, request: Request):
         return templates.TemplateResponse("end.html", {"request": request})
 
 
-@router.get("/{session_id}/intermission")
-def intermission(session_id: str, request: Request):
-    return templates.TemplateResponse("intermission.html", {"request": request})
-
-
 @router.get("/{session_id}/next")
 def next_session(session_id: str):
     with Session(engine) as db_session:

@@ -18,14 +18,14 @@ function initializeUserCreation() {
             return false;
         }
 
-        var age = document.getElementById("age").value;
-        var gender = document.getElementById("gender").value;
-        var occupation = document.getElementById("occupation").value;
-        var location = document.getElementById("location").value;
-        var language = document.querySelector('input[name="language"]:checked').value;
-        var invite_code = document.getElementById("invite_code").value;
+        const age = document.getElementById("age").value;
+        const gender = document.getElementById("gender").value;
+        const occupation = document.getElementById("occupation").value;
+        const location = document.getElementById("location").value;
+        const language = document.querySelector('input[name="language"]:checked').value;
+        const invite_code = document.getElementById("invite_code").value;
 
-        var userInfo = {
+        const userInfo = {
             age: age,
             gender: gender,
             occupation: occupation,
@@ -43,11 +43,7 @@ function initializeUserCreation() {
         })
             .then(response => {
                 if (response.redirected) {
-                    // Get the redirect URL from the response headers
-                    const redirectUrl = response.url;
-
-                    // Manually redirect the user to the new URL
-                    window.location.href = redirectUrl;
+                    window.location.href = response.url;
                 }
             })
             .catch(error => {

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+          integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='questionnaire.css') }}">
+</head>
+<body>
+<div class="pure-g">
+    <div class="pure-u-1">
+        <h1 class="header">Questionnaire</h1>
+    </div>
+
+    <form class="pure-form pure-form-stacked pure-u-1" id="rosas-form">
+        <fieldset>
+            <legend>Perceived Social Attributes</legend>
+            <p>Rate each statement on a scale from 1 (Strongly Disagree) to 5 (Strongly Agree)</p>
+
+            <div class="range-container">
+                <label for="sociability">Sociability:</label>
+                <input type="range" id="sociability" name="sociability" min="1" max="5" step="1" required
+                       oninput="this.nextElementSibling.value = this.value">
+                <output class="range-label">3</output>
+            </div>
+            <div class="range-container">
+                <label for="interpersonal-warmth">Interpersonal Warmth:</label>
+                <input type="range" id="interpersonal-warmth" name="interpersonal-warmth" min="1" max="5" step="1"
+                       required oninput="this.nextElementSibling.value = this.value">
+                <output class="range-label">3</output>
+            </div>
+            <div class="range-container">
+                <label for="openness">Openness:</label>
+                <input type="range" id="openness" name="openness" min="1" max="5" step="1" required
+                       oninput="this.nextElementSibling.value = this.value">
+                <output class="range-label">3</output>
+            </div>
+            <div class="range-container">
+                <label for="reliability">Reliability:</label>
+                <input type="range" id="reliability" name="reliability" min="1" max="5" step="1" required
+                       oninput="this.nextElementSibling.value = this.value">
+                <output class="range-label">3</output>
+            </div>
+            <div class="range-container">
+                <label for="authenticity">Authenticity:</label>
+                <input type="range" id="authenticity" name="authenticity" min="1" max="5" step="1" required
+                       oninput="this.nextElementSibling.value = this.value">
+                <output class="range-label">3</output>
+            </div>
+
+            <div class="range-container">
+                <label for="dominance">Dominance:</label>
+                <input type="range" id="dominance" name="dominance" min="1" max="5" step="1" required
+                       oninput="this.nextElementSibling.value = this.value">
+                <output class="range-label">3</output>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>User Experience and Satisfaction</legend>
+            <label for="satisfaction">How satisfied were you with your interactions with ChatBot?</label>
+            <select id="satisfaction" name="satisfaction" required>
+                <option value="" disabled selected>Select an option</option>
+                <option value="1">Not at all satisfied</option>
+                <option value="2">Somewhat satisfied</option>
+                <option value="3">Neutral</option>
+                <option value="4">Satisfied</option>
+                <option value="5">Very satisfied</option>
+            </select>
+
+            <label for="behavior-effect">Did the ChatBot's behavior enhance or diminish your experience?</label>
+            <textarea id="behavior-effect" name="behavior-effect" rows="2" required></textarea>
+
+            <label for="expectations">To what extent did the interactions with ChatBot meet your expectations?</label>
+            <textarea id="expectations" name="expectations" rows="2" required></textarea>
+        </fieldset>
+
+        <fieldset>
+            <legend>Open-Ended Feedback</legend>
+            <label for="feedback">Please provide any additional comments or feedback about your experience:</label>
+            <textarea id="feedback" name="feedback" rows="4"></textarea>
+        </fieldset>
+
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </form>
+</div>
+
+<script type="module" src="{{ url_for('static', path='common.js') }}"></script>
+<script type="module" src="{{ url_for('static', path='questionnaire.js') }}"></script>
+</body>
+</html>

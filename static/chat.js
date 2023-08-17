@@ -1,3 +1,5 @@
+import {getSessionIdFromUrl} from "./common.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     initializeChat()
 });
@@ -36,7 +38,7 @@ function initializeChat() {
     }
 
     function sendToServer(message) {
-        const session_id = getSessionIdFromUrl();
+        const session_id = getSessionIdFromUrl("chat");
         // Make an HTTP request to the server
         fetch(`/chat/${session_id}`, {
             method: "POST", headers: {
@@ -56,7 +58,7 @@ function initializeChat() {
     }
 
     function request_greeting() {
-        const session_id = getSessionIdFromUrl()
+        const session_id = getSessionIdFromUrl("chat")
         // Make an HTTP request to the server
         fetch(`/chat/${session_id}/greetings`)
             .then(response => response.json())
@@ -69,29 +71,18 @@ function initializeChat() {
             });
     }
 
-    function getSessionIdFromUrl() {
-        const path = window.location.pathname;
-        const parts = path.split('/');
-        const sessionIdIndex = parts.indexOf('chat'); // Find the index of 'session' in the path
-        if (sessionIdIndex !== -1 && sessionIdIndex < parts.length - 1) {
-            // If 'session' is found and the session_id is present in the next part of the path
-            return parts[sessionIdIndex + 1]; // Return the session_id
-        }
-        return null; // If session_id is not found, return null
-    }
-
     function endSession() {
-        const session_id = getSessionIdFromUrl();
+        const session_id = getSessionIdFromUrl("chat");
         userInput.disabled = true;
         sendButton.disabled = true;
         doneButton.disabled = true;
         timerDisplay.textContent = "Chat session ended.";
-        window.location.href = `/chat/${session_id}/intermission`;
+        window.location.href = `/questionnaire/${session_id}`;
     }
 
     async function checkSessionEnd() {
         try {
-            const session_id = getSessionIdFromUrl();
+            const session_id = getSessionIdFromUrl("chat");
             const response = await fetch(`/chat/${session_id}/check_done`);
             const data = await response.json();
             if (data.session_end) {
@@ -113,7 +104,7 @@ function initializeChat() {
     }
 
     function loadChatHistory() {
-        const session_id = getSessionIdFromUrl()
+        const session_id = getSessionIdFromUrl("chat")
         let first_time = true;
         // Make an HTTP request to the server
         fetch(`/chat/${session_id}/history`, {})
@@ -139,7 +130,7 @@ function initializeChat() {
 
     function showDisclaimerModal() {
         const modal = document.getElementById('disclaimerModal');
-        const session_id = getSessionIdFromUrl()
+        const session_id = getSessionIdFromUrl("chat")
 
         fetch(`/chat/${session_id}/disclaimer`)
             .then(response => response.text())
@@ -158,7 +149,7 @@ function initializeChat() {
 
     function showEndChatModal() {
         const modal = document.getElementById('endChatModal');
-        const session_id = getSessionIdFromUrl()
+        const session_id = getSessionIdFromUrl("chat")
 
         fetch(`/chat/${session_id}/check_done`)
             .then(response => response.json())
