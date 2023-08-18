@@ -8,6 +8,7 @@ function initializeChat() {
     const chatMessages = document.getElementById("chat-messages");
     const userInput = document.getElementById("user-input");
     const sendButton = document.getElementById("send-button");
+    const taskButton = document.getElementById("task-button");
     const doneButton = document.getElementById('done-button');
     const timerDisplay = document.getElementById('timer-display');
     const messageCounter = document.getElementById('message-counter');
@@ -182,7 +183,8 @@ function initializeChat() {
 
     // Event listeners
     sendButton.addEventListener("click", sendMessage);
-    doneButton.addEventListener("click", showEndChatModal)
+    taskButton.addEventListener("click", showDisclaimerModal)
+    doneButton.addEventListener("click", showEndChatModal);
     userInput.addEventListener("keyup", function (event) {
         if (event.code === 'Enter') {
             sendMessage();

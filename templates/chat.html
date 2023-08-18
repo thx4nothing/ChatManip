@@ -16,7 +16,11 @@
     <div class="chat-input">
         <input type="text" id="user-input" placeholder="Type your message..."/>
         <button id="send-button" class="pure-button pure-button-primary">Send</button>
-        <button id="done-button" class="pure-button pure-button-error" style="background-color: #e53935;">End Chat
+        <button id="task-button" class="pure-button"
+                style="background-color: #007bff;">Show Task
+        </button>
+        <button id="done-button" class="pure-button pure-button-error"
+                style="background-color: #e53935;">End Chat
         </button>
     </div>
     <div id="timer-display" class="timer-display">Time remaining: mm:ss</div>
@@ -46,7 +50,9 @@
             <div class="modal-body">
             </div>
             <footer class="modal-footer">
-                <button id="endChatModalConfirmButton" class="pure-button pure-button-primary">End Chat</button>
+                <button id="endChatModalConfirmButton" class="pure-button pure-button-primary">End
+                    Chat
+                </button>
                 <button id="endChatModalCancelButton" class="pure-button">Cancel</button>
             </footer>
         </div>

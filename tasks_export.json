@@ -1,37 +1,9 @@
 [
   {
-    "name": "Riddle Me This",
-    "task_instruction": {
-      "german": "Stellen Sie dem Bot ein Rätsel und lassen Sie ihn versuchen, es zu lösen.",
-      "english": "Pose a riddle to the bot and have it attempt to solve it."
-    }
-  },
-  {
-    "name": "20 Questions",
-    "task_instruction": {
-      "german": "Denken Sie an ein Objekt, und lassen Sie den Bot 20 Fragen stellen, um herauszufinden, was es ist.",
-      "english": "Think of an object and have the bot ask 20 questions to determine what it is."
-    }
-  },
-  {
-    "name": "Word Association",
-    "task_instruction": {
-      "german": "Sagen Sie ein Wort, und lassen Sie den Bot ein assoziiertes Wort zurückgeben.",
-      "english": "Say a word and have the bot provide an associated word."
-    }
-  },
-  {
     "name": "Story Collaboration",
     "task_instruction": {
-      "german": "Beginnen Sie eine Geschichte, und lassen Sie den Bot abwechselnd Sätze hinzufügen.",
-      "english": "Start a story and have the bot add alternating sentences."
-    }
-  },
-  {
-    "name": "Trivia Quiz",
-    "task_instruction": {
-      "german": "Stellen Sie dem Bot Fragen zu verschiedenen Themen und sehen Sie, wie viele er korrekt beantworten kann.",
-      "english": "Ask the bot trivia questions on various topics and see how many it can answer correctly."
+      "english": "Welcome to the 'Story Collaboration' task! In this activity, you will have the opportunity to co-create a short story with the chatbot. Your role is to contribute sentences to the story, and the chatbot will respond by adding its own sentences. Explain it to the bot on how to play this game and begin!",
+      "german": "Willkommen zur 'Story Vervollständigung'! In dieser Aktivität haben Sie die Möglichkeit, gemeinsam mit dem Chatbot eine kurze Geschichte zu erstellen. Ihre Rolle besteht darin, Sätze zur Geschichte beizutragen, und der Chatbot wird antworten, indem er eigene Sätze hinzufügt. Erklären Sie es dem Bot, dieses Spiel zu spielen, und fangen Sie an!"
     }
   }
 ]
