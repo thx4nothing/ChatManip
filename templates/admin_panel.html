@@ -5,12 +5,28 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
           integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
           crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='admin_panel/admin_panel.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', path='admin_panel/admin_panel.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <div class="container pure-g">
     <h1 class="pure-u-1">Admin Panel</h1>
+
+    <div class="settings-section pure-u-1">
+        <h2>Settings</h2>
+        <label for="modelSelect">Model:</label>
+        <select id="modelSelect" class="pure-u-1-4">
+            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+            <option value="gpt-4">GPT-4</option>
+        </select>
+        <br>
+        <label for="temperatureInput">Temperature:</label>
+        <input type="number" id="temperatureInput" step="0.1" min="0.0" max="2.0" value="1.0">
+        <br>
+        <button id="saveSettingsBtn" class="pure-button pure-button-primary">Save Settings</button>
+    </div>
+
 
     <div class="persona-section pure-u-1">
         <h2>Persona Definitions</h2>
@@ -32,12 +48,15 @@
                     <input type="text" class="language-name" placeholder="english or german">
                     <input type="text" class="system-instruction" placeholder="System Instruction">
                     <input type="text" class="first-message" placeholder="First Message">
-                    <input type="text" class="instruction-before" placeholder="Instruction before User Message">
-                    <input type="text" class="instruction-after" placeholder="Instruction after User Message">
+                    <input type="text" class="instruction-before"
+                           placeholder="Instruction before User Message">
+                    <input type="text" class="instruction-after"
+                           placeholder="Instruction after User Message">
                 </div>
             </div>
             <button id="addLanguageBtn" class="pure-button">Add Language</button>
-            <button id="savePersonaBtn" class="pure-button pure-button-primary">Save Persona</button>
+            <button id="savePersonaBtn" class="pure-button pure-button-primary">Save Persona
+            </button>
         </div>
         <div id="personaDetails" class="pure-u-1">
             <h3>Persona Details</h3>
@@ -153,5 +172,6 @@
 <script type="module" src="{{ url_for('static', path='admin_panel/rules.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='admin_panel/users.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='admin_panel/personas.js') }}"></script>
+<script type="module" src="{{ url_for('static', path='admin_panel/settings.js') }}"></script>
 </body>
 </html>

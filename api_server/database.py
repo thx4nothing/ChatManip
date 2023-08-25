@@ -124,6 +124,15 @@ class Questionnaire(SQLModel, table=True):
     session_id: str
 
 
+class Settings(SQLModel, table=True):
+    """Represents the settings in the database."""
+    settings_id: Optional[int] = Field(
+        sa_column=Column(Integer, primary_key=True, autoincrement=True, unique=True,
+                         nullable=False))
+    temperature: float = 1.0
+    model: str = "gpt-3.5-turbo"
+
+
 def generate_invite_code():
     """
     Generates a random invite code for user registration.

@@ -27,7 +27,7 @@ import openai
 import tiktoken
 from sqlmodel import Session, select
 
-from api_server.database import engine, User, ChatSession
+from api_server.database import engine, User, ChatSession, Settings
 
 
 class Ok:
@@ -53,6 +53,16 @@ token_rate: float = 0.5
 min_time_between_requests: float = 2.0
 
 
+def get_settings():
+    with Session(engine) as db_session:
+        statement = select(Settings)
+        settings = db_session.exec(statement).first()
+        if settings:
+            return settings.model, settings.temperature
+        else:
+            return "gpt-3.5-turbo", 1.0
+
+
 def request_system_response(messages: list[dict[str, str]]):
     """
     Requests a chat response from the OpenAI GPT-3 model using provided messages.
@@ -65,7 +75,9 @@ def request_system_response(messages: list[dict[str, str]]):
         str: The generated chat response.
     """
     # Make the API request
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+    model, temperature = get_settings()
+    completion = openai.ChatCompletion.create(model=model, messages=messages,
+                                              temperature=temperature)
     chat_response = completion.choices[0].message.content
 
     return chat_response
@@ -120,8 +132,11 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
                 current_user.last_request_time = current_time
 
                 # Make the API request
-                completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages,
-                                                          max_tokens=50)
+                model, temperature = get_settings()
+                print("using model: ", model)
+                print("using temperature: ", temperature)
+                completion = openai.ChatCompletion.create(model=model, messages=messages,
+                                                          max_tokens=50, temperature=temperature)
                 chat_response = completion.choices[0].message.content
 
                 # Update API token counters in the database
