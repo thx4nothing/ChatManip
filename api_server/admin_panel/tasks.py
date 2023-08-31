@@ -45,7 +45,8 @@ async def list_tasks(token: str = Query(...)):
 async def create_task(task: Task, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
-        new_task = Task(name=task.name, task_instruction=task.task_instruction)
+        new_task = Task(name=task.name, task_instruction=task.task_instruction,
+                        show_discussion_section=task.show_discussion_section)
         db_session.add(new_task)
         db_session.commit()
         return task

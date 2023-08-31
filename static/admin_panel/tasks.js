@@ -7,6 +7,7 @@ export function initializeTasksSection() {
     const deleteSelectedTaskBtn = document.getElementById("deleteSelectedTaskBtn");
     const taskForm = document.getElementById("taskForm");
     const taskName = document.getElementById("taskName");
+    const taskShowDiscussionCheckbox = document.getElementById("taskShowDiscussionCheckbox");
     const saveTaskBtn = document.getElementById("saveTaskBtn");
     const addTaskLanguageBtn = document.getElementById("addTaskLanguageBtn");
     const taskLanguageInputs = document.getElementById("taskLanguageInputs");
@@ -32,6 +33,10 @@ export function initializeTasksSection() {
             const taskInstruction = document.createElement("p");
             taskInstruction.textContent = `Task Instruction: ${task.task_instruction[language] || ""}`;
             languageDiv.appendChild(taskInstruction);
+
+            const taskDiscussion = document.createElement("p");
+            taskDiscussion.textContent = `Show Discussion questions: ${task.show_discussion_section}`;
+            languageDiv.appendChild(taskDiscussion);
 
             taskDetailsContainer.appendChild(languageDiv);
         }
@@ -60,6 +65,7 @@ export function initializeTasksSection() {
         taskDropdown.selectedIndex = -1;
         taskForm.classList.remove("hidden");
         taskName.value = "";
+        taskShowDiscussionCheckbox.checked = false
 
         const languageContainer = document.getElementById("taskLanguageInputs");
         languageContainer.innerHTML = '';
@@ -90,6 +96,7 @@ export function initializeTasksSection() {
                 .then(response => response.json())
                 .then(task => {
                     taskName.value = task.name;
+                    taskShowDiscussionCheckbox.checked = task.show_discussion_section
                     const availableLanguages = Object.keys(task.task_instruction);
                     const languageContainer = document.getElementById("taskLanguageInputs");
                     languageContainer.innerHTML = '';
@@ -145,6 +152,7 @@ export function initializeTasksSection() {
         const selectedTaskId = taskDropdown.value;
         const taskData = {
             name: taskName.value,
+            show_discussion_section: taskShowDiscussionCheckbox.checked,
             task_instruction: {}
         };
 

@@ -87,3 +87,11 @@
 .modal.is-visible {
     display: block;
 }
+
+.end-chat-button {
+    display: none;
+}
+
+.end-chat-button.is-visible {
+    display: block;
+}

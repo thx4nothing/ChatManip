@@ -71,7 +71,8 @@ async def create_user(user: UserInformation):
         new_session = ChatSession(session_id=new_invite_code_str, user_id=current_user.user_id,
                                   persona_id=invite_code_obj.persona_id,
                                   task_id=invite_code_obj.task_id,
-                                  rules=invite_code_obj.rules)
+                                  rules=invite_code_obj.rules,
+                                  history_id=invite_code_obj.history_id)
         db_session.add(new_session)
         db_session.commit()
 

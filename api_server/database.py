@@ -66,7 +66,9 @@ class ChatSession(SQLModel, table=True):
     rules: str = Field(default='')
     done: bool = Field(default=False)
     message_limit: int = Field(default=20)
+    min_messages_needed: int = Field(default=2)
     time_limit: timedelta = Field(default=timedelta(minutes=10))
+    history_id: Optional[int] = Field(default=None, nullable=True)
 
 
 class Messages(SQLModel, table=True):
@@ -101,6 +103,16 @@ class Task(SQLModel, table=True):
                          nullable=False))
     name: str = Field("")
     task_instruction: dict = Field(sa_column=Column(JSON, default={}))
+    show_discussion_section: bool = Field(default=False)
+
+
+class History(SQLModel, table=True):
+    """Represents task information for chat sessions."""
+    history_id: Optional[int] = Field(
+        sa_column=Column(Integer, primary_key=True, autoincrement=True, unique=True,
+                         nullable=False))
+    name: str = Field("")
+    history: dict = Field(sa_column=Column(JSON, default={}))
 
 
 class InviteCode(SQLModel, table=True):
@@ -112,6 +124,7 @@ class InviteCode(SQLModel, table=True):
     task_id: Optional[int] = Field(default=None, nullable=True)
     rules: str = Field(default='')
     next_session_id: Optional[str] = Field(default='none')
+    history_id: Optional[int] = Field(default=None, nullable=True)
 
 
 class Questionnaire(SQLModel, table=True):

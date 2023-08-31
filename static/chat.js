@@ -72,13 +72,25 @@ function initializeChat() {
             });
     }
 
-    function endSession() {
+    async function endSession() {
         const session_id = getSessionIdFromUrl("chat");
         userInput.disabled = true;
         sendButton.disabled = true;
         doneButton.disabled = true;
         timerDisplay.textContent = "Chat session ended.";
-        window.location.href = `/questionnaire/${session_id}`;
+
+        try {
+            const response = await fetch(`/chat/${session_id}/end`);
+
+            if (response.ok) {
+                console.log("API call successful");
+                window.location.href = `/questionnaire/${session_id}`;
+            } else {
+                console.error("API call failed");
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
     }
 
     async function checkSessionEnd() {
@@ -87,7 +99,7 @@ function initializeChat() {
             const response = await fetch(`/chat/${session_id}/check_done`);
             const data = await response.json();
             if (data.session_end) {
-                endSession();
+                await endSession();
             } else {
                 // Update timer display
                 const timeLeft = data.time_left;
@@ -165,11 +177,18 @@ function initializeChat() {
                     modal.classList.add('is-visible');
 
                     const endChatButton = document.getElementById('endChatModalConfirmButton');
+                    endChatButton.classList.add('is-visible');
                     endChatButton.addEventListener('click', function () {
                         modal.classList.remove('is-visible');
-                        endSession();
+                        if (data.min_messages_reached) {
+                            endSession();
+                        } else {
+                            endChatButton.classList.remove('is-visible')
+                        }
                     });
-
+                    if (!data.min_messages_reached) {
+                        endChatButton.classList.remove('is-visible')
+                    }
                     const closeButton = document.getElementById('endChatModalCancelButton');
                     closeButton.addEventListener('click', function () {
                         modal.classList.remove('is-visible');

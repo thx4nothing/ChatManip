@@ -16,6 +16,7 @@ export function initializeInviteCodeSection() {
             row.insertCell().textContent = inviteCode.user_id === -1 ? "Not used" : inviteCode.user_id;
             const personaCell = row.insertCell();
             const taskCell = row.insertCell();
+            const historyCell = row.insertCell();
             const rulesCell = row.insertCell();
             const nextSessionIDCell = row.insertCell();
             const saveCell = row.insertCell();
@@ -39,7 +40,7 @@ export function initializeInviteCodeSection() {
                 });
             personaCell.appendChild(personaDropdown);
 
-            // Create dropdown for Taks
+            // Create dropdown for Tasks
             const taskDropdown = document.createElement("select");
             fetch(`/admin/tasks?token=${getToken()}`)
                 .then(response => response.json())
@@ -56,6 +57,24 @@ export function initializeInviteCodeSection() {
                     console.error("Error fetching tasks:", error);
                 });
             taskCell.appendChild(taskDropdown);
+
+            // Create dropdown for History
+            const historyDropdown = document.createElement("select");
+            fetch(`/admin/history?token=${getToken()}`)
+                .then(response => response.json())
+                .then(histories => {
+                    histories.forEach(history => {
+                        const option = document.createElement("option");
+                        option.value = history.history_id;
+                        option.textContent = history.name;
+                        historyDropdown.appendChild(option);
+                    });
+                    historyDropdown.value = inviteCode.history_id || "";
+                })
+                .catch(error => {
+                    console.error("Error fetching tasks:", error);
+                });
+            historyCell.appendChild(historyDropdown);
 
             // Create textbox for Rules
             const rulesTextbox = document.createElement("input");
@@ -97,9 +116,11 @@ export function initializeInviteCodeSection() {
                     let personaDropdownValue = parseInt(personaDropdown.value)
                     let persona_id = isNaN(personaDropdownValue) ? -1 : personaDropdownValue
                     let taskDropdownValue = parseInt(taskDropdown.value)
+                    let historyDropdownValue = parseInt(historyDropdown.value)
                     let task_id = isNaN(taskDropdownValue) ? -1 : taskDropdownValue
+                    let history_id = isNaN(historyDropdownValue) ? -1 : historyDropdownValue
                     let next_session_id = nextSessionIDDropdown.value
-                    updateInviteCode(inviteCode.invite_code, persona_id, task_id, rules, next_session_id);
+                    updateInviteCode(inviteCode.invite_code, persona_id, task_id, history_id, rules, next_session_id);
                 });
                 saveCell.appendChild(saveBtn);
             }
@@ -155,9 +176,13 @@ export function initializeInviteCodeSection() {
             });
     }
 
-    function updateInviteCode(inviteCode, persona_id, task_id, rules, next_session_id) {
+    function updateInviteCode(inviteCode, persona_id, task_id, history_id, rules, next_session_id) {
         const queryParams = new URLSearchParams({
-            persona_id: parseInt(persona_id), task_id: parseInt(task_id), rules: rules, next_session_id: next_session_id
+            persona_id: parseInt(persona_id),
+            task_id: parseInt(task_id),
+            history_id: parseInt(history_id),
+            rules: rules,
+            next_session_id: next_session_id
         });
         fetch(`/admin/invite_codes/${inviteCode}?${queryParams}&token=${getToken()}`, {
             method: "PATCH", headers: {

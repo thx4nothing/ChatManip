@@ -74,6 +74,7 @@ def request_system_response(messages: list[dict[str, str]]):
     Returns:
         str: The generated chat response.
     """
+    print(messages)
     # Make the API request
     model, temperature = get_settings()
     completion = openai.ChatCompletion.create(model=model, messages=messages,

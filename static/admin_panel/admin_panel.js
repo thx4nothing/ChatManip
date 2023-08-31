@@ -3,6 +3,7 @@ import {initializeRulesSection} from "./rules.js";
 import {initializeInviteCodeSection} from "./invite_codes.js";
 import {initializeUserManagementSection} from "./users.js";
 import {initializePersonaSection} from "./personas.js";
+import {initializeHistorysSection} from "./history.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     initializePersonaSection();
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeInviteCodeSection();
     initializeRulesSection();
     initializeTasksSection();
+    initializeHistorysSection();
 });
 
 export function getToken() {

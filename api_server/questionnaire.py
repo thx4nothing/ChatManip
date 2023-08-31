@@ -14,7 +14,7 @@ from typing import Dict
 from fastapi import APIRouter, Request
 from sqlmodel import Session, select
 
-from api_server.database import engine, ChatSession, Questionnaire
+from api_server.database import engine, ChatSession, Questionnaire, Task, Messages
 from api_server.templates import templates
 
 router = APIRouter()
@@ -35,7 +35,14 @@ async def read_root(session_id: str, request: Request):
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()
         if current_session is not None:
-            return templates.TemplateResponse("questionnaire.html", {"request": request})
+            statement = select(Task).where(Task.task_id == current_session.task_id)
+            current_task = db_session.exec(statement).first()
+            show_discussion_section = current_task.show_discussion_section
+            statement = select(Messages).where(Messages.session_id == current_session.session_id)
+            intention = db_session.exec(statement).all()[-1].response
+            return templates.TemplateResponse("questionnaire.html", {"request": request,
+                                                                     "show_discussion_section": show_discussion_section,
+                                                                     "intention": intention})
 
 
 @router.post("/{session_id}")

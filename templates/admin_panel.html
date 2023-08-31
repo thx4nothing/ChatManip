@@ -84,6 +84,9 @@
         </div>
         <div id="taskForm" class="hidden pure-u-1">
             <input type="text" id="taskName" class="pure-u-1-4" placeholder="Task Name">
+            <input type="checkbox" id="taskShowDiscussionCheckbox" name="show-section-checkbox">
+            <label for="taskShowDiscussionCheckbox">Show Discussion Attributes section in
+                questionnaire</label>
             <div id="taskLanguageInputs">
                 <div class="task-language-input-row">
                     <input type="text" class="task-language-name" placeholder="Language">
@@ -98,9 +101,38 @@
             <p><strong>Task Name:</strong> <span id="taskNameD"></span></p>
             <p><strong>Language:</strong> <span id="taskLanguage"></span></p>
             <p><strong>Task Instruction:</strong> <span id="taskInstruction"></span></p>
+            <p><strong>Show Discussion questions:</strong> <span id="taskDiscussion"></span></p>
         </div>
     </div>
 
+    <div class="history-section pure-u-1">
+        <h2>History Definitions</h2>
+        <select id="historyDropdown" class="pure-u-1-4">
+            <option value="-1" style="display:none;">Create New</option>
+        </select>
+        <div class="buttons pure-u-1-4">
+            <button id="createNewHistoryBtn" class="pure-button">Create New</button>
+            <button id="editSelectedHistoryBtn" class="pure-button" disabled>Edit Selected</button>
+            <button id="deleteSelectedHistoryBtn" class="pure-button" disabled>Delete Selected
+            </button>
+            <button id="exportHistoryBtn" class="pure-button">Export</button>
+            <input type="file" id="importHistoryInput" style="display: none;">
+            <button id="importHistoryBtn" class="pure-button">Import</button>
+        </div>
+        <div id="historyForm" class="hidden pure-u-1">
+            <input type="text" id="historyName" class="pure-u-1-4" placeholder="History Name">
+            <div id="historyLanguageInputs">
+
+            </div>
+            <button id="addHistoryLanguageBtn" class="pure-button">Add Language</button>
+            <button id="saveHistoryBtn" class="pure-button pure-button-primary">Save History
+            </button>
+        </div>
+
+        <div id="historyDetails" class="pure-u-1">
+            <h3>History Details</h3>
+        </div>
+    </div>
 
     <div class="rules-section pure-u-1">
         <h2>Rules</h2>
@@ -129,6 +161,7 @@
                 <th>User ID</th>
                 <th>Persona</th>
                 <th>Tasks</th>
+                <th>History</th>
                 <th>Rules</th>
                 <th>Next Invite Code</th>
                 <th>Save</th>

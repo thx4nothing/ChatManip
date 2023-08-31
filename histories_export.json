@@ -1,0 +1,17 @@
+[
+  {
+    "name": "test",
+    "history": {
+      "english": [
+        {
+          "role": "user",
+          "content": "I say A, you say"
+        },
+        {
+          "role": "assistant",
+          "content": "B"
+        }
+      ]
+    }
+  }
+]
