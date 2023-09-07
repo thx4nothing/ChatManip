@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+          integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='questionnaire.css') }}">
+</head>
+<body>
+<div class="container pure-g">
+    <div class="pure-u-1">
+        <h1 class="header">Questionnaire</h1>
+    </div>
+    <form class="pure-form pure-form-stacked pure-u-1" id="rosas-form">
+
+        <fieldset>
+            <legend>Perceived Social Attributes</legend>
+            <p>Rate each statement on a scale from 1 (Strongly Disagree) to 5 (Strongly Agree)</p>
+            <div class="rating">
+                <label for="happy">Happy</label>
+                <input type="radio" id="happy-1" name="happy" value="1" required>
+                <label for="happy-1">1</label>
+                <input type="radio" id="happy-2" name="happy" value="2" required>
+                <label for="happy-2">2</label>
+                <input type="radio" id="happy-3" name="happy" value="3" required>
+                <label for="happy-3">3</label>
+                <input type="radio" id="happy-4" name="happy" value="4" required>
+                <label for="happy-4">4</label>
+                <input type="radio" id="happy-5" name="happy" value="5" required>
+                <label for="happy-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="feeling">Feeling</label>
+                <input type="radio" id="feeling-1" name="feeling" value="1" required>
+                <label for="feeling-1">1</label>
+                <input type="radio" id="feeling-2" name="feeling" value="2" required>
+                <label for="feeling-2">2</label>
+                <input type="radio" id="feeling-3" name="feeling" value="3" required>
+                <label for="feeling-3">3</label>
+                <input type="radio" id="feeling-4" name="feeling" value="4" required>
+                <label for="feeling-4">4</label>
+                <input type="radio" id="feeling-5" name="feeling" value="5" required>
+                <label for="feeling-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="social">Social</label>
+                <input type="radio" id="social-1" name="social" value="1" required>
+                <label for="social-1">1</label>
+                <input type="radio" id="social-2" name="social" value="2" required>
+                <label for="social-2">2</label>
+                <input type="radio" id="social-3" name="social" value="3" required>
+                <label for="social-3">3</label>
+                <input type="radio" id="social-4" name="social" value="4" required>
+                <label for="social-4">4</label>
+                <input type="radio" id="social-5" name="social" value="5" required>
+                <label for="social-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="organic">Organic</label>
+                <input type="radio" id="organic-1" name="organic" value="1" required>
+                <label for="organic-1">1</label>
+                <input type="radio" id="organic-2" name="organic" value="2" required>
+                <label for="organic-2">2</label>
+                <input type="radio" id="organic-3" name="organic" value="3" required>
+                <label for="organic-3">3</label>
+                <input type="radio" id="organic-4" name="organic" value="4" required>
+                <label for="organic-4">4</label>
+                <input type="radio" id="organic-5" name="organic" value="5" required>
+                <label for="organic-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="compassionate">Compassionate</label>
+                <input type="radio" id="compassionate-1" name="compassionate" value="1" required>
+                <label for="compassionate-1">1</label>
+                <input type="radio" id="compassionate-2" name="compassionate" value="2" required>
+                <label for="compassionate-2">2</label>
+                <input type="radio" id="compassionate-3" name="compassionate" value="3" required>
+                <label for="compassionate-3">3</label>
+                <input type="radio" id="compassionate-4" name="compassionate" value="4" required>
+                <label for="compassionate-4">4</label>
+                <input type="radio" id="compassionate-5" name="compassionate" value="5" required>
+                <label for="compassionate-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="emotional">Emotional</label>
+                <input type="radio" id="emotional-1" name="emotional" value="1" required>
+                <label for="emotional-1">1</label>
+                <input type="radio" id="emotional-2" name="emotional" value="2" required>
+                <label for="emotional-2">2</label>
+                <input type="radio" id="emotional-3" name="emotional" value="3" required>
+                <label for="emotional-3">3</label>
+                <input type="radio" id="emotional-4" name="emotional" value="4" required>
+                <label for="emotional-4">4</label>
+                <input type="radio" id="emotional-5" name="emotional" value="5" required>
+                <label for="emotional-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="capable">Capable</label>
+                <input type="radio" id="capable-1" name="capable" value="1" required>
+                <label for="capable-1">1</label>
+                <input type="radio" id="capable-2" name="capable" value="2" required>
+                <label for="capable-2">2</label>
+                <input type="radio" id="capable-3" name="capable" value="3" required>
+                <label for="capable-3">3</label>
+                <input type="radio" id="capable-4" name="capable" value="4" required>
+                <label for="capable-4">4</label>
+                <input type="radio" id="capable-5" name="capable" value="5" required>
+                <label for="capable-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="responsive">Responsive</label>
+                <input type="radio" id="responsive-1" name="responsive" value="1" required>
+                <label for="responsive-1">1</label>
+                <input type="radio" id="responsive-2" name="responsive" value="2" required>
+                <label for="responsive-2">2</label>
+                <input type="radio" id="responsive-3" name="responsive" value="3" required>
+                <label for="responsive-3">3</label>
+                <input type="radio" id="responsive-4" name="responsive" value="4" required>
+                <label for="responsive-4">4</label>
+                <input type="radio" id="responsive-5" name="responsive" value="5" required>
+                <label for="responsive-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="interactive">Interactive</label>
+                <input type="radio" id="interactive-1" name="interactive" value="1" required>
+                <label for="interactive-1">1</label>
+                <input type="radio" id="interactive-2" name="interactive" value="2" required>
+                <label for="interactive-2">2</label>
+                <input type="radio" id="interactive-3" name="interactive" value="3" required>
+                <label for="interactive-3">3</label>
+                <input type="radio" id="interactive-4" name="interactive" value="4" required>
+                <label for="interactive-4">4</label>
+                <input type="radio" id="interactive-5" name="interactive" value="5" required>
+                <label for="interactive-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="reliable">Reliable</label>
+                <input type="radio" id="reliable-1" name="reliable" value="1" required>
+                <label for="reliable-1">1</label>
+                <input type="radio" id="reliable-2" name="reliable" value="2" required>
+                <label for="reliable-2">2</label>
+                <input type="radio" id="reliable-3" name="reliable" value="3" required>
+                <label for="reliable-3">3</label>
+                <input type="radio" id="reliable-4" name="reliable" value="4" required>
+                <label for="reliable-4">4</label>
+                <input type="radio" id="reliable-5" name="reliable" value="5" required>
+                <label for="reliable-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="competent">Competent</label>
+                <input type="radio" id="competent-1" name="competent" value="1" required>
+                <label for="competent-1">1</label>
+                <input type="radio" id="competent-2" name="competent" value="2" required>
+                <label for="competent-2">2</label>
+                <input type="radio" id="competent-3" name="competent" value="3" required>
+                <label for="competent-3">3</label>
+                <input type="radio" id="competent-4" name="competent" value="4" required>
+                <label for="competent-4">4</label>
+                <input type="radio" id="competent-5" name="competent" value="5" required>
+                <label for="competent-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="knowledgable">Knowledgable</label>
+                <input type="radio" id="knowledgable-1" name="knowledgable" value="1" required>
+                <label for="knowledgable-1">1</label>
+                <input type="radio" id="knowledgable-2" name="knowledgable" value="2" required>
+                <label for="knowledgable-2">2</label>
+                <input type="radio" id="knowledgable-3" name="knowledgable" value="3" required>
+                <label for="knowledgable-3">3</label>
+                <input type="radio" id="knowledgable-4" name="knowledgable" value="4" required>
+                <label for="knowledgable-4">4</label>
+                <input type="radio" id="knowledgable-5" name="knowledgable" value="5" required>
+                <label for="knowledgable-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="scary">Scary</label>
+                <input type="radio" id="scary-1" name="scary" value="1" required>
+                <label for="scary-1">1</label>
+                <input type="radio" id="scary-2" name="scary" value="2" required>
+                <label for="scary-2">2</label>
+                <input type="radio" id="scary-3" name="scary" value="3" required>
+                <label for="scary-3">3</label>
+                <input type="radio" id="scary-4" name="scary" value="4" required>
+                <label for="scary-4">4</label>
+                <input type="radio" id="scary-5" name="scary" value="5" required>
+                <label for="scary-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="strange">Strange</label>
+                <input type="radio" id="strange-1" name="strange" value="1" required>
+                <label for="strange-1">1</label>
+                <input type="radio" id="strange-2" name="strange" value="2" required>
+                <label for="strange-2">2</label>
+                <input type="radio" id="strange-3" name="strange" value="3" required>
+                <label for="strange-3">3</label>
+                <input type="radio" id="strange-4" name="strange" value="4" required>
+                <label for="strange-4">4</label>
+                <input type="radio" id="strange-5" name="strange" value="5" required>
+                <label for="strange-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="awkward">Awkward</label>
+                <input type="radio" id="awkward-1" name="awkward" value="1" required>
+                <label for="awkward-1">1</label>
+                <input type="radio" id="awkward-2" name="awkward" value="2" required>
+                <label for="awkward-2">2</label>
+                <input type="radio" id="awkward-3" name="awkward" value="3" required>
+                <label for="awkward-3">3</label>
+                <input type="radio" id="awkward-4" name="awkward" value="4" required>
+                <label for="awkward-4">4</label>
+                <input type="radio" id="awkward-5" name="awkward" value="5" required>
+                <label for="awkward-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="dangerous">Dangerous</label>
+                <input type="radio" id="dangerous-1" name="dangerous" value="1" required>
+                <label for="dangerous-1">1</label>
+                <input type="radio" id="dangerous-2" name="dangerous" value="2" required>
+                <label for="dangerous-2">2</label>
+                <input type="radio" id="dangerous-3" name="dangerous" value="3" required>
+                <label for="dangerous-3">3</label>
+                <input type="radio" id="dangerous-4" name="dangerous" value="4" required>
+                <label for="dangerous-4">4</label>
+                <input type="radio" id="dangerous-5" name="dangerous" value="5" required>
+                <label for="dangerous-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="awful">Awful</label>
+                <input type="radio" id="awful-1" name="awful" value="1" required>
+                <label for="awful-1">1</label>
+                <input type="radio" id="awful-2" name="awful" value="2" required>
+                <label for="awful-2">2</label>
+                <input type="radio" id="awful-3" name="awful" value="3" required>
+                <label for="awful-3">3</label>
+                <input type="radio" id="awful-4" name="awful" value="4" required>
+                <label for="awful-4">4</label>
+                <input type="radio" id="awful-5" name="awful" value="5" required>
+                <label for="awful-5">5</label>
+            </div>
+            <div class="rating">
+                <label for="aggressive">Aggressive</label>
+                <input type="radio" id="aggressive-1" name="aggressive" value="1" required>
+                <label for="aggressive-1">1</label>
+                <input type="radio" id="aggressive-2" name="aggressive" value="2" required>
+                <label for="aggressive-2">2</label>
+                <input type="radio" id="aggressive-3" name="aggressive" value="3" required>
+                <label for="aggressive-3">3</label>
+                <input type="radio" id="aggressive-4" name="aggressive" value="4" required>
+                <label for="aggressive-4">4</label>
+                <input type="radio" id="aggressive-5" name="aggressive" value="5" required>
+                <label for="aggressive-5">5</label>
+            </div>
+        </fieldset>
+
+        {% if show_discussion_section %}
+        <fieldset>
+            <legend>Discussion Attributes</legend>
+            <p>Rate each statement on a scale from 1 (Not at all) to 5 (Completely)</p>
+
+            <div class="range-container">
+                <div class="rating">
+                    <label for="accuracy-before">How accurately do you think the ChatBot
+                        understood you?</label>
+                    <input type="radio" id="accuracy-before-1" name="accuracy-before" value="1"
+                           required>
+                    <label for="accuracy-before-1">1</label>
+                    <input type="radio" id="accuracy-before-2" name="accuracy-before" value="2"
+                           required>
+                    <label for="accuracy-before-2">2</label>
+                    <input type="radio" id="accuracy-before-3" name="accuracy-before" value="3"
+                           required>
+                    <label for="accuracy-before-3">3</label>
+                    <input type="radio" id="accuracy-before-4" name="accuracy-before" value="4"
+                           required>
+                    <label for="accuracy-before-4">4</label>
+                    <input type="radio" id="accuracy-before-5" name="accuracy-before" value="5"
+                           required>
+                    <label for="accuracy-before-5">5</label>
+                </div>
+            </div>
+
+            <div class="range-container">
+                <div class="rating">
+                    <label for="convince-before">To what extent were you able to convince the
+                        ChatBot?</label>
+                    <input type="radio" id="convince-before-1" name="convince-before" value="1"
+                           required>
+                    <label for="convince-before-1">1</label>
+                    <input type="radio" id="convince-before-2" name="convince-before" value="2"
+                           required>
+                    <label for="convince-before-2">2</label>
+                    <input type="radio" id="convince-before-3" name="convince-before" value="3"
+                           required>
+                    <label for="convince-before-3">3</label>
+                    <input type="radio" id="convince-before-4" name="convince-before" value="4"
+                           required>
+                    <label for="convince-before-4">4</label>
+                    <input type="radio" id="convince-before-5" name="convince-before" value="5"
+                           required>
+                    <label for="convince-before-5">5</label>
+                </div>
+            </div>
+        </fieldset>
+        {% else %}
+        <fieldset>
+            <legend>Open-Ended Feedback</legend>
+            <label for="feedback">Please provide any additional comments or feedback about your
+                experience:</label>
+            <textarea id="feedback" name="feedback" rows="4"></textarea>
+        </fieldset>
+        {% endif %}
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </form>
+</div>
+
+<script type="module" src="{{ url_for('static', path='common.js') }}"></script>
+<script type="module" src="{{ url_for('static', path='questionnaire.js') }}"></script>
+</body>
+</html>

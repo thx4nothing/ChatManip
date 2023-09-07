@@ -84,7 +84,7 @@ function initializeChat() {
 
             if (response.ok) {
                 console.log("API call successful");
-                window.location.href = `/questionnaire/${session_id}`;
+                window.location.href = `/questionnaire/${session_id}/before`;
             } else {
                 console.error("API call failed");
             }

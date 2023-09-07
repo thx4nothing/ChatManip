@@ -287,8 +287,9 @@ def get_chat_history(db_session: Session, current_session: ChatSession, persona:
     if not user:
         statement = select(History).where(History.history_id == current_session.history_id)
         history_obj = db_session.exec(statement).first()
-        history = history_obj.history[language]
-        messages = history
+        if history_obj:
+            history = history_obj.history[language]
+            messages = history
 
     if persona:
         messages.append({"role": "system",

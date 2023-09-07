@@ -13,6 +13,7 @@ from typing import Dict
 
 from fastapi import APIRouter, Request
 from sqlmodel import Session, select
+from starlette.responses import JSONResponse
 
 from api_server.database import engine, ChatSession, Questionnaire, Task, Messages
 from api_server.templates import templates
@@ -20,8 +21,8 @@ from api_server.templates import templates
 router = APIRouter()
 
 
-@router.get("/{session_id}")
-async def read_root(session_id: str, request: Request):
+@router.get("/{session_id}/before")
+async def read_before(session_id: str, request: Request):
     """
     Retrieve the questionnaire page template for a given session ID.
 
@@ -37,12 +38,62 @@ async def read_root(session_id: str, request: Request):
         if current_session is not None:
             statement = select(Task).where(Task.task_id == current_session.task_id)
             current_task = db_session.exec(statement).first()
-            show_discussion_section = current_task.show_discussion_section
-            statement = select(Messages).where(Messages.session_id == current_session.session_id)
-            intention = db_session.exec(statement).all()[-1].response
-            return templates.TemplateResponse("questionnaire.html", {"request": request,
-                                                                     "show_discussion_section": show_discussion_section,
-                                                                     "intention": intention})
+            if current_task:
+                show_discussion_section = current_task.show_discussion_section
+                statement = select(Messages).where(
+                    Messages.session_id == current_session.session_id)
+                intention = db_session.exec(statement).all()[-1].response
+            else:
+                show_discussion_section = False
+                intention = ""
+            return templates.TemplateResponse("questionnaire_before.html", {"request": request,
+                                                                            "show_discussion_section": show_discussion_section,
+                                                                            "intention": intention})
+
+
+@router.get("/{session_id}/after")
+async def read_after(session_id: str, request: Request):
+    """
+    Retrieve the questionnaire page template for a given session ID.
+
+    Parameters:
+    - `session_id` (str): The ID of the chat session.
+
+    Returns:
+    A FastAPI TemplateResponse containing the questionnaire HTML template.
+    """
+    with Session(engine) as db_session:
+        statement = select(ChatSession).where(ChatSession.session_id == session_id)
+        current_session = db_session.exec(statement).first()
+        if current_session is not None:
+            statement = select(Task).where(Task.task_id == current_session.task_id)
+            current_task = db_session.exec(statement).first()
+            if current_task:
+                show_discussion_section = current_task.show_discussion_section
+                statement = select(Messages).where(
+                    Messages.session_id == current_session.session_id)
+                intention = db_session.exec(statement).all()[-1].response
+            else:
+                show_discussion_section = False
+                intention = ""
+            return templates.TemplateResponse("questionnaire_after.html", {"request": request,
+                                                                           "show_discussion_section": show_discussion_section,
+                                                                           "intention": intention})
+
+
+@router.get("/{session_id}/show_discussion")
+async def read_after(session_id: str, request: Request):
+    with Session(engine) as db_session:
+        statement = select(ChatSession).where(ChatSession.session_id == session_id)
+        current_session = db_session.exec(statement).first()
+        if current_session is not None:
+            statement = select(Task).where(Task.task_id == current_session.task_id)
+            current_task = db_session.exec(statement).first()
+            if current_task:
+                show_discussion_section = current_task.show_discussion_section
+            else:
+                show_discussion_section = False
+            return JSONResponse(content={"show_discussion_section": show_discussion_section})
 
 
 @router.post("/{session_id}")

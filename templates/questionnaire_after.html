@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+          integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='questionnaire.css') }}">
+</head>
+<body>
+<div class="container pure-g">
+    <div class="pure-u-1">
+        <h1 class="header">Questionnaire</h1>
+    </div>
+    <form class="pure-form pure-form-stacked pure-u-1" id="rosas-form">
+
+        {% if show_discussion_section %}
+        <fieldset>
+            <legend>Discussion Attributes</legend>
+            <p>Rate each statement on a scale from 1 (Not at all) to 5 (Completely)</p>
+
+            <label for="intention-label">Perceived intention of the user:</label>
+            <span id="intention-label">"{{ intention }}"</span>
+
+            <div class="range-container">
+                <div class="rating">
+                    <label for="accuracy-after">How accurately does this interpretation describe
+                        your intentions?</label>
+                    <input type="radio" id="accuracy-after-1" name="accuracy-after" value="1"
+                           required>
+                    <label for="accuracy-after-1">1</label>
+                    <input type="radio" id="accuracy-after-2" name="accuracy-after" value="2"
+                           required>
+                    <label for="accuracy-after-2">2</label>
+                    <input type="radio" id="accuracy-after-3" name="accuracy-after" value="3"
+                           required>
+                    <label for="accuracy-after-3">3</label>
+                    <input type="radio" id="accuracy-after-4" name="accuracy-after" value="4"
+                           required>
+                    <label for="accuracy-after-4">4</label>
+                    <input type="radio" id="accuracy-after-5" name="accuracy-after" value="5"
+                           required>
+                    <label for="accuracy-after-5">5</label>
+                </div>
+            </div>
+
+            <div class="range-container">
+                <div class="rating">
+                    <label for="convince-after">How effectively do you believe you were able to
+                        persuade the ChatBot based on this description?</label>
+                    <input type="radio" id="convince-after-1" name="convince-after" value="1"
+                           required>
+                    <label for="convince-after-1">1</label>
+                    <input type="radio" id="convince-after-2" name="convince-after" value="2"
+                           required>
+                    <label for="convince-after-2">2</label>
+                    <input type="radio" id="convince-after-3" name="convince-after" value="3"
+                           required>
+                    <label for="convince-after-3">3</label>
+                    <input type="radio" id="convince-after-4" name="convince-after" value="4"
+                           required>
+                    <label for="convince-after-4">4</label>
+                    <input type="radio" id="convince-after-5" name="convince-after" value="5"
+                           required>
+                    <label for="convince-after-5">5</label>
+                </div>
+            </div>
+        </fieldset>
+        {% endif %}
+
+        <fieldset>
+            <legend>Open-Ended Feedback</legend>
+            <label for="feedback">Please provide any additional comments or feedback about your
+                experience:</label>
+            <textarea id="feedback" name="feedback" rows="4"></textarea>
+        </fieldset>
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </form>
+</div>
+
+<script type="module" src="{{ url_for('static', path='common.js') }}"></script>
+<script type="module" src="{{ url_for('static', path='questionnaire.js') }}"></script>
+</body>
+</html>

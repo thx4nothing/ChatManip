@@ -78,3 +78,16 @@ button {
     font-size: 12px;
     margin-left: 10px;
 }
+
+
+.rating {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.rating label {
+    width: 120px; /* Adjust the width as needed */
+    text-align: left;
+    margin-right: 20px; /* Adjust the margin as needed */
+}
