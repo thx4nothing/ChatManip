@@ -29,7 +29,7 @@ async def list_invite_codes(token: str = Query(...)):
     return await list_entities(InviteCode, token)
 
 
-@router.delete("/{invite_code}", response_model=InviteCode)
+@router.delete("/{invite_code}/", response_model=InviteCode)
 async def delete_invite_code(invite_code: str, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -42,7 +42,7 @@ async def delete_invite_code(invite_code: str, token: str = Query(...)):
         return invite_code_obj
 
 
-@router.patch("/{invite_code}", response_model=InviteCode)
+@router.patch("/{invite_code}/", response_model=InviteCode)
 async def update_invite_code(invite_code: str, persona_id: int, task_id: int, rules: str,
                              next_session_id: str, history_id: int,
                              token: str = Query(...)):

@@ -34,6 +34,37 @@ async def create_persona(persona: Persona, token: str = Query(...)):
         return persona
 
 
+@router.get("/export/")
+async def export_persona_database(token: str = Query(...)):
+    print(token)
+    await check_authentication(token)
+    with Session(engine) as db_session:
+        statement = select(Persona)
+        personas = db_session.exec(statement).all()
+        persona_data = [{"name": persona.name,
+                         "system_instruction": persona.system_instruction,
+                         "first_message": persona.first_message,
+                         "before_instruction": persona.before_instruction,
+                         "after_instruction": persona.after_instruction} for persona in personas]
+        print(persona_data)
+        return persona_data
+
+
+@router.post("/import/")
+async def import_persona_database(file: UploadFile = File(...), token: str = Query(...)):
+    await check_authentication(token)
+    data = await file.read()
+    personas_to_import = json.loads(data)
+
+    with Session(engine) as db_session:
+        for imported_persona in personas_to_import:
+            persona = Persona(**imported_persona)
+            if not does_persona_exist(db_session, persona):
+                db_session.add(persona)
+        db_session.commit()
+        return {"message": "Import successful"}
+
+
 @router.get("/{persona_id}/", response_model=Persona)
 async def get_persona(persona_id: int, token: str = Query(...)):
     await check_authentication(token)
@@ -74,35 +105,6 @@ async def delete_persona(persona_id: int, token: str = Query(...)):
         db_session.delete(persona)
         db_session.commit()
         return {"message": "Persona deleted successfully"}
-
-
-@router.get("/export")
-async def export_persona_database(token: str = Query(...)):
-    await check_authentication(token)
-    with Session(engine) as db_session:
-        statement = select(Persona)
-        personas = db_session.exec(statement).all()
-        persona_data = [{"name": persona.name,
-                         "system_instruction": persona.system_instruction,
-                         "first_message": persona.first_message,
-                         "before_instruction": persona.before_instruction,
-                         "after_instruction": persona.after_instruction} for persona in personas]
-        return persona_data
-
-
-@router.post("/import")
-async def import_persona_database(file: UploadFile = File(...), token: str = Query(...)):
-    await check_authentication(token)
-    data = await file.read()
-    personas_to_import = json.loads(data)
-
-    with Session(engine) as db_session:
-        for imported_persona in personas_to_import:
-            persona = Persona(**imported_persona)
-            if not does_persona_exist(db_session, persona):
-                db_session.add(persona)
-        db_session.commit()
-        return {"message": "Import successful"}
 
 
 def does_persona_exist(db_session: Session, new_persona: Persona) -> bool:

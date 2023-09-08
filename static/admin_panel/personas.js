@@ -261,9 +261,8 @@ export async function initializePersonaSection() {
     }
 
     function exportPersonaDatabase() {
-        fetch(`/admin/personas/export/?token=${getToken()}`, {
-            method: 'GET',
-        })
+        console.log(`/admin/personas/export/?token=${getToken()}`)
+        fetch(`/admin/personas/export/?token=${getToken()}`)
             .then(response => response.json())
             .then(data => {
                 const beautifiedJson = JSON.stringify(data, null, 2);

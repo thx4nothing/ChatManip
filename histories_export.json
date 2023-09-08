@@ -1,15 +1,41 @@
 [
   {
-    "name": "test",
+    "name": "Discussion",
     "history": {
       "english": [
         {
           "role": "user",
-          "content": "I say A, you say"
+          "content": "I will pick a side of a discussion topic, you pick the other side and let's discuss!"
         },
         {
           "role": "assistant",
-          "content": "B"
+          "content": "Understood. Let's go"
+        },
+        {
+          "role": "user",
+          "content": "Answer in short to medium sentences."
+        },
+        {
+          "role": "assistant",
+          "content": "Understood."
+        }
+      ],
+      "german": [
+        {
+          "role": "user",
+          "content": "Ich wähle eine Seite eines Diskussionsthemas, du nimmst die andere Seite und lass uns diskutieren!"
+        },
+        {
+          "role": "assistant",
+          "content": "Verstand. Los geht's!"
+        },
+        {
+          "role": "user",
+          "content": "Antworte in kurz bis mittelangen Sätzen."
+        },
+        {
+          "role": "assistant",
+          "content": "Verstanden."
         }
       ]
     }

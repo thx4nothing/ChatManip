@@ -11,7 +11,7 @@ from .common import list_entities
 router = APIRouter()
 
 
-@router.get("/export")
+@router.get("/export/")
 async def export_tasks_database(token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -22,7 +22,7 @@ async def export_tasks_database(token: str = Query(...)):
         return task_data
 
 
-@router.post("/import")
+@router.post("/import/")
 async def import_tasks_database(file: UploadFile = File(...), token: str = Query(...)):
     await check_authentication(token)
     data = await file.read()
