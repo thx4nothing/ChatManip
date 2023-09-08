@@ -47,9 +47,18 @@ async def read_before(session_id: str, request: Request):
             else:
                 show_discussion_section = False
                 intention = ""
+            if get_session_language(db_session, current_session) == "english":
+                with open("static/translations/questionnaire_en.json", "r",
+                          encoding="utf-8") as translation_file:
+                    translation_data = json.load(translation_file)
+            else:
+                with open("static/translations/questionnaire_de.json", "r",
+                          encoding="utf-8") as translation_file:
+                    translation_data = json.load(translation_file)
             return templates.TemplateResponse("questionnaire_before.html", {"request": request,
                                                                             "show_discussion_section": show_discussion_section,
-                                                                            "intention": intention})
+                                                                            "intention": intention,
+                                                                            "translations": translation_data})
 
 
 @router.get("/{session_id}/after")

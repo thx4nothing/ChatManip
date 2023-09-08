@@ -155,14 +155,14 @@ def end_session(session_id: str, request: Request):
             add_message_to_database(db_session, current_session.session_id, ask_intention,
                                     ask_intention, chat_response, chat_response)
 
-            if get_session_language(db_session, current_session) == "german":
-                with open("static/translations/end_de.json", "r",
-                          encoding="utf-8") as translation_file:
-                    translation_data = json.load(translation_file)
-            else:
-                with open("static/translations/end_en.json", "r",
-                          encoding="utf-8") as translation_file:
-                    translation_data = json.load(translation_file)
+        if get_session_language(db_session, current_session) == "german":
+            with open("static/translations/end_de.json", "r",
+                      encoding="utf-8") as translation_file:
+                translation_data = json.load(translation_file)
+        else:
+            with open("static/translations/end_en.json", "r",
+                      encoding="utf-8") as translation_file:
+                translation_data = json.load(translation_file)
         return templates.TemplateResponse("end.html",
                                           {"request": request, "translations": translation_data})
 

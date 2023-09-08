@@ -1,5 +1,6 @@
 {
   "title": "Fragebogen",
+  "rate_instructions": "Bewerte folgende Eigenschaften auf einer Skala von 1 (trifft nicht zu) bis 5 (trifft voll zu)",
   "social_attributes": "Wahrgenommene soziale Merkmale",
   "happy": "Glücklich",
   "feeling": "Gefühl",
