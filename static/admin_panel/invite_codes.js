@@ -137,7 +137,7 @@ export function initializeInviteCodeSection() {
 
     function generateInviteCodes() {
         const numCodes = numCodesInput.value;
-        fetch(`/admin/invite_codes?num_codes=${numCodes}&token=${getToken()}`, {
+        fetch(`/admin/invite_codes/?num_codes=${numCodes}&token=${getToken()}`, {
             method: "POST"
         })
             .then(response => response.json())
@@ -151,7 +151,7 @@ export function initializeInviteCodeSection() {
     }
 
     function deleteInviteCode(inviteCode) {
-        fetch(`/admin/invite_codes/${inviteCode}//?token=${getToken()}`, {
+        fetch(`/admin/invite_codes/${inviteCode}/?token=${getToken()}`, {
             method: "DELETE"
         })
             .then(response => response.json())
@@ -184,7 +184,7 @@ export function initializeInviteCodeSection() {
             rules: rules,
             next_session_id: next_session_id
         });
-        fetch(`/admin/invite_codes/${inviteCode}?${queryParams}&token=${getToken()}`, {
+        fetch(`/admin/invite_codes/${inviteCode}/?${queryParams}&token=${getToken()}`, {
             method: "PATCH", headers: {
                 "Content-Type": "application/json"
             },
