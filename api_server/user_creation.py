@@ -15,6 +15,7 @@ Usage:
 Author: Marlon Beck
 Date: 17/08/2023
 """
+import json
 
 from fastapi import APIRouter, Request, HTTPException
 from sqlmodel import Session, select
@@ -28,7 +29,12 @@ router = APIRouter()
 
 
 @router.get("/")
-async def read_root(request: Request):
+async def read_root_language(request: Request):
+    return await read_root_language(request, "en")
+
+
+@router.get("/{language}")
+async def read_root_language(request: Request, language: str):
     """
     Serves the index.html template on the root URL ("/").
 
@@ -38,7 +44,16 @@ async def read_root(request: Request):
     Returns:
         TemplateResponse: The template response containing the "user_creation.html" template.
     """
-    return templates.TemplateResponse("user_creation.html", {"request": request})
+    if language == "de":
+        with open("static/translations/user_creation_de.json", "r",
+                  encoding="utf-8") as translation_file:
+            translation_data = json.load(translation_file)
+    else:
+        with open("static/translations/user_creation_en.json", "r",
+                  encoding="utf-8") as translation_file:
+            translation_data = json.load(translation_file)
+    return templates.TemplateResponse("user_creation.html",
+                                      {"request": request, "translations": translation_data})
 
 
 @router.post("/create_user")

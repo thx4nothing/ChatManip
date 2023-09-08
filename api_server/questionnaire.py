@@ -8,14 +8,15 @@ questionnaire data for each session.
 Author: Marlon Beck
 Date: 17/08/2023
 """
-
+import json
 from typing import Dict
 
 from fastapi import APIRouter, Request
 from sqlmodel import Session, select
 from starlette.responses import JSONResponse
 
-from api_server.database import engine, ChatSession, Questionnaire, Task, Messages
+from api_server.database import engine, ChatSession, Questionnaire, Task, Messages, \
+    get_session_language
 from api_server.templates import templates
 
 router = APIRouter()
@@ -76,9 +77,18 @@ async def read_after(session_id: str, request: Request):
             else:
                 show_discussion_section = False
                 intention = ""
+            if get_session_language(db_session, current_session) == "english":
+                with open("static/translations/questionnaire_en.json", "r",
+                          encoding="utf-8") as translation_file:
+                    translation_data = json.load(translation_file)
+            else:
+                with open("static/translations/questionnaire_de.json", "r",
+                          encoding="utf-8") as translation_file:
+                    translation_data = json.load(translation_file)
             return templates.TemplateResponse("questionnaire_after.html", {"request": request,
                                                                            "show_discussion_section": show_discussion_section,
-                                                                           "intention": intention})
+                                                                           "intention": intention,
+                                                                           "translations": translation_data})
 
 
 @router.get("/{session_id}/show_discussion")

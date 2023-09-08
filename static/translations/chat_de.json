@@ -1,0 +1,13 @@
+{
+  "chat_title": "Chat-Oberfläche",
+  "user_input_placeholder": "Geben Sie Ihre Nachricht ein...",
+  "send_button_text": "Senden",
+  "show_task_button_text": "Aufgabe anzeigen",
+  "end_chat_button_text": "Chat beenden",
+  "timer_display_text": "Verbleibende Zeit: mm:ss",
+  "message_counter_text": "Gesendete Nachrichten: 0",
+  "task_modal_title": "Aufgabe",
+  "end_chat_modal_title": "Chat beenden",
+  "end_chat_modal_confirm_button_text": "Chat beenden",
+  "end_chat_modal_cancel_button_text": "Zurück"
+}

@@ -15,7 +15,7 @@ export function initializeRulesSection() {
     }
 
     function getRules() {
-        fetch(`/admin/rules?token=${getToken()}`)
+        fetch(`/admin/rules/?token=${getToken()}`)
             .then(response => response.json())
             .then(data => {
                 console.log("Rules:", data);

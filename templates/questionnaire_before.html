@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questionnaire</title>
+    <title>{{ translations.title }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
           integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
           crossorigin="anonymous">
@@ -14,15 +14,15 @@
 <body>
 <div class="container pure-g">
     <div class="pure-u-1">
-        <h1 class="header">Questionnaire</h1>
+        <h1 class="header">{{ translations.title }}</h1>
     </div>
     <form class="pure-form pure-form-stacked pure-u-1" id="rosas-form">
 
         <fieldset>
-            <legend>Perceived Social Attributes</legend>
+            <legend>{{ translations.social_attributes }}</legend>
             <p>Rate each statement on a scale from 1 (Strongly Disagree) to 5 (Strongly Agree)</p>
             <div class="rating">
-                <label for="happy">Happy</label>
+                <label for="happy">{{ translations.happy }}</label>
                 <input type="radio" id="happy-1" name="happy" value="1" required>
                 <label for="happy-1">1</label>
                 <input type="radio" id="happy-2" name="happy" value="2" required>
@@ -35,7 +35,7 @@
                 <label for="happy-5">5</label>
             </div>
             <div class="rating">
-                <label for="feeling">Feeling</label>
+                <label for="feeling">{{ translations.feeling }}</label>
                 <input type="radio" id="feeling-1" name="feeling" value="1" required>
                 <label for="feeling-1">1</label>
                 <input type="radio" id="feeling-2" name="feeling" value="2" required>
@@ -48,7 +48,7 @@
                 <label for="feeling-5">5</label>
             </div>
             <div class="rating">
-                <label for="social">Social</label>
+                <label for="social">{{ translations.social }}</label>
                 <input type="radio" id="social-1" name="social" value="1" required>
                 <label for="social-1">1</label>
                 <input type="radio" id="social-2" name="social" value="2" required>
@@ -61,7 +61,7 @@
                 <label for="social-5">5</label>
             </div>
             <div class="rating">
-                <label for="organic">Organic</label>
+                <label for="organic">{{ translations.organic }}</label>
                 <input type="radio" id="organic-1" name="organic" value="1" required>
                 <label for="organic-1">1</label>
                 <input type="radio" id="organic-2" name="organic" value="2" required>
@@ -74,7 +74,7 @@
                 <label for="organic-5">5</label>
             </div>
             <div class="rating">
-                <label for="compassionate">Compassionate</label>
+                <label for="compassionate">{{ translations.compassionate }}</label>
                 <input type="radio" id="compassionate-1" name="compassionate" value="1" required>
                 <label for="compassionate-1">1</label>
                 <input type="radio" id="compassionate-2" name="compassionate" value="2" required>
@@ -87,7 +87,7 @@
                 <label for="compassionate-5">5</label>
             </div>
             <div class="rating">
-                <label for="emotional">Emotional</label>
+                <label for="emotional">{{ translations.emotional }}</label>
                 <input type="radio" id="emotional-1" name="emotional" value="1" required>
                 <label for="emotional-1">1</label>
                 <input type="radio" id="emotional-2" name="emotional" value="2" required>
@@ -100,7 +100,7 @@
                 <label for="emotional-5">5</label>
             </div>
             <div class="rating">
-                <label for="capable">Capable</label>
+                <label for="capable">{{ translations.capable }}</label>
                 <input type="radio" id="capable-1" name="capable" value="1" required>
                 <label for="capable-1">1</label>
                 <input type="radio" id="capable-2" name="capable" value="2" required>
@@ -113,7 +113,7 @@
                 <label for="capable-5">5</label>
             </div>
             <div class="rating">
-                <label for="responsive">Responsive</label>
+                <label for="responsive">{{ translations.responsive }}</label>
                 <input type="radio" id="responsive-1" name="responsive" value="1" required>
                 <label for="responsive-1">1</label>
                 <input type="radio" id="responsive-2" name="responsive" value="2" required>
@@ -126,7 +126,7 @@
                 <label for="responsive-5">5</label>
             </div>
             <div class="rating">
-                <label for="interactive">Interactive</label>
+                <label for="interactive">{{ translations.interactive }}</label>
                 <input type="radio" id="interactive-1" name="interactive" value="1" required>
                 <label for="interactive-1">1</label>
                 <input type="radio" id="interactive-2" name="interactive" value="2" required>
@@ -139,7 +139,7 @@
                 <label for="interactive-5">5</label>
             </div>
             <div class="rating">
-                <label for="reliable">Reliable</label>
+                <label for="reliable">{{ translations.reliable }}</label>
                 <input type="radio" id="reliable-1" name="reliable" value="1" required>
                 <label for="reliable-1">1</label>
                 <input type="radio" id="reliable-2" name="reliable" value="2" required>
@@ -152,7 +152,7 @@
                 <label for="reliable-5">5</label>
             </div>
             <div class="rating">
-                <label for="competent">Competent</label>
+                <label for="competent">{{ translations.competent }}</label>
                 <input type="radio" id="competent-1" name="competent" value="1" required>
                 <label for="competent-1">1</label>
                 <input type="radio" id="competent-2" name="competent" value="2" required>
@@ -165,7 +165,7 @@
                 <label for="competent-5">5</label>
             </div>
             <div class="rating">
-                <label for="knowledgable">Knowledgable</label>
+                <label for="knowledgeable">{{ translations.knowledgeable }}</label>
                 <input type="radio" id="knowledgable-1" name="knowledgable" value="1" required>
                 <label for="knowledgable-1">1</label>
                 <input type="radio" id="knowledgable-2" name="knowledgable" value="2" required>
@@ -178,7 +178,7 @@
                 <label for="knowledgable-5">5</label>
             </div>
             <div class="rating">
-                <label for="scary">Scary</label>
+                <label for="scary">{{ translations.scary }}</label>
                 <input type="radio" id="scary-1" name="scary" value="1" required>
                 <label for="scary-1">1</label>
                 <input type="radio" id="scary-2" name="scary" value="2" required>
@@ -191,7 +191,7 @@
                 <label for="scary-5">5</label>
             </div>
             <div class="rating">
-                <label for="strange">Strange</label>
+                <label for="strange">{{ translations.strange }}</label>
                 <input type="radio" id="strange-1" name="strange" value="1" required>
                 <label for="strange-1">1</label>
                 <input type="radio" id="strange-2" name="strange" value="2" required>
@@ -204,7 +204,7 @@
                 <label for="strange-5">5</label>
             </div>
             <div class="rating">
-                <label for="awkward">Awkward</label>
+                <label for="awkward">{{ translations.awkward }}</label>
                 <input type="radio" id="awkward-1" name="awkward" value="1" required>
                 <label for="awkward-1">1</label>
                 <input type="radio" id="awkward-2" name="awkward" value="2" required>
@@ -217,7 +217,7 @@
                 <label for="awkward-5">5</label>
             </div>
             <div class="rating">
-                <label for="dangerous">Dangerous</label>
+                <label for="dangerous">{{ translations.dangerous }}</label>
                 <input type="radio" id="dangerous-1" name="dangerous" value="1" required>
                 <label for="dangerous-1">1</label>
                 <input type="radio" id="dangerous-2" name="dangerous" value="2" required>
@@ -230,7 +230,7 @@
                 <label for="dangerous-5">5</label>
             </div>
             <div class="rating">
-                <label for="awful">Awful</label>
+                <label for="awful">{{ translations.awful }}</label>
                 <input type="radio" id="awful-1" name="awful" value="1" required>
                 <label for="awful-1">1</label>
                 <input type="radio" id="awful-2" name="awful" value="2" required>
@@ -243,7 +243,7 @@
                 <label for="awful-5">5</label>
             </div>
             <div class="rating">
-                <label for="aggressive">Aggressive</label>
+                <label for="aggressive">{{ translations.aggressive }}</label>
                 <input type="radio" id="aggressive-1" name="aggressive" value="1" required>
                 <label for="aggressive-1">1</label>
                 <input type="radio" id="aggressive-2" name="aggressive" value="2" required>
@@ -259,13 +259,12 @@
 
         {% if show_discussion_section %}
         <fieldset>
-            <legend>Discussion Attributes</legend>
-            <p>Rate each statement on a scale from 1 (Not at all) to 5 (Completely)</p>
+            <legend>{{ translations.discussion_attributes_legend }}</legend>
+            <p>{{ translations.discussion_attributes_description }}</p>
 
             <div class="range-container">
                 <div class="rating">
-                    <label for="accuracy-before">How accurately do you think the ChatBot
-                        understood you?</label>
+                    <label for="accuracy-before">{{ translations.accuracy_label_before }}</label>
                     <input type="radio" id="accuracy-before-1" name="accuracy-before" value="1"
                            required>
                     <label for="accuracy-before-1">1</label>
@@ -286,8 +285,7 @@
 
             <div class="range-container">
                 <div class="rating">
-                    <label for="convince-before">To what extent were you able to convince the
-                        ChatBot?</label>
+                    <label for="convince-before">{{ translations.convince_label_before }}</label>
                     <input type="radio" id="convince-before-1" name="convince-before" value="1"
                            required>
                     <label for="convince-before-1">1</label>
@@ -308,13 +306,14 @@
         </fieldset>
         {% else %}
         <fieldset>
-            <legend>Open-Ended Feedback</legend>
-            <label for="feedback">Please provide any additional comments or feedback about your
-                experience:</label>
+            <legend>{{ translations.feedback_legend }}</legend>
+            <label for="feedback">{{ translations.feedback_label }}</label>
             <textarea id="feedback" name="feedback" rows="4"></textarea>
         </fieldset>
         {% endif %}
-        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        <button type="submit" class="pure-button pure-button-primary">{{
+            translations.submit_button_text }}
+        </button>
     </form>
 </div>
 

@@ -1,7 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
     initializeUserCreation()
+    initializeLanguage()
 });
 
+function initializeLanguage() {
+    const languageDropdown = document.getElementById("languageSelect");
+    const currentPath = window.location.pathname;
+    const parts = currentPath.split("/");
+    const language = parts.length >= 2 ? parts[1] : "en";
+    if (language === "en" || language === "de") {
+        languageDropdown.value = language;
+    }
+
+    languageDropdown.addEventListener("change", function () {
+        const selectedLanguage = languageDropdown.value;
+        console.log(selectedLanguage)
+        window.location.href = `/${selectedLanguage}`;
+    });
+}
 
 function initializeUserCreation() {
     const privacyPolicyLink = document.getElementById('privacyPolicyLink');

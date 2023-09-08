@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questionnaire</title>
+    <title>{{ translations.title }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
           integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
           crossorigin="anonymous">
@@ -14,22 +14,21 @@
 <body>
 <div class="container pure-g">
     <div class="pure-u-1">
-        <h1 class="header">Questionnaire</h1>
+        <h1 class="header">{{ translations.title }}</h1>
     </div>
     <form class="pure-form pure-form-stacked pure-u-1" id="rosas-form">
 
         {% if show_discussion_section %}
         <fieldset>
-            <legend>Discussion Attributes</legend>
-            <p>Rate each statement on a scale from 1 (Not at all) to 5 (Completely)</p>
+            <legend>{{ translations.discussion_attributes_legend }}</legend>
+            <p>{{ translations.discussion_attributes_description }}</p>
 
-            <label for="intention-label">Perceived intention of the user:</label>
-            <span id="intention-label">"{{ intention }}"</span>
+            <label for="intention-label">{{ translations.intention_label }}</label>
+            <span id="intention-label">{{ translations.intention }}</span>
 
             <div class="range-container">
                 <div class="rating">
-                    <label for="accuracy-after">How accurately does this interpretation describe
-                        your intentions?</label>
+                    <label for="accuracy-after">{{ translations.accuracy_label_after }}</label>
                     <input type="radio" id="accuracy-after-1" name="accuracy-after" value="1"
                            required>
                     <label for="accuracy-after-1">1</label>
@@ -50,8 +49,7 @@
 
             <div class="range-container">
                 <div class="rating">
-                    <label for="convince-after">How effectively do you believe you were able to
-                        persuade the ChatBot based on this description?</label>
+                    <label for="convince-after">{{ translations.convince_label_after }}</label>
                     <input type="radio" id="convince-after-1" name="convince-after" value="1"
                            required>
                     <label for="convince-after-1">1</label>
@@ -73,12 +71,13 @@
         {% endif %}
 
         <fieldset>
-            <legend>Open-Ended Feedback</legend>
-            <label for="feedback">Please provide any additional comments or feedback about your
-                experience:</label>
+            <legend>{{ translations.feedback_legend }}</legend>
+            <label for="feedback">{{ translations.feedback_label }}</label>
             <textarea id="feedback" name="feedback" rows="4"></textarea>
         </fieldset>
-        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        <button type="submit" class="pure-button pure-button-primary">{{
+            translations.submit_button_text }}
+        </button>
     </form>
 </div>
 

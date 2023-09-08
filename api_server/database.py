@@ -30,7 +30,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from sqlalchemy import Column, Boolean, JSON, Integer
-from sqlmodel import Field, SQLModel, create_engine
+from sqlmodel import Field, SQLModel, create_engine, Session, select
 
 engine = create_engine("sqlite:///database.db")
 
@@ -159,3 +159,9 @@ def generate_invite_code():
 
     invite_code = ''.join(random.choice(characters) for _ in range(length))
     return invite_code
+
+
+def get_session_language(db_session: Session, current_session: ChatSession):
+    statement = select(User).where(User.user_id == current_session.user_id)
+    user = db_session.exec(statement).first()
+    return user.language if user else "english"

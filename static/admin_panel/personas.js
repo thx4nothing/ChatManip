@@ -1,6 +1,6 @@
-import {getToken} from "./admin_panel.js";
+import {getTranslation, getLanguage, getToken} from "./admin_panel.js";
 
-export function initializePersonaSection() {
+export async function initializePersonaSection() {
     const personaDropdown = document.getElementById("personaDropdown");
     const createNewBtn = document.getElementById("createNewBtn");
     const editSelectedBtn = document.getElementById("editSelectedBtn");
@@ -10,6 +10,8 @@ export function initializePersonaSection() {
     const savePersonaBtn = document.getElementById("savePersonaBtn");
     const addLanguageBtn = document.getElementById("addLanguageBtn");
     const languageInputs = document.getElementById("languageInputs");
+    const translations = await getTranslation(getLanguage());
+    console.log(translations)
 
     function populatePersonaDetails(persona) {
         const personaNameSpan = document.getElementById("personaNameD");
@@ -26,23 +28,23 @@ export function initializePersonaSection() {
             languageDiv.classList.add("language-row");
 
             const languageName = document.createElement("p");
-            languageName.textContent = "Language: " + language;
+            languageName.textContent = `${translations.language_placeholder}: ` + language;
             languageDiv.appendChild(languageName);
 
             const systemInstruction = document.createElement("p");
-            systemInstruction.textContent = `System Instruction: ${persona.system_instruction[language] || ""}`;
+            systemInstruction.textContent = `${translations.system_instruction_label}: ${persona.system_instruction[language] || ""}`;
             languageDiv.appendChild(systemInstruction);
 
             const firstMessage = document.createElement("p");
-            firstMessage.textContent = `First Message: ${persona.first_message[language] || ""}`;
+            firstMessage.textContent = `${translations.first_message_placeholder}: ${persona.first_message[language] || ""}`;
             languageDiv.appendChild(firstMessage);
 
             const instructionBefore = document.createElement("p");
-            instructionBefore.textContent = `Instruction Before: ${persona.before_instruction[language] || ""}`;
+            instructionBefore.textContent = `${translations.instruction_before_placeholder}: ${persona.before_instruction[language] || ""}`;
             languageDiv.appendChild(instructionBefore);
 
             const instructionAfter = document.createElement("p");
-            instructionAfter.textContent = `Instruction After: ${persona.after_instruction[language] || ""}`;
+            instructionAfter.textContent = `${translations.instruction_after_placeholder}: ${persona.after_instruction[language] || ""}`;
             languageDiv.appendChild(instructionAfter);
 
             personaDetailsContainer.appendChild(languageDiv);
@@ -51,7 +53,7 @@ export function initializePersonaSection() {
 
 
     function populatePersonaDropdown() {
-        fetch(`/admin/personas?token=${getToken()}`)
+        fetch(`/admin/personas/?token=${getToken()}`)
             .then(response => response.json())
             .then(personas => {
                 personaDropdown.innerHTML = "";
@@ -75,27 +77,27 @@ export function initializePersonaSection() {
         const languageNameInput = document.createElement("input");
         languageNameInput.type = "text";
         languageNameInput.classList.add("language-name");
-        languageNameInput.placeholder = "english or german";
+        languageNameInput.placeholder = `${translations.language_name_placeholder}`;
 
         const systemInstructionInput = document.createElement("input");
         systemInstructionInput.type = "text";
         systemInstructionInput.classList.add("system-instruction");
-        systemInstructionInput.placeholder = "System Instruction";
+        systemInstructionInput.placeholder = `${translations.system_instruction_placeholder}`;
 
         const firstMessageInput = document.createElement("input");
         firstMessageInput.type = "text";
         firstMessageInput.classList.add("first-message");
-        firstMessageInput.placeholder = "First Message";
+        firstMessageInput.placeholder = `${translations.first_message_placeholder}`;
 
         const instructionBeforeInput = document.createElement("input");
         instructionBeforeInput.type = "text";
         instructionBeforeInput.classList.add("instruction-before");
-        instructionBeforeInput.placeholder = "Instruction before User Message";
+        instructionBeforeInput.placeholder = `${translations.instruction_before_placeholder}`;
 
         const instructionAfterInput = document.createElement("input");
         instructionAfterInput.type = "text";
         instructionAfterInput.classList.add("instruction-after");
-        instructionAfterInput.placeholder = "Instruction after User Message";
+        instructionAfterInput.placeholder = `${translations.instruction_after_placeholder}`;
 
         newRow.appendChild(languageNameInput);
         newRow.appendChild(systemInstructionInput);
@@ -119,7 +121,7 @@ export function initializePersonaSection() {
     function handleEditSelectedClick() {
         const selectedPersonaId = personaDropdown.value;
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`)
+            fetch(`/admin/personas/${selectedPersonaId}/?token=${getToken()}`)
                 .then(response => response.json())
                 .then(persona => {
                     personaName.value = persona.name;
@@ -130,34 +132,34 @@ export function initializePersonaSection() {
                         const row = document.createElement("div");
                         row.classList.add("language-input-row");
 
-                        const languageInput = document.createElement("input");
-                        languageInput.type = "text";
-                        languageInput.classList.add("language-name");
-                        languageInput.placeholder = "english or german";
-                        languageInput.value = language;
+                        const languageNameInput = document.createElement("input");
+                        languageNameInput.type = "text";
+                        languageNameInput.classList.add("language-name");
+                        languageNameInput.placeholder = `${translations.language_name_placeholder}`;
+                        languageNameInput.value = language;
 
                         const systemInstructionInput = document.createElement("input");
                         systemInstructionInput.type = "text";
                         systemInstructionInput.classList.add("system-instruction");
-                        systemInstructionInput.placeholder = "System Instruction";
+                        systemInstructionInput.placeholder = `${translations.system_instruction_placeholder}`;
                         systemInstructionInput.value = persona.system_instruction[language] || "";
 
                         const firstMessageInput = document.createElement("input");
                         firstMessageInput.type = "text";
                         firstMessageInput.classList.add("first-message");
-                        firstMessageInput.placeholder = "First Message";
+                        firstMessageInput.placeholder = `${translations.first_message_placeholder}`;
                         firstMessageInput.value = persona.first_message[language] || "";
 
                         const instructionBeforeInput = document.createElement("input");
                         instructionBeforeInput.type = "text";
                         instructionBeforeInput.classList.add("instruction-before");
-                        instructionBeforeInput.placeholder = "Instruction before User Message";
+                        instructionBeforeInput.placeholder = `${translations.instruction_before_placeholder}`;
                         instructionBeforeInput.value = persona.before_instruction[language] || "";
 
                         const instructionAfterInput = document.createElement("input");
                         instructionAfterInput.type = "text";
                         instructionAfterInput.classList.add("instruction-after");
-                        instructionAfterInput.placeholder = "Instruction after User Message";
+                        instructionAfterInput.placeholder = `${translations.instruction_after_placeholder}`;
                         instructionAfterInput.value = persona.after_instruction[language] || "";
 
                         row.appendChild(languageInput);
@@ -179,7 +181,7 @@ export function initializePersonaSection() {
     function handleDeleteSelectedClick() {
         const selectedPersonaId = personaDropdown.value;
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`, {
+            fetch(`/admin/personas/${selectedPersonaId}/?token=${getToken()}`, {
                 method: "DELETE"
             })
                 .then(response => response.json())
@@ -226,7 +228,7 @@ export function initializePersonaSection() {
             body: JSON.stringify(personaData)
         };
 
-        const url = selectedPersonaId ? `/admin/personas/${selectedPersonaId}?token=${getToken()}` : `/admin/personas?token=${getToken()}`;
+        const url = selectedPersonaId ? `/admin/personas/${selectedPersonaId}/?token=${getToken()}` : `/admin/personas/?token=${getToken()}`;
 
         fetch(url, fetchOptions)
             .then(response => response.json())
@@ -246,7 +248,7 @@ export function initializePersonaSection() {
         editSelectedBtn.disabled = !isPersonaSelected; // Enable/disable "Edit Selected" button
         deleteSelectedBtn.disabled = !isPersonaSelected; // Enable/disable "Delete Selected" button
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`)
+            fetch(`/admin/personas/${selectedPersonaId}/?token=${getToken()}`)
                 .then(response => response.json())
                 .then(persona => {
                     populatePersonaDetails(persona);
@@ -259,7 +261,7 @@ export function initializePersonaSection() {
     }
 
     function exportPersonaDatabase() {
-        fetch(`/admin/personas/export?token=${getToken()}`, {
+        fetch(`/admin/personas/export/?token=${getToken()}`, {
             method: 'GET',
         })
             .then(response => response.json())
@@ -284,7 +286,7 @@ export function initializePersonaSection() {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch(`/admin/personas/import?token=${getToken()}`, {
+        fetch(`/admin/personas/import/?token=${getToken()}`, {
             method: 'POST',
             body: formData,
         })

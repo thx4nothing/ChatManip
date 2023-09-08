@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Panel</title>
+    <title>{{ translations.title }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
           integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
           crossorigin="anonymous">
@@ -11,136 +11,188 @@
 </head>
 <body>
 <div class="container pure-g">
-    <h1 class="pure-u-1">Admin Panel</h1>
+    <h1 class="pure-u-1">{{ translations.title }}</h1>
+
+    <label for="languageSelect">Select Language:</label>
+    <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+    </select>
+
 
     <div class="settings-section pure-u-1">
-        <h2>Settings</h2>
-        <label for="modelSelect">Model:</label>
+        <h2>{{ translations.settings }}</h2>
+        <label for="modelSelect">{{ translations.model_label }}:</label>
         <select id="modelSelect" class="pure-u-1-4">
             <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
             <option value="gpt-4">GPT-4</option>
         </select>
         <br>
-        <label for="temperatureInput">Temperature:</label>
+        <label for="temperatureInput">{{ translations.temperature_label }}:</label>
         <input type="number" id="temperatureInput" step="0.1" min="0.0" max="2.0" value="1.0">
         <br>
-        <button id="saveSettingsBtn" class="pure-button pure-button-primary">Save Settings</button>
+        <button id="saveSettingsBtn" class="pure-button pure-button-primary">{{
+            translations.save_settings_button }}
+        </button>
     </div>
 
 
     <div class="persona-section pure-u-1">
-        <h2>Persona Definitions</h2>
+        <h2>{{ translations.persona_definitions }}</h2>
         <select id="personaDropdown" class="pure-u-1-4">
-            <option value="-1" style="display:none;">Create New</option>
+            <option value="-1" style="display:none;">{{ translations.create_new_option }}</option>
         </select>
         <div class="buttons pure-u-1-4">
-            <button id="createNewBtn" class="pure-button">Create New</button>
-            <button id="editSelectedBtn" class="pure-button" disabled>Edit Selected</button>
-            <button id="deleteSelectedBtn" class="pure-button" disabled>Delete Selected</button>
-            <button id="exportPersonaBtn" class="pure-button">Export</button>
+            <button id="createNewBtn" class="pure-button">{{ translations.create_new_option }}
+            </button>
+            <button id="editSelectedBtn" class="pure-button" disabled>{{
+                translations.edit_selected_button }}
+            </button>
+            <button id="deleteSelectedBtn" class="pure-button" disabled>{{
+                translations.delete_selected_button }}
+            </button>
+            <button id="exportPersonaBtn" class="pure-button">{{ translations.export_button }}
+            </button>
             <input type="file" id="importPersonaInput" style="display: none;">
-            <button id="importPersonaBtn" class="pure-button">Import</button>
+            <button id="importPersonaBtn" class="pure-button">{{ translations.import_button }}
+            </button>
         </div>
         <div id="personaForm" class="hidden pure-u-1">
-            <input type="text" id="personaName" class="pure-u-1-4" placeholder="Name (internal)">
+            <input type="text" id="personaName" class="pure-u-1-4"
+                   placeholder="{{ translations.name_internal_placeholder }}">
             <div id="languageInputs">
                 <div class="language-input-row">
                     <input type="text" class="language-name" placeholder="english or german">
-                    <input type="text" class="system-instruction" placeholder="System Instruction">
-                    <input type="text" class="first-message" placeholder="First Message">
+                    <input type="text" class="system-instruction"
+                           placeholder="{{ translations.system_instruction_placeholder }}">
+                    <input type="text" class="first-message"
+                           placeholder="{{ translations.first_message_placeholder }}">
                     <input type="text" class="instruction-before"
-                           placeholder="Instruction before User Message">
+                           placeholder="{{ translations.instruction_before_placeholder }}">
                     <input type="text" class="instruction-after"
-                           placeholder="Instruction after User Message">
+                           placeholder="{{ translations.instruction_after_placeholder }}">
                 </div>
             </div>
-            <button id="addLanguageBtn" class="pure-button">Add Language</button>
-            <button id="savePersonaBtn" class="pure-button pure-button-primary">Save Persona
+            <button id="addLanguageBtn" class="pure-button">{{ translations.add_language_button }}
+            </button>
+            <button id="savePersonaBtn" class="pure-button pure-button-primary">{{
+                translations.save_persona_button }}
             </button>
         </div>
         <div id="personaDetails" class="pure-u-1">
-            <h3>Persona Details</h3>
-            <p><strong>Name:</strong> <span id="personaNameD"></span></p>
-            <p><strong>Language:</strong> <span id="personaLanguage"></span></p>
-            <p><strong>System Instruction:</strong> <span id="personaSystemInstruction"></span></p>
-            <p><strong>First Message:</strong> <span id="firstMessage"></span></p>
-            <p><strong>Instruction Before:</strong> <span id="personaInstructionBefore"></span></p>
-            <p><strong>Instruction After:</strong> <span id="personaInstructionAfter"></span></p>
+            <h3>{{ translations.persona_details_title }}</h3>
+            <p><strong>{{ translations.name_label }}</strong> <span id="personaNameD"></span></p>
+            <p><strong>{{ translations.language_label }}</strong> <span id="personaLanguage"></span>
+            </p>
+            <p><strong>{{ translations.system_instruction_label }}</strong> <span
+                    id="personaSystemInstruction"></span></p>
+            <p><strong>{{ translations.first_message_label }}</strong> <span
+                    id="firstMessage"></span></p>
+            <p><strong>{{ translations.instruction_before_label }}</strong> <span
+                    id="personaInstructionBefore"></span></p>
+            <p><strong>{{ translations.instruction_after_label }}</strong> <span
+                    id="personaInstructionAfter"></span></p>
         </div>
     </div>
 
     <div class="task-section pure-u-1">
-        <h2>Task Definitions</h2>
+        <h2>{{ translations.task_definitions }}</h2>
         <select id="taskDropdown" class="pure-u-1-4">
-            <option value="-1" style="display:none;">Create New</option>
+            <option value="-1" style="display:none;">{{ translations.create_new_option }}</option>
         </select>
         <div class="buttons pure-u-1-4">
-            <button id="createNewTaskBtn" class="pure-button">Create New</button>
-            <button id="editSelectedTaskBtn" class="pure-button" disabled>Edit Selected</button>
-            <button id="deleteSelectedTaskBtn" class="pure-button" disabled>Delete Selected</button>
-            <button id="exportTaskBtn" class="pure-button">Export</button>
+            <button id="createNewTaskBtn" class="pure-button">{{ translations.create_new_option }}
+            </button>
+            <button id="editSelectedTaskBtn" class="pure-button" disabled>{{
+                translations.edit_selected_button }}
+            </button>
+            <button id="deleteSelectedTaskBtn" class="pure-button" disabled>{{
+                translations.delete_selected_button }}
+            </button>
+            <button id="exportTaskBtn" class="pure-button">{{ translations.export_button }}</button>
             <input type="file" id="importTaskInput" style="display: none;">
-            <button id="importTaskBtn" class="pure-button">Import</button>
+            <button id="importTaskBtn" class="pure-button">{{ translations.import_button }}</button>
         </div>
         <div id="taskForm" class="hidden pure-u-1">
-            <input type="text" id="taskName" class="pure-u-1-4" placeholder="Task Name">
+            <input type="text" id="taskName" class="pure-u-1-4"
+                   placeholder="{{ translations.task_name_placeholder }}">
             <input type="checkbox" id="taskShowDiscussionCheckbox" name="show-section-checkbox">
-            <label for="taskShowDiscussionCheckbox">Show Discussion Attributes section in
-                questionnaire</label>
+            <label for="taskShowDiscussionCheckbox">{{ translations.show_discussion_label }}</label>
             <div id="taskLanguageInputs">
                 <div class="task-language-input-row">
-                    <input type="text" class="task-language-name" placeholder="Language">
-                    <input type="text" class="task-instruction" placeholder="Task Instruction">
+                    <input type="text" class="task-language-name"
+                           placeholder="{{ translations.task_language }}">
+                    <input type="text" class="task-instruction"
+                           placeholder="{{ translations.task_instruction }}">
                 </div>
             </div>
-            <button id="addTaskLanguageBtn" class="pure-button">Add Language</button>
-            <button id="saveTaskBtn" class="pure-button pure-button-primary">Save Task</button>
+            <button id="addTaskLanguageBtn" class="pure-button">{{
+                translations.add_task_language_button }}
+            </button>
+            <button id="saveTaskBtn" class="pure-button pure-button-primary">{{
+                translations.save_task_button }}
+            </button>
         </div>
         <div id="taskDetails" class="pure-u-1">
-            <h3>Task Details</h3>
-            <p><strong>Task Name:</strong> <span id="taskNameD"></span></p>
-            <p><strong>Language:</strong> <span id="taskLanguage"></span></p>
-            <p><strong>Task Instruction:</strong> <span id="taskInstruction"></span></p>
-            <p><strong>Show Discussion questions:</strong> <span id="taskDiscussion"></span></p>
+            <h3>{{ translations.task_details_title }}</h3>
+            <p><strong>{{ translations.task_name_label }}</strong> <span id="taskNameD"></span></p>
+            <p><strong>{{ translations.language_label }}</strong> <span id="taskLanguage"></span>
+            </p>
+            <p><strong>{{ translations.task_instruction_label }}</strong> <span
+                    id="taskInstruction"></span></p>
+            <p><strong>{{ translations.show_discussion_label }}</strong> <span
+                    id="taskDiscussion"></span></p>
         </div>
     </div>
 
     <div class="history-section pure-u-1">
-        <h2>History Definitions</h2>
+        <h2>{{ translations.history_definitions_title }}</h2>
         <select id="historyDropdown" class="pure-u-1-4">
-            <option value="-1" style="display:none;">Create New</option>
+            <option value="-1" style="display:none;">{{ translations.create_new_option }}</option>
         </select>
         <div class="buttons pure-u-1-4">
-            <button id="createNewHistoryBtn" class="pure-button">Create New</button>
-            <button id="editSelectedHistoryBtn" class="pure-button" disabled>Edit Selected</button>
-            <button id="deleteSelectedHistoryBtn" class="pure-button" disabled>Delete Selected
+            <button id="createNewHistoryBtn" class="pure-button">{{ translations.create_new_option
+                }}
             </button>
-            <button id="exportHistoryBtn" class="pure-button">Export</button>
+            <button id="editSelectedHistoryBtn" class="pure-button" disabled>{{
+                translations.edit_selected_button }}
+            </button>
+            <button id="deleteSelectedHistoryBtn" class="pure-button" disabled>{{
+                translations.delete_selected_button }}
+            </button>
+            <button id="exportHistoryBtn" class="pure-button">{{ translations.export_button }}
+            </button>
             <input type="file" id="importHistoryInput" style="display: none;">
-            <button id="importHistoryBtn" class="pure-button">Import</button>
+            <button id="importHistoryBtn" class="pure-button">{{ translations.import_button }}
+            </button>
         </div>
         <div id="historyForm" class="hidden pure-u-1">
-            <input type="text" id="historyName" class="pure-u-1-4" placeholder="History Name">
+            <input type="text" id="historyName" class="pure-u-1-4"
+                   placeholder="{{ translations.history_name_placeholder }}">
             <div id="historyLanguageInputs">
 
             </div>
-            <button id="addHistoryLanguageBtn" class="pure-button">Add Language</button>
-            <button id="saveHistoryBtn" class="pure-button pure-button-primary">Save History
+            <button id="addHistoryLanguageBtn" class="pure-button">{{
+                translations.add_language_button
+                }}
+            </button>
+            <button id="saveHistoryBtn" class="pure-button pure-button-primary">{{
+                translations.save_history_btn }}
             </button>
         </div>
 
         <div id="historyDetails" class="pure-u-1">
-            <h3>History Details</h3>
+            <h3>{{ translations.history_details_title }}</h3>
         </div>
     </div>
 
     <div class="rules-section pure-u-1">
-        <h2>Rules</h2>
+        <h2>{{ translations.rules_title }}</h2>
         <table id="rulesTable" class="pure-table pure-table-bordered pure-table-striped">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Description</th>
+                <th>{{ translations.rules_table_name_header }}</th>
+                <th>{{ translations.rules_table_description_header }}</th>
             </tr>
             </thead>
             <tbody>
@@ -150,22 +202,23 @@
 
 
     <div class="invite-code-section pure-u-1">
-        <h2>Invite Codes</h2>
+        <h2>{{ translations.invite_codes_title }}</h2>
         <input type="number" id="numCodes" class="pure-u-1-4" min="1" value="1">
-        <button id="generateCodesBtn" class="pure-button pure-button-primary">Generate Codes
+        <button id="generateCodesBtn" class="pure-button pure-button-primary">{{
+            translations.generate_codes_btn }}
         </button>
         <table id="inviteCodesTable" class="pure-table pure-table-bordered pure-table-striped">
             <thead>
             <tr>
-                <th>Invite Code</th>
-                <th>User ID</th>
-                <th>Persona</th>
-                <th>Tasks</th>
-                <th>History</th>
-                <th>Rules</th>
-                <th>Next Invite Code</th>
-                <th>Save</th>
-                <th>Delete</th>
+                <th>{{ translations.invite_codes_table_invite_code_header }}</th>
+                <th>{{ translations.invite_codes_table_user_id_header }}</th>
+                <th>{{ translations.invite_codes_table_persona_header }}</th>
+                <th>{{ translations.invite_codes_table_tasks_header }}</th>
+                <th>{{ translations.invite_codes_table_history_header }}</th>
+                <th>{{ translations.invite_codes_table_rules_header }}</th>
+                <th>{{ translations.invite_codes_table_next_invite_code_header }}</th>
+                <th>{{ translations.invite_codes_table_save_header }}</th>
+                <th>{{ translations.invite_codes_table_delete_header }}</th>
             </tr>
             </thead>
             <tbody>
@@ -173,31 +226,31 @@
         </table>
     </div>
 
-
     <div class="user-management-section pure-u-1">
-        <h2>User Management</h2>
+        <h2>{{ translations.user_management_title }}</h2>
         <table id="userTable" class="pure-table pure-table-bordered pure-table-striped">
             <thead>
             <tr>
-                <th>Age</th>
-                <th>Gender</th>
-                <th>Occupation</th>
-                <th>Location</th>
-                <th>Language</th>
-                <th>ID</th>
-                <th>API Prompt Tokens</th>
-                <th>API Completion Tokens</th>
-                <th>API Total Tokens</th>
-                <th>Last Token Update Time</th>
-                <th>Available Tokens</th>
-                <th>Last Request Time</th>
-                <th>Delete</th>
+                <th>{{ translations.user_table_age_header }}</th>
+                <th>{{ translations.user_table_gender_header }}</th>
+                <th>{{ translations.user_table_occupation_header }}</th>
+                <th>{{ translations.user_table_location_header }}</th>
+                <th>{{ translations.user_table_language_header }}</th>
+                <th>{{ translations.user_table_id_header }}</th>
+                <th>{{ translations.user_table_api_prompt_tokens_header }}</th>
+                <th>{{ translations.user_table_api_completion_tokens_header }}</th>
+                <th>{{ translations.user_table_api_total_tokens_header }}</th>
+                <th>{{ translations.user_table_last_token_update_time_header }}</th>
+                <th>{{ translations.user_table_available_tokens_header }}</th>
+                <th>{{ translations.user_table_last_request_time_header }}</th>
+                <th>{{ translations.user_table_delete_header }}</th>
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
     </div>
+
 </div>
 <script type="module" src="{{ url_for('static', path='admin_panel/admin_panel.js') }}"></script>
 <script type="module" src="{{ url_for('static', path='admin_panel/tasks.js') }}"></script>

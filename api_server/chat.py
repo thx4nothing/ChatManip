@@ -1,3 +1,4 @@
+import json
 import sys
 from datetime import datetime
 
@@ -7,7 +8,7 @@ from starlette.responses import RedirectResponse
 
 from api_server.chatgpt_interface import request_response, Ok, Err
 from api_server.database import engine, ChatSession, Persona, User, Messages, Task, InviteCode, \
-    History
+    History, get_session_language
 from api_server.models import Message
 from api_server.rule import *
 from api_server.templates import templates
@@ -23,7 +24,16 @@ async def session(session_id: str, request: Request):
         if current_session is None:
             return RedirectResponse(url="/")
 
-    return templates.TemplateResponse("chat.html", {"request": request})
+        if get_session_language(db_session, current_session) == "german":
+            with open("static/translations/chat_de.json", "r",
+                      encoding="utf-8") as translation_file:
+                translation_data = json.load(translation_file)
+        else:
+            with open("static/translations/chat_en.json", "r",
+                      encoding="utf-8") as translation_file:
+                translation_data = json.load(translation_file)
+    return templates.TemplateResponse("chat.html",
+                                      {"request": request, "translations": translation_data})
 
 
 def add_message_to_database(db_session, session_id, message, altered_message, chat_response,
@@ -144,7 +154,17 @@ def end_session(session_id: str, request: Request):
             chat_response = request_system_response(messages)
             add_message_to_database(db_session, current_session.session_id, ask_intention,
                                     ask_intention, chat_response, chat_response)
-        return templates.TemplateResponse("end.html", {"request": request})
+
+            if get_session_language(db_session, current_session) == "german":
+                with open("static/translations/end_de.json", "r",
+                          encoding="utf-8") as translation_file:
+                    translation_data = json.load(translation_file)
+            else:
+                with open("static/translations/end_en.json", "r",
+                          encoding="utf-8") as translation_file:
+                    translation_data = json.load(translation_file)
+        return templates.TemplateResponse("end.html",
+                                          {"request": request, "translations": translation_data})
 
 
 @router.get("/{session_id}/next")
@@ -262,12 +282,6 @@ def process_user_chat_message(db_session: Session, current_session: ChatSession,
                             altered_response)
 
     return altered_response
-
-
-def get_session_language(db_session: Session, current_session: ChatSession):
-    statement = select(User).where(User.user_id == current_session.user_id)
-    user = db_session.exec(statement).first()
-    return user.language
 
 
 def get_session_persona(db_session: Session, current_session: ChatSession):

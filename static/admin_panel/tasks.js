@@ -44,7 +44,7 @@ export function initializeTasksSection() {
 
 
     function populateTaskDropdown() {
-        fetch(`/admin/tasks?token=${getToken()}`)
+        fetch(`/admin/tasks/?token=${getToken()}`)
             .then(response => response.json())
             .then(tasks => {
                 taskDropdown.innerHTML = "";
@@ -92,7 +92,7 @@ export function initializeTasksSection() {
     function handleEditSelectedTaskClick() {
         const selectedTaskId = taskDropdown.value;
         if (selectedTaskId) {
-            fetch(`/admin/tasks/${selectedTaskId}?token=${getToken()}`)
+            fetch(`/admin/tasks/${selectedTaskId}/?token=${getToken()}`)
                 .then(response => response.json())
                 .then(task => {
                     taskName.value = task.name;
@@ -133,7 +133,7 @@ export function initializeTasksSection() {
     function handleDeleteSelectedTaskClick() {
         const selectedTaskId = taskDropdown.value;
         if (selectedTaskId) {
-            fetch(`/admin/tasks/${selectedTaskId}?token=${getToken()}`, {
+            fetch(`/admin/tasks/${selectedTaskId}/?token=${getToken()}`, {
                 method: "DELETE"
             })
                 .then(response => response.json())
@@ -172,7 +172,7 @@ export function initializeTasksSection() {
             body: JSON.stringify(taskData)
         };
 
-        const url = selectedTaskId ? `/admin/tasks/${selectedTaskId}?token=${getToken()}` : `/admin/tasks?token=${getToken()}`;
+        const url = selectedTaskId ? `/admin/tasks/${selectedTaskId}/?token=${getToken()}` : `/admin/tasks/?token=${getToken()}`;
 
         fetch(url, fetchOptions)
             .then(response => response.json())
@@ -212,7 +212,7 @@ export function initializeTasksSection() {
         editSelectedTaskBtn.disabled = !isTaskSelected; // Enable/disable "Edit Selected" button
         deleteSelectedTaskBtn.disabled = !isTaskSelected; // Enable/disable "Delete Selected" button
         if (selectedTaskId) {
-            fetch(`/admin/tasks/${selectedTaskId}?token=${getToken()}`)
+            fetch(`/admin/tasks/${selectedTaskId}/?token=${getToken()}`)
                 .then(response => response.json())
                 .then(task => {
                     populateTaskDetails(task);
@@ -224,7 +224,7 @@ export function initializeTasksSection() {
     }
 
     function exportTaskDatabase() {
-        fetch(`/admin/tasks/export?token=${getToken()}`, {
+        fetch(`/admin/tasks/export/?token=${getToken()}`, {
             method: 'GET',
         })
             .then(response => response.json())
@@ -249,7 +249,7 @@ export function initializeTasksSection() {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch(`/admin/tasks/import?token=${getToken()}`, {
+        fetch(`/admin/tasks/import/?token=${getToken()}`, {
             method: 'POST',
             body: formData,
         })

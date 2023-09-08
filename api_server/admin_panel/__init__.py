@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter, Query
 from starlette.requests import Request
 
@@ -18,5 +20,32 @@ router.include_router(settings.router, prefix="/settings", tags=["settings"])
 
 @router.get("/")
 async def read_root(request: Request, token: str = Query(...)):
+    return await read_root_en(request, "en", token)
+
+
+@router.get("/{language}")
+async def read_root_en(request: Request, language: str, token: str = Query(...)):
     await check_authentication(token)
-    return templates.TemplateResponse("admin_panel.html", {"request": request})
+    if language == "de":
+        with open("static/translations/admin_panel_de.json", "r",
+                  encoding="utf-8") as translation_file:
+            translation_data = json.load(translation_file)
+    else:
+        with open("static/translations/admin_panel_en.json", "r",
+                  encoding="utf-8") as translation_file:
+            translation_data = json.load(translation_file)
+    return templates.TemplateResponse("admin_panel.html",
+                                      {"request": request, "translations": translation_data})
+
+
+@router.get("/translations/{language}")
+async def get_translations(language: str):
+    if language == "de":
+        with open("static/translations/admin_panel_de.json", "r",
+                  encoding="utf-8") as translation_file:
+            translation_data = json.load(translation_file)
+    else:
+        with open("static/translations/admin_panel_en.json", "r",
+                  encoding="utf-8") as translation_file:
+            translation_data = json.load(translation_file)
+    return translation_data

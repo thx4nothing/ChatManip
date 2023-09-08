@@ -1,0 +1,13 @@
+{
+  "chat_title": "Chat Interface",
+  "user_input_placeholder": "Type your message...",
+  "send_button_text": "Send",
+  "show_task_button_text": "Show Task",
+  "end_chat_button_text": "End Chat",
+  "timer_display_text": "Time remaining: mm:ss",
+  "message_counter_text": "Messages sent: 0",
+  "task_modal_title": "Task",
+  "end_chat_modal_title": "End Chat",
+  "end_chat_modal_confirm_button_text": "End Chat",
+  "end_chat_modal_cancel_button_text": "Return"
+}

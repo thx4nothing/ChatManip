@@ -2,21 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Experiment Conclusion</title>
+    <title>{{ translations.end }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
           integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"/>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"/>
     <link rel="stylesheet" href="{{ url_for('static', path='end.css') }}">
 </head>
 <body>
 <div class="pure-g">
     <div class="pure-u-1 thank-you-container">
-        <h1 class="thank-you-title">Thank You for Participating!</h1>
-        <p class="thank-you-message">We greatly appreciate your participation in our experiment.</p>
-        <p class="thank-you-message">Your feedback is invaluable to us and will contribute to our research.</p>
-        <p class="thank-you-message">If you have any questions or feedback, please feel free to contact us.</p>
-        <p class="thank-you-message">Have a great day!</p>
+        <h1 class="thank-you-title">{{ translations.thank_you_title }}</h1>
+        <p class="thank-you-message">{{ translations.thank_you_message_1 }}</p>
+        <p class="thank-you-message">{{ translations.thank_you_message_2 }}</p>
+        <p class="thank-you-message">{{ translations.thank_you_message_3 }}</p>
+        <p class="thank-you-message">{{ translations.thank_you_message_4 }}</p>
     </div>
 </div>
 </body>
