@@ -14,6 +14,7 @@ Usage:
 Author: Marlon Beck
 Date: 17/08/2023
 """
+import os
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -22,8 +23,18 @@ from sqlmodel import SQLModel
 from api_server import chat, database, user_creation, questionnaire
 from api_server.admin_panel import router as admin_panel_router
 
+debug = os.getenv("CHATMANIP_DEBUG").lower() == "true"
+
 # Create the FastAPI app
-app = FastAPI()
+if debug:
+    print("Running in DEBUG mode!")
+    app = FastAPI()
+else:
+    print("Running in PRODUCTION mode!")
+    app = FastAPI(
+        docs_url=None,  # Disable docs (Swagger UI)
+        redoc_url=None,  # Disable redoc
+    )
 
 # Mount static files directory to serve CSS and JavaScript files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -33,9 +44,6 @@ app.include_router(admin_panel_router, prefix="/admin", tags=["admin"])
 app.include_router(chat.router, prefix="/chat", tags=["chat"])
 app.include_router(questionnaire.router, prefix="/questionnaire", tags=["questionnaire"])
 app.include_router(user_creation.router)
-
-
-# app.include_router(security.router)
 
 
 @app.on_event("startup")
