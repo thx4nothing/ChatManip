@@ -37,7 +37,8 @@ else:
     )
 
 # Mount static files directory to serve CSS and JavaScript files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/chatmanip/static", StaticFiles(directory="static"), name="static")
 
 # Route the functions to the main app
 app.include_router(admin_panel_router, prefix="/admin", tags=["admin"])

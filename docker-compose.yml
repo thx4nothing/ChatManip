@@ -1,0 +1,11 @@
+version: "3"
+services:
+  chatmanip:
+    image: thx4nothing15/chatmanip
+    ports:
+      - "8000:8000"
+    environment:
+      - CHATMANIP_DEBUG=0
+      - OPENAI_API_KEY=<APIKEY>
+      - CHATMANIP_ADMIN_TOKEN=<PASSWORD>
+    container_name: chatmanip
