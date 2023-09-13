@@ -30,7 +30,7 @@ function initializeLanguage() {
     languageDropdown.addEventListener("change", function () {
         const selectedLanguage = languageDropdown.value;
         console.log(selectedLanguage)
-        window.location.href = `/admin/${selectedLanguage}/?token=${getToken()}`;
+        window.location.href = `/admin/${selectedLanguage}?token=${getToken()}`;
     });
 }
 

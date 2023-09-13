@@ -11,7 +11,7 @@ from .common import list_entities
 router = APIRouter()
 
 
-@router.get("/export/")
+@router.get("/export")
 async def export_histories_database(token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -22,7 +22,7 @@ async def export_histories_database(token: str = Query(...)):
         return history_data
 
 
-@router.post("/import/")
+@router.post("/import")
 async def import_histories_database(file: UploadFile = File(...), token: str = Query(...)):
     await check_authentication(token)
     data = await file.read()
@@ -36,12 +36,12 @@ async def import_histories_database(file: UploadFile = File(...), token: str = Q
         return {"message": "Import successful"}
 
 
-@router.get("/", response_model=List[History])
+@router.get("", response_model=List[History])
 async def list_histories(token: str = Query(...)):
     return await list_entities(History, token)
 
 
-@router.post("/", response_model=History)
+@router.post("", response_model=History)
 async def create_history(history: History, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -51,7 +51,7 @@ async def create_history(history: History, token: str = Query(...)):
         return history
 
 
-@router.get("/{history_id}/", response_model=History)
+@router.get("/{history_id}", response_model=History)
 async def get_history(history_id: int, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -62,7 +62,7 @@ async def get_history(history_id: int, token: str = Query(...)):
         return history
 
 
-@router.put("/{history_id}/", response_model=History)
+@router.put("/{history_id}", response_model=History)
 async def update_history(history_id: int, history: History, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -81,7 +81,7 @@ async def update_history(history_id: int, history: History, token: str = Query(.
         return existing_history
 
 
-@router.delete("/{history_id}/", response_model=dict)
+@router.delete("/{history_id}", response_model=dict)
 async def delete_history(history_id: int, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:

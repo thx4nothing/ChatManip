@@ -9,7 +9,7 @@ export function initializeUserManagementSection() {
             userTableDiv.deleteRow(1);
         }
 
-        fetch(`/admin/users/?token=${getToken()}`)
+        fetch(`/admin/users?token=${getToken()}`)
             .then(response => response.json())
             .then(users => {
                 users.forEach(user => {
@@ -41,7 +41,7 @@ export function initializeUserManagementSection() {
 
 
     function deleteUser(userId) {
-        fetch(`/admin/users/delete/${userId}/?token=${getToken()}`, {
+        fetch(`/admin/users/delete/${userId}?token=${getToken()}`, {
             method: "DELETE"
         })
             .then(response => response.json())

@@ -53,7 +53,7 @@ export async function initializePersonaSection() {
 
 
     function populatePersonaDropdown() {
-        fetch(`/admin/personas/?token=${getToken()}`)
+        fetch(`/admin/personas?token=${getToken()}`)
             .then(response => response.json())
             .then(personas => {
                 personaDropdown.innerHTML = "";
@@ -121,7 +121,7 @@ export async function initializePersonaSection() {
     function handleEditSelectedClick() {
         const selectedPersonaId = personaDropdown.value;
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}/?token=${getToken()}`)
+            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`)
                 .then(response => response.json())
                 .then(persona => {
                     personaName.value = persona.name;
@@ -181,7 +181,7 @@ export async function initializePersonaSection() {
     function handleDeleteSelectedClick() {
         const selectedPersonaId = personaDropdown.value;
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}/?token=${getToken()}`, {
+            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`, {
                 method: "DELETE"
             })
                 .then(response => response.json())
@@ -228,7 +228,7 @@ export async function initializePersonaSection() {
             body: JSON.stringify(personaData)
         };
 
-        const url = selectedPersonaId ? `/admin/personas/${selectedPersonaId}/?token=${getToken()}` : `/admin/personas/?token=${getToken()}`;
+        const url = selectedPersonaId ? `/admin/personas/${selectedPersonaId}?token=${getToken()}` : `/admin/personas?token=${getToken()}`;
 
         fetch(url, fetchOptions)
             .then(response => response.json())
@@ -248,7 +248,7 @@ export async function initializePersonaSection() {
         editSelectedBtn.disabled = !isPersonaSelected; // Enable/disable "Edit Selected" button
         deleteSelectedBtn.disabled = !isPersonaSelected; // Enable/disable "Delete Selected" button
         if (selectedPersonaId) {
-            fetch(`/admin/personas/${selectedPersonaId}/?token=${getToken()}`)
+            fetch(`/admin/personas/${selectedPersonaId}?token=${getToken()}`)
                 .then(response => response.json())
                 .then(persona => {
                     populatePersonaDetails(persona);
@@ -261,8 +261,8 @@ export async function initializePersonaSection() {
     }
 
     function exportPersonaDatabase() {
-        console.log(`/admin/personas/export/?token=${getToken()}`)
-        fetch(`/admin/personas/export/?token=${getToken()}`)
+        console.log(`/admin/personas/export?token=${getToken()}`)
+        fetch(`/admin/personas/export?token=${getToken()}`)
             .then(response => response.json())
             .then(data => {
                 const beautifiedJson = JSON.stringify(data, null, 2);
@@ -285,7 +285,7 @@ export async function initializePersonaSection() {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch(`/admin/personas/import/?token=${getToken()}`, {
+        fetch(`/admin/personas/import?token=${getToken()}`, {
             method: 'POST',
             body: formData,
         })

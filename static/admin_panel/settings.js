@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function fetchSettings() {
-    fetch(`/admin/settings/model/?token=${getToken()}`)
+    fetch(`/admin/settings/model?token=${getToken()}`)
         .then(response => response.json())
         .then(data => {
             const modelSelect = document.getElementById("modelSelect");
@@ -17,7 +17,7 @@ function fetchSettings() {
         })
         .catch(error => console.error("Error fetching model settings:", error));
 
-    fetch(`/admin/settings/temperature/?token=${getToken()}`)
+    fetch(`/admin/settings/temperature?token=${getToken()}`)
         .then(response => response.json())
         .then(data => {
             const temperatureInput = document.getElementById("temperatureInput");
@@ -33,7 +33,7 @@ function saveSettings() {
     const temperatureInput = document.getElementById("temperatureInput");
     const selectedTemperature = parseFloat(temperatureInput.value);
 
-    fetch(`/admin/settings/model/?token=${getToken()}`, {
+    fetch(`/admin/settings/model?token=${getToken()}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -42,7 +42,7 @@ function saveSettings() {
     })
         .catch(error => console.error("Error saving model settings:", error));
 
-    fetch(`/admin/settings/temperature/?token=${getToken()}`, {
+    fetch(`/admin/settings/temperature?token=${getToken()}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

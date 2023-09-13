@@ -9,7 +9,7 @@ from .auth import check_authentication
 router = APIRouter()
 
 
-@router.get("/", response_model=List[RuleResponse])
+@router.get("", response_model=List[RuleResponse])
 async def get_rules(token: str = Query(...)):
     await check_authentication(token)
     # Get all the subclasses of the Rule base class

@@ -10,12 +10,12 @@ from .common import list_entities
 router = APIRouter()
 
 
-@router.get("/", response_model=List[User])
+@router.get("", response_model=List[User])
 async def list_users(token: str = Query(...)):
     return await list_entities(User, token)
 
 
-@router.delete("/delete/{user_id}/")
+@router.delete("/delete/{user_id}")
 async def delete_user(user_id: int, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:

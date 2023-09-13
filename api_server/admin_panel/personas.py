@@ -11,12 +11,12 @@ from .common import list_entities
 router = APIRouter()
 
 
-@router.get("/", response_model=List[Persona])
+@router.get("", response_model=List[Persona])
 async def list_personas(token: str = Query(...)):
     return await list_entities(Persona, token)
 
 
-@router.post("/", response_model=Persona)
+@router.post("", response_model=Persona)
 async def create_persona(persona: Persona, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -34,7 +34,7 @@ async def create_persona(persona: Persona, token: str = Query(...)):
         return persona
 
 
-@router.get("/export/")
+@router.get("/export")
 async def export_persona_database(token: str = Query(...)):
     print(token)
     await check_authentication(token)
@@ -50,7 +50,7 @@ async def export_persona_database(token: str = Query(...)):
         return persona_data
 
 
-@router.post("/import/")
+@router.post("/import")
 async def import_persona_database(file: UploadFile = File(...), token: str = Query(...)):
     await check_authentication(token)
     data = await file.read()
@@ -65,7 +65,7 @@ async def import_persona_database(file: UploadFile = File(...), token: str = Que
         return {"message": "Import successful"}
 
 
-@router.get("/{persona_id}/", response_model=Persona)
+@router.get("/{persona_id}", response_model=Persona)
 async def get_persona(persona_id: int, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -76,7 +76,7 @@ async def get_persona(persona_id: int, token: str = Query(...)):
         return persona
 
 
-@router.put("/{persona_id}/", response_model=Persona)
+@router.put("/{persona_id}", response_model=Persona)
 async def update_persona(persona_id: int, persona: Persona, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -94,7 +94,7 @@ async def update_persona(persona_id: int, persona: Persona, token: str = Query(.
         return existing_persona
 
 
-@router.delete("/{persona_id}/", response_model=dict)
+@router.delete("/{persona_id}", response_model=dict)
 async def delete_persona(persona_id: int, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:

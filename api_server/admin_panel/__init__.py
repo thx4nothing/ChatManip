@@ -2,6 +2,7 @@ import json
 
 from fastapi import APIRouter, Query
 from starlette.requests import Request
+from starlette.responses import RedirectResponse
 
 from . import personas, rules, tasks, users, invite_codes, settings, history
 from .auth import check_authentication
@@ -18,9 +19,12 @@ router.include_router(users.router, prefix="/users", tags=["users"])
 router.include_router(settings.router, prefix="/settings", tags=["settings"])
 
 
-@router.get("/")
+@router.get("")
 async def read_root(request: Request, token: str = Query(...)):
-    return await read_root_en(request, "en", token)
+    print(token)
+    redirect_url = f"/admin/en?token={token}"
+    print(redirect_url)
+    return RedirectResponse(url=redirect_url, status_code=303)
 
 
 @router.get("/{language}")

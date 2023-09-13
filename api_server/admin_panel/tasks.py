@@ -11,7 +11,7 @@ from .common import list_entities
 router = APIRouter()
 
 
-@router.get("/export/")
+@router.get("/export")
 async def export_tasks_database(token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -22,7 +22,7 @@ async def export_tasks_database(token: str = Query(...)):
         return task_data
 
 
-@router.post("/import/")
+@router.post("/import")
 async def import_tasks_database(file: UploadFile = File(...), token: str = Query(...)):
     await check_authentication(token)
     data = await file.read()
@@ -36,12 +36,12 @@ async def import_tasks_database(file: UploadFile = File(...), token: str = Query
         return {"message": "Import successful"}
 
 
-@router.get("/", response_model=List[Task])
+@router.get("", response_model=List[Task])
 async def list_tasks(token: str = Query(...)):
     return await list_entities(Task, token)
 
 
-@router.post("/", response_model=Task)
+@router.post("", response_model=Task)
 async def create_task(task: Task, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -52,7 +52,7 @@ async def create_task(task: Task, token: str = Query(...)):
         return task
 
 
-@router.get("/{task_id}/", response_model=Task)
+@router.get("/{task_id}", response_model=Task)
 async def get_task(task_id: int, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -63,7 +63,7 @@ async def get_task(task_id: int, token: str = Query(...)):
         return task
 
 
-@router.put("/{task_id}/", response_model=Task)
+@router.put("/{task_id}", response_model=Task)
 async def update_task(task_id: int, task: Task, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
@@ -82,7 +82,7 @@ async def update_task(task_id: int, task: Task, token: str = Query(...)):
         return existing_task
 
 
-@router.delete("/{task_id}/", response_model=dict)
+@router.delete("/{task_id}", response_model=dict)
 async def delete_task(task_id: int, token: str = Query(...)):
     await check_authentication(token)
     with Session(engine) as db_session:
