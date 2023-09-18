@@ -5,7 +5,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const saveSettingsBtn = document.getElementById("saveSettingsBtn");
     saveSettingsBtn.addEventListener("click", saveSettings);
+    const downloadDatabaseBtn = document.getElementById("downloadDatabaseBtn")
+    downloadDatabaseBtn.addEventListener("click", downloadDatabase)
 });
+
+function downloadDatabase() {
+    fetch(`/admin/settings/database?token=${getToken()}`, {
+        method: 'GET',
+    })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `database_${new Date().toISOString()}.db`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Error exporting task database:', error);
+        });
+}
 
 function fetchSettings() {
     fetch(`/admin/settings/model?token=${getToken()}`)

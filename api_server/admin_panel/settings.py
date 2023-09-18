@@ -1,5 +1,7 @@
 from fastapi import Query, APIRouter
 from sqlmodel import Session, select
+from fastapi.responses import FileResponse
+from pathlib import Path
 
 from api_server.database import engine, Settings
 from .auth import check_authentication
@@ -67,3 +69,14 @@ async def set_model(settings: dict, token: str = Query(...)):
 
             db_session.add(settings)
             db_session.commit()
+
+
+@router.get("/database")
+async def download_database(token: str = Query(...)):
+    await check_authentication(token)
+
+    database_file_path = Path("database.db")
+    if database_file_path.exists():
+        return FileResponse(database_file_path, headers={
+            "Content-Disposition": "attachment; filename=database.db"})
+    return {"error": "Database file not found"}

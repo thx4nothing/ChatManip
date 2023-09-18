@@ -48,9 +48,7 @@ class Err:
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # rate limits
-bucket_capacity: int = 500
-token_rate: float = 0.5
-min_time_between_requests: float = 2.0
+min_time_between_requests: float = 1.0
 
 
 def get_settings():
@@ -114,14 +112,6 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
                 return Err(f"Minimum time between requests not met."
                            f"Please wait for {min_time_between_requests} seconds.")
 
-            # Calculate the number of tokens that should be added based on the elapsed time
-            tokens_to_add = token_rate * time_since_last_request
-
-            # Update the available tokens in the bucket
-            if tokens_to_add > 0:
-                current_user.available_tokens = min(current_user.available_tokens + tokens_to_add,
-                                                    bucket_capacity)
-
             # Check if there are enough tokens available for the request
             # (only using min_tokens_required instead of calculating api calls before hand,
             # because we don't know how many each api call will generate
@@ -137,7 +127,7 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
                 print("using model: ", model)
                 print("using temperature: ", temperature)
                 completion = openai.ChatCompletion.create(model=model, messages=messages,
-                                                          max_tokens=50, temperature=temperature)
+                                                          max_tokens=100, temperature=temperature)
                 chat_response = completion.choices[0].message.content
 
                 # Update API token counters in the database

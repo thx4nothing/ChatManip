@@ -68,5 +68,6 @@
   "user_table_last_token_update_time_header": "Letzte Aktualisierung der Token",
   "user_table_available_tokens_header": "Verfügbare Token",
   "user_table_last_request_time_header": "Letzte Anfragezeit",
-  "user_table_delete_header": "Löschen"
+  "user_table_delete_header": "Löschen",
+  "download_database_button": "Datenbank downloaden"
 }

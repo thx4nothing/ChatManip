@@ -58,19 +58,6 @@ function initializeChat() {
             });
     }
 
-    function request_greeting() {
-        const session_id = getSessionIdFromUrl("chat")
-        // Make an HTTP request to the server
-        fetch(`/chat/${session_id}/greetings`)
-            .then(response => response.json())
-            .then(data => {
-                const response = data.response;
-                displayMessage("assistant", response);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-    }
 
     async function endSession() {
         const session_id = getSessionIdFromUrl("chat");
