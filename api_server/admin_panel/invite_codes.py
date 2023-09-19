@@ -1,11 +1,14 @@
+import random
+import string
 from typing import List
 
 from fastapi import Query, HTTPException, APIRouter
 from sqlmodel import Session, select
 
-from api_server.database import engine, generate_invite_code, InviteCode
+from api_server.database import engine, InviteCode
 from .auth import check_authentication
 from .common import list_entities
+from ..logger import logger as logger
 
 router = APIRouter()
 
@@ -63,3 +66,19 @@ async def update_invite_code(invite_code: str, persona_id: int, task_id: int, ru
         db_session.commit()
         db_session.refresh(invite_code_obj)
         return invite_code_obj
+
+
+def generate_invite_code():
+    """
+    Generates a random invite code for user registration.
+
+    Returns:
+        str: A randomly generated invite code.
+    """
+    length = 8
+    characters = ''.join(
+        c for c in string.ascii_letters + string.digits if c not in ['0', 'O', 'I', 'l'])
+
+    invite_code = ''.join(random.choice(characters) for _ in range(length))
+    logger.debug("Created a new Invite code: %s", invite_code)
+    return invite_code

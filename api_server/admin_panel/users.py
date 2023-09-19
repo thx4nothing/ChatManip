@@ -6,6 +6,7 @@ from sqlmodel import Session, select
 from api_server.database import User, engine
 from .auth import check_authentication
 from .common import list_entities
+from api_server.logger import logger as logger
 
 router = APIRouter()
 
@@ -23,6 +24,9 @@ async def delete_user(user_id: int, token: str = Query(...)):
         user = db_session.exec(statement).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
+
+        logger.info("Deleting user: %s", user.__dict__)
         db_session.delete(user)
         db_session.commit()
+        
         return {"message": "User deleted successfully"}

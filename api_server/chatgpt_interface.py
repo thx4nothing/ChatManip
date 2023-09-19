@@ -28,6 +28,7 @@ import tiktoken
 from sqlmodel import Session, select
 
 from api_server.database import engine, User, ChatSession, Settings
+from api_server.logger import logger as logger
 
 
 class Ok:
@@ -57,8 +58,7 @@ def get_settings():
         settings = db_session.exec(statement).first()
         if settings:
             return settings.model, settings.temperature
-        else:
-            return "gpt-3.5-turbo", 1.0
+        return "gpt-3.5-turbo", 1.0  # default values
 
 
 def request_system_response(messages: list[dict[str, str]]):
@@ -72,13 +72,13 @@ def request_system_response(messages: list[dict[str, str]]):
     Returns:
         str: The generated chat response.
     """
-    print(messages)
+    logger.debug("System response requested. Context: %s", messages)
     # Make the API request
     model, temperature = get_settings()
     completion = openai.ChatCompletion.create(model=model, messages=messages,
                                               temperature=temperature)
     chat_response = completion.choices[0].message.content
-
+    logger.info("System response: %s", chat_response)
     return chat_response
 
 
@@ -112,23 +112,28 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
                 return Err(f"Minimum time between requests not met."
                            f"Please wait for {min_time_between_requests} seconds.")
 
+            logger.info("ChatGPT response requested. Context: %s", messages)
+
+            model, temperature = get_settings()
+
             # Check if there are enough tokens available for the request
             # (only using min_tokens_required instead of calculating api calls before hand,
             # because we don't know how many each api call will generate
-            min_tokens_required = num_tokens_from_messages(messages) + 50
-            print("min tokens required: ", min_tokens_required)
-            print("currently available: ", current_user.available_tokens)
+            min_tokens_required = num_tokens_from_messages(messages, model) + 50
+            logger.debug("min tokens required: %s", min_tokens_required)
+            logger.debug("currently available: %s", current_user.available_tokens)
             if current_user.available_tokens >= min_tokens_required:
                 # Update the last request time
                 current_user.last_request_time = current_time
 
                 # Make the API request
-                model, temperature = get_settings()
-                print("using model: ", model)
-                print("using temperature: ", temperature)
+                logger.debug("using model: %s", model)
+                logger.debug("using temperature: %s", temperature)
                 completion = openai.ChatCompletion.create(model=model, messages=messages,
                                                           max_tokens=100, temperature=temperature)
                 chat_response = completion.choices[0].message.content
+
+                logger.info("ChatGPT response: %s", chat_response)
 
                 # Update API token counters in the database
                 current_user.api_prompt_tokens += completion.usage.prompt_tokens
@@ -144,32 +149,34 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
                 return Ok(chat_response)
 
             # rate limit exceeded
-            return Err("Rate limit exceeded. Please wait before making another request.")
+            return Err("Rate limit exceeded.")
         return Err("No session found")
 
 
-def num_tokens_from_string(string: str) -> int:
+def num_tokens_from_string(string: str, model: str) -> int:
     """
     Returns the number of tokens in a text string.
 
     Args:
         string (str): The text string to count tokens in.
+        model (str): model that is used for the token calculations.
 
     Returns:
         int: The number of tokens in the given string.
     """
-    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    encoding = tiktoken.encoding_for_model(model)
     num_tokens = len(encoding.encode(string))
     return num_tokens
 
 
-def num_tokens_from_messages(messages):
+def num_tokens_from_messages(messages, model):
     """
     Returns the number of tokens used by a list of messages.
 
     Args:
         messages (list): List of messages in the format
         [{"role": "user", "content": "message_text"}, ...].
+        model (str): model that is used for the token calculations.
 
     Returns:
         int: The number of tokens used by the messages.
@@ -178,7 +185,7 @@ def num_tokens_from_messages(messages):
     for message in messages:
         num_tokens += 4  # every message follows <im_start>{role/name}\n{content}<im_end>\n
         for key, value in message.items():
-            num_tokens += num_tokens_from_string(value)
+            num_tokens += num_tokens_from_string(value, model)
             if key == "name":
                 num_tokens += -1  # role is always required and always 1 token
     num_tokens += 2  # every reply is primed with <im_start>assistant

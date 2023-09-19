@@ -23,7 +23,7 @@ from sqlmodel import SQLModel
 from api_server import chat, database, user_creation, questionnaire
 from api_server.admin_panel import router as admin_panel_router
 
-debug = os.getenv("CHATMANIP_DEBUG").lower() == "true"
+debug = int(os.getenv("CHATMANIP_DEBUG")) == 1
 
 # Create the FastAPI app
 if debug:

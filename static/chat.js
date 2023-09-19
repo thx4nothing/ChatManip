@@ -67,7 +67,7 @@ function initializeChat() {
         timerDisplay.textContent = "Chat session ended.";
 
         try {
-            const response = await fetch(`/chat/${session_id}/end`);
+            const response = await fetch(`/chat/${session_id}/session_end`);
 
             if (response.ok) {
                 console.log("API call successful");
@@ -128,14 +128,14 @@ function initializeChat() {
         return first_time;
     }
 
-    function showDisclaimerModal() {
-        const modal = document.getElementById('disclaimerModal');
+    function showTaskModal() {
+        const modal = document.getElementById('taskModal');
         const session_id = getSessionIdFromUrl("chat")
 
-        fetch(`/chat/${session_id}/disclaimer`)
+        fetch(`/chat/${session_id}/task`)
             .then(response => response.text())
             .then(data => {
-                const modalContent = document.querySelector('#disclaimerModal .modal-body');
+                const modalContent = document.querySelector('#taskModal .modal-body');
                 modalContent.innerHTML = "<p>" + data + "</p>";
             });
 
@@ -189,7 +189,7 @@ function initializeChat() {
 
     // Event listeners
     sendButton.addEventListener("click", sendMessage);
-    taskButton.addEventListener("click", showDisclaimerModal)
+    taskButton.addEventListener("click", showTaskModal)
     doneButton.addEventListener("click", showEndChatModal);
     userInput.addEventListener("keyup", function (event) {
         if (event.code === 'Enter') {
@@ -199,6 +199,6 @@ function initializeChat() {
 
     //Startup functions
     loadChatHistory();
-    showDisclaimerModal();
+    showTaskModal();
     setInterval(checkSessionEnd, 1000);
 }

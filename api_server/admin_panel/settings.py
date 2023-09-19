@@ -1,10 +1,16 @@
+import datetime
+import os
+import shutil
+
 from fastapi import Query, APIRouter
-from sqlmodel import Session, select
+from sqlalchemy import text
+from sqlmodel import Session, select, SQLModel
 from fastapi.responses import FileResponse
 from pathlib import Path
 
 from api_server.database import engine, Settings
 from .auth import check_authentication
+from api_server.logger import logger as logger
 
 router = APIRouter()
 
@@ -25,7 +31,6 @@ async def read_temperature(token: str = Query(...)):
 async def set_temperature(settings: dict, token: str = Query(...)):
     await check_authentication(token)
     temperature = settings["temperature"]
-    print(type(temperature))
     if 0.0 <= temperature <= 2.0:
         with Session(engine) as db_session:
             statement = select(Settings)
@@ -71,7 +76,7 @@ async def set_model(settings: dict, token: str = Query(...)):
             db_session.commit()
 
 
-@router.get("/database")
+@router.get("/database/download")
 async def download_database(token: str = Query(...)):
     await check_authentication(token)
 
@@ -80,3 +85,40 @@ async def download_database(token: str = Query(...)):
         return FileResponse(database_file_path, headers={
             "Content-Disposition": "attachment; filename=database.db"})
     return {"error": "Database file not found"}
+
+
+def backup_database():
+    try:
+        current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        backup_directory = "database_backups"
+        if not os.path.exists(backup_directory):
+            os.makedirs(backup_directory)
+        backup_file_path = os.path.join(backup_directory, f"database_{current_datetime}.db")
+        shutil.copyfile('database.db', backup_file_path)
+
+        print(f"Database backup completed successfully to {backup_file_path}")
+    except Exception as e:
+        print(f"Error during database backup: {str(e)}")
+
+
+def reset_database():
+    SQLModel.metadata.drop_all(engine)
+    SQLModel.metadata.create_all(engine)
+
+
+@router.post("/database/reset")
+async def request_reset_database(token: str = Query(...)):
+    await check_authentication(token)
+    try:
+        logger.warning("Requested to reset database. Making backup before resetting.")
+
+        backup_database()
+        reset_database()
+
+        logger.warning("Database reset completed successfully.")
+
+        return {"message": "Database reset completed successfully."}
+
+    except Exception as e:
+        logger.error(f"Error resetting the database: {str(e)}")
+        return {"message": f"Error resetting the database: {str(e)}"}

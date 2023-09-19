@@ -7,6 +7,13 @@
     }
   },
   {
+    "name": "Story Collaboration v2",
+    "task_instruction": {
+      "english": "Welcome to the 'Story Collaboration' task! In this activity, you will have the opportunity to co-create a short story with the chatbot. Your role is to contribute sentences to the story, and the chatbot will respond by adding its own sentences.",
+      "german": "Willkommen zur 'Story Vervollständigung'! In dieser Aktivität haben Sie die Möglichkeit, gemeinsam mit dem Chatbot eine kurze Geschichte zu erstellen. Ihre Rolle besteht darin, Sätze zur Geschichte beizutragen, und der Chatbot wird antworten, indem er eigene Sätze hinzufügt."
+    }
+  },
+  {
     "name": "Discussion",
     "task_instruction": {
       "english": "The topic is daylight saving time. Choose a side and try to convince the chatbot of your views.",

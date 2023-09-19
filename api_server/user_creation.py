@@ -24,12 +24,13 @@ from starlette.responses import RedirectResponse
 from api_server.database import engine, User, ChatSession, InviteCode
 from api_server.models import UserInformation
 from api_server.templates import templates
+from api_server.logger import logger as logger
 
 router = APIRouter()
 
 
 @router.get("/")
-async def read_root_language(request: Request):
+async def read_root(request: Request):
     return await read_root_language(request, "en")
 
 
@@ -40,6 +41,7 @@ async def read_root_language(request: Request, language: str):
 
     Args:
         request (Request): The incoming request.
+        language (str): The chosen language.
 
     Returns:
         TemplateResponse: The template response containing the "user_creation.html" template.
@@ -75,32 +77,46 @@ async def create_user(user: UserInformation):
         if invite_code_obj.used:
             raise HTTPException(status_code=404, detail="Invite already in use")
 
-        new_user = User(age=user.age, gender=user.gender, occupation=user.occupation,
-                        location=user.location, language=user.language)
-        db_session.add(new_user)
-        db_session.commit()
-        db_session.refresh(new_user)
+        new_user = create_new_user(db_session, age=user.age, gender=user.gender,
+                                   occupation=user.occupation,
+                                   location=user.location, language=user.language)
 
-        current_user = new_user
-        new_invite_code_str = user.invite_code
-        new_session = ChatSession(session_id=new_invite_code_str, user_id=current_user.user_id,
-                                  persona_id=invite_code_obj.persona_id,
-                                  task_id=invite_code_obj.task_id,
-                                  rules=invite_code_obj.rules,
-                                  history_id=invite_code_obj.history_id)
-        db_session.add(new_session)
-        db_session.commit()
+        new_session = create_new_session(db_session, user.invite_code, new_user.user_id,
+                                         invite_code_obj.persona_id, invite_code_obj.task_id,
+                                         invite_code_obj.rules, invite_code_obj.history_id)
 
         invite_code_obj.used = True
-        invite_code_obj.user_id = current_user.user_id
+        invite_code_obj.user_id = new_user.user_id
         db_session.add(invite_code_obj)
         db_session.commit()
 
-        statement = select(ChatSession).where(ChatSession.user_id == current_user.user_id)
-        current_session = db_session.exec(statement).first()
-        session_id = str(current_session.session_id)
-        redirect_url = f"/chat/{session_id}"
-        print(redirect_url)
+        redirect_url = f"/chat/{user.invite_code}"
+        logger.debug("Redirecting new user %s to: %s", new_user.user_id, redirect_url)
         return RedirectResponse(url=redirect_url, status_code=303)
 
     return RedirectResponse(url="/")
+
+
+def create_new_user(db_session, age, gender, occupation, location, language) -> User:
+    new_user = User(age=age, gender=gender, occupation=occupation,
+                    location=location, language=language)
+    db_session.add(new_user)
+    db_session.commit()
+    db_session.refresh(new_user)
+    logger.info("Created a new user: %s", new_user.__dict__)
+    return new_user
+
+
+def create_new_session(db_session, invite_code: str, user_id: int, persona_id: int, task_id: int,
+                       rules, history_id: int) -> ChatSession:
+    new_session = ChatSession(session_id=invite_code,
+                              user_id=user_id,
+                              persona_id=persona_id,
+                              task_id=task_id,
+                              rules=rules,
+                              history_id=history_id)
+    db_session.add(new_session)
+    db_session.commit()
+    db_session.refresh(new_session)
+    logger.info("Created a new session: %s", new_session.__dict__)
+    return new_session

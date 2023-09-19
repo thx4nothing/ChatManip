@@ -8,12 +8,5 @@
       <jdbc-url>jdbc:sqlite:D:\Uni\Bachelorarbeit\ChatManip\database.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="database [2]" uuid="0a2f6d6a-8ed2-4deb-a346-a4ddcd280de1">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\marlo\PycharmProjects\ChatManip\database.db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>

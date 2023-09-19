@@ -7,10 +7,19 @@ document.addEventListener("DOMContentLoaded", () => {
     saveSettingsBtn.addEventListener("click", saveSettings);
     const downloadDatabaseBtn = document.getElementById("downloadDatabaseBtn")
     downloadDatabaseBtn.addEventListener("click", downloadDatabase)
+    const resetDatabaseBtn = document.getElementById("resetDatabaseBtn")
+    resetDatabaseBtn.addEventListener("click", resetDatabase)
 });
 
+async function resetDatabase() {
+    const confirmed = window.confirm("Are you sure you want to reset the database? This action cannot be undone.");
+    if (confirmed) {
+        await fetch(`/admin/settings/database/reset?token=${getToken()}`, {method: "POST"})
+    }
+}
+
 function downloadDatabase() {
-    fetch(`/admin/settings/database?token=${getToken()}`, {
+    fetch(`/admin/settings/database/download?token=${getToken()}`, {
         method: 'GET',
     })
         .then(response => response.blob())

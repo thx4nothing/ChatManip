@@ -31,7 +31,73 @@
         },
         {
           "role": "user",
-          "content": "Antworte in kurz bis mittelangen Sätzen."
+          "content": "Antworte in kurzen bis mittelangen Sätzen."
+        },
+        {
+          "role": "assistant",
+          "content": "Verstanden."
+        }
+      ]
+    }
+  },
+  {
+    "name": "Story Collab",
+    "history": {
+      "english": [
+        {
+          "role": "user",
+          "content": "I want to create a story together. I will say one sentence and then you will say one sentence. Only one!"
+        },
+        {
+          "role": "assistant",
+          "content": "Understood. Let's go"
+        },
+        {
+          "role": "user",
+          "content": "Answer in short to medium sentences."
+        },
+        {
+          "role": "assistant",
+          "content": "Understood."
+        }
+      ],
+      "german": [
+        {
+          "role": "user",
+          "content": "Lass uns zusammen eine Story erstellen. Ich sage einen Satz und dann sagst du einen Satz, nur EINEN!"
+        },
+        {
+          "role": "assistant",
+          "content": "Verstanden. Los geht's!"
+        },
+        {
+          "role": "user",
+          "content": "Antworte in kurzen bis mittelangen Sätzen."
+        },
+        {
+          "role": "assistant",
+          "content": "Verstanden."
+        }
+      ]
+    }
+  },
+  {
+    "name": "Keep it short",
+    "history": {
+      "english": [
+        {
+          "role": "user",
+          "content": "Answer in short to medium sentences."
+        },
+        {
+          "role": "assistant",
+          "content": "Understood."
+        }
+      ],
+      "german": [
+        {
+          "role": "user",
+          "content": "Antworte in kurzen bis mittelangen Sätzen."
         },
         {
           "role": "assistant",

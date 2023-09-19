@@ -24,8 +24,6 @@ Author: Marlon Beck
 Date: 17/08/2023
 """
 
-import random
-import string
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -144,21 +142,6 @@ class Settings(SQLModel, table=True):
                          nullable=False))
     temperature: float = 1.0
     model: str = "gpt-3.5-turbo"
-
-
-def generate_invite_code():
-    """
-    Generates a random invite code for user registration.
-
-    Returns:
-        str: A randomly generated invite code.
-    """
-    length = 8
-    characters = ''.join(
-        c for c in string.ascii_letters + string.digits if c not in ['0', 'O', 'I', 'l'])
-
-    invite_code = ''.join(random.choice(characters) for _ in range(length))
-    return invite_code
 
 
 def get_session_language(db_session: Session, current_session: ChatSession):
