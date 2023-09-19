@@ -12,7 +12,7 @@ function initializeChat() {
     const doneButton = document.getElementById('done-button');
     const timerDisplay = document.getElementById('timer-display');
     const messageCounter = document.getElementById('message-counter');
-
+    const overlay = document.getElementById("loadingOverlay");
 
     function sendMessage() {
         const message = userInput.value.trim();
@@ -65,6 +65,7 @@ function initializeChat() {
         sendButton.disabled = true;
         doneButton.disabled = true;
         timerDisplay.textContent = "Chat session ended.";
+        overlay.style.display = "flex";
 
         try {
             const response = await fetch(`/chat/${session_id}/session_end`);
