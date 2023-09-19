@@ -9,7 +9,7 @@
           crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"/>
-    <link rel="stylesheet" href="{{ url_for('static', path='questionnaire.css') }}">
+    <link rel="stylesheet" href="/static/questionnaire.css">
 </head>
 <body>
 <div class="container pure-g">
@@ -81,7 +81,7 @@
     </form>
 </div>
 
-<script type="module" src="{{ url_for('static', path='common.js') }}"></script>
-<script type="module" src="{{ url_for('static', path='questionnaire.js') }}"></script>
+<script type="module" src="/static/common.js"></script>
+<script type="module" src="/static/questionnaire.js"></script>
 </body>
 </html>
