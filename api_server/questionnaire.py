@@ -16,7 +16,7 @@ from sqlmodel import Session, select
 from starlette.responses import JSONResponse
 
 from api_server.database import engine, ChatSession, Questionnaire, Task, Messages, \
-    get_session_language
+    get_session_language, InviteCode
 from api_server.templates import templates
 from api_server.logger import logger as logger
 
@@ -75,6 +75,20 @@ async def read_after(session_id: str):
             else:
                 show_discussion_section = False
             return JSONResponse(content={"show_discussion_section": show_discussion_section})
+
+
+@router.get("/{session_id}/has_next")
+async def has_next(session_id: str):
+    with Session(engine) as db_session:
+        statement = select(ChatSession).where(ChatSession.session_id == session_id)
+        current_session = db_session.exec(statement).first()
+        if current_session is not None:
+            statement = select(InviteCode).where(InviteCode.invite_code == session_id)
+            invite_code_obj = db_session.exec(statement).first()
+            next_session_id = invite_code_obj.next_session_id
+            if next_session_id != "none":
+                return {"has_next": True}
+    return {"has_next": False}
 
 
 @router.post("/{session_id}")

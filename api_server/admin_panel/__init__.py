@@ -38,16 +38,3 @@ async def read_root_en(request: Request, language: str, token: str = Query(...))
             translation_data = json.load(translation_file)
     return templates.TemplateResponse("admin_panel.html",
                                       {"request": request, "translations": translation_data})
-
-
-@router.get("/translations/{language}")
-async def get_translations(language: str):
-    if language == "de":
-        with open("static/translations/admin_panel_de.json", "r",
-                  encoding="utf-8") as translation_file:
-            translation_data = json.load(translation_file)
-    else:
-        with open("static/translations/admin_panel_en.json", "r",
-                  encoding="utf-8") as translation_file:
-            translation_data = json.load(translation_file)
-    return translation_data

@@ -29,5 +29,6 @@
   "submit_button_text": "Absenden",
   "intention": "Wahrgenommene Absicht des Benutzers",
   "accuracy_label_after": "Wie genau beschreibt diese Interpretation Ihrer Absichten?",
-  "convince_label_after": "Inwieweit glauben Sie, dass Sie den ChatBot aufgrund dieser Beschreibung überzeugen konnten?"
+  "convince_label_after": "Inwieweit glauben Sie, dass Sie den ChatBot aufgrund dieser Beschreibung überzeugen konnten?",
+  "next_session_info": "Sie werden nun zu der nächsten Chat Sitzung weitergeleitet."
 }

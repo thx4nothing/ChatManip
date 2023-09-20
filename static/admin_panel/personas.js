@@ -1,4 +1,5 @@
-import {getTranslation, getLanguage, getToken} from "./admin_panel.js";
+import {getToken} from "./admin_panel.js";
+import {getLanguage, getTranslation} from "../common.js"
 
 export async function initializePersonaSection() {
     const personaDropdown = document.getElementById("personaDropdown");
@@ -10,8 +11,7 @@ export async function initializePersonaSection() {
     const savePersonaBtn = document.getElementById("savePersonaBtn");
     const addLanguageBtn = document.getElementById("addLanguageBtn");
     const languageInputs = document.getElementById("languageInputs");
-    const translations = await getTranslation(getLanguage());
-    console.log(translations)
+    const translations = await getTranslation(await getLanguage(), "admin_panel");
 
     function populatePersonaDetails(persona) {
         const personaNameSpan = document.getElementById("personaNameD");

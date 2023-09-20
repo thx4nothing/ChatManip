@@ -4,6 +4,7 @@ import {initializeInviteCodeSection} from "./invite_codes.js";
 import {initializeUserManagementSection} from "./users.js";
 import {initializePersonaSection} from "./personas.js";
 import {initializeHistorysSection} from "./history.js";
+import {getLanguage} from "../common.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     initializePersonaSection();
@@ -20,34 +21,16 @@ export function getToken() {
     return urlSearchParams.get("token")
 }
 
-function initializeLanguage() {
+async function initializeLanguage() {
     const languageDropdown = document.getElementById("languageSelect");
-    const language = getLanguage()
+    const language = await getLanguage()
     if (language === "en" || language === "de") {
         languageDropdown.value = language;
     }
 
     languageDropdown.addEventListener("change", function () {
         const selectedLanguage = languageDropdown.value;
-        console.log(selectedLanguage)
         window.location.href = `/admin/${selectedLanguage}?token=${getToken()}`;
     });
 }
 
-export function getLanguage() {
-    const currentPath = window.location.pathname;
-    const parts = currentPath.split("/");
-    return parts.length >= 3 ? parts[2] : "en"
-}
-
-export async function getTranslation(language) {
-    const translationEndpoint = `/admin/translations/${language}`;
-
-    try {
-        const response = await fetch(translationEndpoint);
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching translation data:", error);
-        return null;
-    }
-}
