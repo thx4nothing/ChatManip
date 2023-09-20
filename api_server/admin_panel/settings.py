@@ -80,10 +80,10 @@ async def set_model(settings: dict, token: str = Query(...)):
 async def download_database(token: str = Query(...)):
     await check_authentication(token)
 
-    database_file_path = Path("database.db")
+    database_file_path = Path("database.sqlite")
     if database_file_path.exists():
         return FileResponse(database_file_path, headers={
-            "Content-Disposition": "attachment; filename=database.db"})
+            "Content-Disposition": "attachment; filename=database.sqlite"})
     return {"error": "Database file not found"}
 
 
@@ -93,8 +93,8 @@ def backup_database():
         backup_directory = "database_backups"
         if not os.path.exists(backup_directory):
             os.makedirs(backup_directory)
-        backup_file_path = os.path.join(backup_directory, f"database_{current_datetime}.db")
-        shutil.copyfile('database.db', backup_file_path)
+        backup_file_path = os.path.join(backup_directory, f"database_{current_datetime}.sqlite")
+        shutil.copyfile('database.sqlite', backup_file_path)
 
         print(f"Database backup completed successfully to {backup_file_path}")
     except Exception as e:

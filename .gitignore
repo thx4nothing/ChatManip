@@ -238,3 +238,8 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 database.db
+database.sqlite
+note*
+*old*
+TODO.txt
+temp.txt

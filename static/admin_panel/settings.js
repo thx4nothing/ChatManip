@@ -28,7 +28,7 @@ function downloadDatabase() {
 
             const a = document.createElement('a');
             a.href = url;
-            a.download = `database_${new Date().toISOString()}.db`;
+            a.download = `database_${new Date().toISOString()}.sqlite`;
             a.click();
 
             URL.revokeObjectURL(url);
