@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<label for="languageSelect">Select Language:</label>
+<label for="languageSelect">Select Language/Wählen Sie Ihre Sprache:</label>
 <select id="languageSelect">
     <option value="en">English</option>
     <option value="de">Deutsch</option>
@@ -20,34 +20,34 @@
 <h1>{{ translations.user_creation_title }}</h1>
 
 <form id="userForm">
-    <label for="age">{{ translations.age_label }}</label>
+    <label for="age">{{ translations.age_label }}:</label>
     <input type="number" id="age" name="age" required>
 
-    <label for="gender">{{ translations.gender_label }}</label>
+    <label for="gender">{{ translations.gender_label }}:</label>
     <select id="gender" name="gender" required>
         <option value="male">{{ translations.male_option }}</option>
         <option value="female">{{ translations.female_option }}</option>
         <option value="other">{{ translations.other_option }}</option>
     </select>
 
-    <label for="occupation">{{ translations.occupation_label }}</label>
+    <label for="occupation">{{ translations.occupation_label }}:</label>
     <input type="text" id="occupation" name="occupation" required>
 
-    <label for="location">{{ translations.location_label }}</label>
+    <label for="location">{{ translations.location_label }}:</label>
     <input type="text" id="location" name="location" required>
 
-    <label class="language-label">{{ translations.language_label }}</label>
+    <label class="language-label">{{ translations.language_label }}:</label>
     <input type="radio" id="languageEnglish" name="language" value="english" required>
     <label class="language-label" for="languageEnglish">{{ translations.english_option }}</label>
     <input type="radio" id="languageGerman" name="language" value="german" required>
     <label class="language-label" for="languageGerman">{{ translations.german_option }}</label>
 
-    <label for="invite_code">{{ translations.invite_code_label }}</label>
+    <label for="invite_code">{{ translations.invite_code_label }}:</label>
     <input type="text" id="invite_code" name="invite_code" required>
     <label for="dataCollectionCheckbox">
         <input type="checkbox" id="dataCollectionCheckbox" name="dataCollectionCheckbox">
         {{ translations.data_collection_label }}
-        <a href="#" id="privacyPolicyLink">{{ translations.privacy_policy_link_text }}</a>.
+        <a href="#" id="privacyPolicyLink">{{ translations.privacy_policy_link_text }}.</a>.
     </label>
     <br>
     <button type="submit" id="createUserButton">{{ translations.create_user_button_text }}</button>

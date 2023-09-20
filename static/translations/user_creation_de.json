@@ -1,17 +1,17 @@
 {
   "user_creation_title": "Benutzererstellung",
-  "age_label": "Alter:",
-  "gender_label": "Geschlecht:",
+  "age_label": "Alter",
+  "gender_label": "Geschlecht",
   "male_option": "Männlich",
   "female_option": "Weiblich",
-  "other_option": "Andere",
-  "occupation_label": "Beruf:",
-  "location_label": "Ort:",
-  "language_label": "Sprache:",
+  "other_option": "Divers",
+  "occupation_label": "Beruf",
+  "location_label": "Ort",
+  "language_label": "Sprache",
   "english_option": "Englisch🇬🇧",
   "german_option": "Deutsch🇩🇪",
-  "invite_code_label": "Einladungscode:",
+  "invite_code_label": "Einladungscode",
   "data_collection_label": "Hiermit erteile ich meine ausdrückliche Zustimmung zur Erhebung und Verarbeitung meiner persönlichen Daten gemäß der",
-  "privacy_policy_link_text": "Datenschutzrichtlinie.",
-  "create_user_button_text": "Benutzer erstellen"
+  "privacy_policy_link_text": "Datenschutzrichtlinie",
+  "create_user_button_text": "Fortfahren"
 }
