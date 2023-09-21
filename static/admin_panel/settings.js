@@ -15,6 +15,7 @@ async function resetDatabase() {
     const confirmed = window.confirm("Are you sure you want to reset the database? This action cannot be undone.");
     if (confirmed) {
         await fetch(`/admin/settings/database/reset?token=${getToken()}`, {method: "POST"})
+        location.reload();
     }
 }
 

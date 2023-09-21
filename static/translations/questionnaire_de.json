@@ -27,8 +27,8 @@
   "feedback_legend": "Freitext-Rückmeldung",
   "feedback_label": "Bitte geben Sie zusätzliche Kommentare oder Rückmeldungen zu Ihrer Erfahrung ab",
   "submit_button_text": "Absenden",
-  "intention": "Wahrgenommene Absicht des Benutzers",
-  "accuracy_label_after": "Wie genau beschreibt diese Interpretation Ihrer Absichten?",
-  "convince_label_after": "Inwieweit glauben Sie, dass Sie den ChatBot aufgrund dieser Beschreibung überzeugen konnten?",
+  "intention_label": "Wahrgenommene Absicht des Benutzers",
+  "accuracy_label_after": "Wie genau beschreibt diese Interpretation Ihre Absichten?",
+  "convince_label_after": "Inwieweit glauben Sie, dass Sie den ChatBot aufgrund dieser Interpretation überzeugen konnten?",
   "next_session_info": "Sie werden nun zu der nächsten Chat Sitzung weitergeleitet."
 }

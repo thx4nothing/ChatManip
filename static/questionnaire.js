@@ -15,16 +15,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
         console.log(data)
 
-        const session_id = getSessionIdFromUrl("questionnaire");
-        const time = window.location.pathname.includes("before") ? "before" : "after";
-
-        const response = await fetch(`/questionnaire/${session_id}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        });
 
         async function getNextSession() {
             const response = await fetch(`/questionnaire/${session_id}/has_next`)
@@ -36,13 +26,25 @@ document.addEventListener("DOMContentLoaded", async function () {
             window.location.href = `/${session_id}/next`;
         }
 
+        const session_id = getSessionIdFromUrl("questionnaire");
+        const time = window.location.pathname.includes("before") ? "before" : "after";
+
+        const response = await fetch(`/questionnaire/${session_id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+
         if (response.ok) {
             console.log("Form data submitted successfully!");
             const response = await fetch(`/questionnaire/${session_id}/show_discussion`);
             if (response.ok) {
                 const data = await response.json();
                 const show_discussion = data.show_discussion_section;
-                if (show_discussion) {
+                if (show_discussion && time !== "after") {
                     window.location.href = `/questionnaire/${session_id}/after`;
                 } else {
                     await getNextSession();

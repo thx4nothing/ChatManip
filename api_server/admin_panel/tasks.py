@@ -18,7 +18,8 @@ async def export_tasks_database(token: str = Query(...)):
         statement = select(Task)
         tasks = db_session.exec(statement).all()
         task_data = [{"name": task.name,
-                      "task_instruction": task.task_instruction} for task in tasks]
+                      "task_instruction": task.task_instruction,
+                      "show_discussion_section": task.show_discussion_section} for task in tasks]
         return task_data
 
 
