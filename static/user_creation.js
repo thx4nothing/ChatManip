@@ -25,6 +25,15 @@ function initializeUserCreation() {
     const agreeButton = document.getElementById('agreeButton');
     const disagreeButton = document.getElementById('disagreeButton');
     const dataCollectionCheckbox = document.getElementById('dataCollectionCheckbox');
+    const queryParams = new URLSearchParams(window.location.search);
+
+    if (queryParams.has('invitecode')) {
+        const inviteCodeValue = queryParams.get('invitecode');
+        const invite_code = document.getElementById("invite_code");
+        if (invite_code) {
+            invite_code.value = inviteCodeValue;
+        }
+    }
 
     function handleUserSubmit(event) {
         event.preventDefault(); // Prevent form submission
