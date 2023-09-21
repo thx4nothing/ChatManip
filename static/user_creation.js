@@ -8,8 +8,11 @@ function initializeLanguage() {
     const currentPath = window.location.pathname;
     const parts = currentPath.split("/");
     const language = parts.length >= 2 ? parts[1] : "en";
+    const privacyPolicyFrame = document.getElementById('privacyPolicyFrame');
+
     if (language === "en" || language === "de") {
         languageDropdown.value = language;
+        privacyPolicyFrame.src = `/static/privacy_policy_${language}.html`;
     }
 
     languageDropdown.addEventListener("change", function () {
