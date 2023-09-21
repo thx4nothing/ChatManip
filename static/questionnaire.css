@@ -2,6 +2,9 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
 }
 
 body {
@@ -40,10 +43,6 @@ textarea {
     margin-top: 5px;
 }
 
-input[type="range"] {
-    width: 100%;
-}
-
 textarea {
     resize: vertical;
 }
@@ -62,24 +61,6 @@ button {
     background-color: #0056b3;
 }
 
-.range-container {
-    display: flex;
-    align-items: center;
-}
-
-.range-container label {
-    width: 200px;
-}
-
-.range-label {
-    display: inline-block;
-    width: 20px;
-    text-align: center;
-    font-size: 12px;
-    margin-left: 10px;
-}
-
-
 .rating {
     display: flex;
     align-items: center;
@@ -87,7 +68,23 @@ button {
 }
 
 .rating label {
-    width: 120px; /* Adjust the width as needed */
+    width: 120px;
     text-align: left;
-    margin-right: 20px; /* Adjust the margin as needed */
+    margin-right: 20px;
+}
+
+
+/* Mobile-friendly media query */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .rating label {
+        width: 100%;
+    }
+
+    .rating label {
+        margin-left: 0;
+    }
 }

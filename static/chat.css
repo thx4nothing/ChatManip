@@ -1,7 +1,6 @@
-/* CSS for the chat container */
 .chat-container {
-    max-width: 70%;
-    height: 90vh;
+    width: 100%;
+    max-width: 90%;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -11,9 +10,8 @@
     background-color: #fff;
 }
 
-/* CSS for the chat messages */
 .chat-messages {
-    height: 80vh;
+    height: auto;
     overflow-y: auto;
     padding: 10px;
     background-color: #f9f9f9;
@@ -21,10 +19,8 @@
     border-radius: 10px;
 }
 
-/* CSS for the chat input */
 .chat-input {
     display: flex;
-    align-items: center;
     margin-top: 10px;
 }
 
@@ -48,6 +44,28 @@
 
 .chat-input button:hover {
     background-color: #45a049;
+}
+
+/* Mobile-friendly media query */
+@media (max-width: 768px) {
+    .chat-container {
+        padding: 10px;
+    }
+
+    .chat-messages {
+        max-height: 50vh;
+    }
+
+    .chat-input {
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 5px;
+    }
+
+    .chat-input input,
+    .chat-input button {
+        margin: 5px 0;
+    }
 }
 
 
