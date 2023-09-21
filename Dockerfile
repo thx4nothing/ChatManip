@@ -6,5 +6,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY api_server/ /ChatManip/api_server
 COPY static/ /ChatManip/static
 COPY templates/ /ChatManip/templates
+RUN mkdir /ChatManip/data
 EXPOSE 8000
 CMD ["uvicorn", "api_server.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips=\"*\"", "--root-path", "/chatmanip"]

@@ -30,7 +30,7 @@ from typing import Optional
 from sqlalchemy import Column, Boolean, JSON, Integer
 from sqlmodel import Field, SQLModel, create_engine, Session, select
 
-engine = create_engine("sqlite:///database.sqlite")
+engine = create_engine("sqlite:///data/database.sqlite")
 
 
 class User(SQLModel, table=True):

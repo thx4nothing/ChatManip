@@ -6,12 +6,13 @@ debug = int(os.getenv("CHATMANIP_DEBUG")) == 1
 
 logger = logging.getLogger(__name__)
 
-logs_directory = "logs"
+logs_directory = "data/logs"
 if not os.path.exists(logs_directory):
     os.makedirs(logs_directory)
 
 # Create a RotatingFileHandler for file logging
-file_handler = RotatingFileHandler('logs/chatmanip.log', maxBytes=1024 * 1024, backupCount=5)
+file_handler = RotatingFileHandler(logs_directory + '/chatmanip.log', maxBytes=1024 * 1024,
+                                   backupCount=5)
 file_handler.setLevel(logging.DEBUG if debug else logging.INFO)
 
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
