@@ -70,5 +70,6 @@
   "user_table_last_request_time_header": "Last Request Time",
   "user_table_delete_header": "Delete",
   "download_database_button": "Download Database",
-  "reset_database_button": "Reset Database"
+  "reset_database_button": "Reset Database",
+  "invite_codes_table_multi_use_header": "Usable multiple times"
 }

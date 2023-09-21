@@ -61,5 +61,6 @@
   "user_table_last_request_time_header": "Letzte Anfragezeit",
   "user_table_delete_header": "Löschen",
   "download_database_button": "Datenbank downloaden",
-  "reset_database_button": "Datenbank resetten"
+  "reset_database_button": "Datenbank resetten",
+  "invite_codes_table_multi_use_header": "Mehrmals nutzbar"
 }

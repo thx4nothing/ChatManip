@@ -19,6 +19,7 @@ export function initializeInviteCodeSection() {
             const historyCell = row.insertCell();
             const rulesCell = row.insertCell();
             const nextSessionIDCell = row.insertCell();
+            const multiUseCell = row.insertCell();
             const saveCell = row.insertCell();
             const deleteCell = row.insertCell();
 
@@ -107,6 +108,11 @@ export function initializeInviteCodeSection() {
                 });
             nextSessionIDCell.appendChild(nextSessionIDDropdown);
 
+            const multiUseCheckBox = document.createElement("input");
+            multiUseCheckBox.type = "checkbox";
+            multiUseCheckBox.checked = inviteCode.multi_use
+            multiUseCell.appendChild(multiUseCheckBox)
+
             // Create save button
             if (!inviteCode.used) {
                 const saveBtn = document.createElement("button");
@@ -120,7 +126,8 @@ export function initializeInviteCodeSection() {
                     let task_id = isNaN(taskDropdownValue) ? -1 : taskDropdownValue
                     let history_id = isNaN(historyDropdownValue) ? -1 : historyDropdownValue
                     let next_session_id = nextSessionIDDropdown.value
-                    updateInviteCode(inviteCode.invite_code, persona_id, task_id, history_id, rules, next_session_id);
+                    let multi_use = multiUseCheckBox.checked
+                    updateInviteCode(inviteCode.invite_code, persona_id, task_id, history_id, rules, next_session_id, multi_use);
                 });
                 saveCell.appendChild(saveBtn);
             }
@@ -176,13 +183,14 @@ export function initializeInviteCodeSection() {
             });
     }
 
-    function updateInviteCode(inviteCode, persona_id, task_id, history_id, rules, next_session_id) {
+    function updateInviteCode(inviteCode, persona_id, task_id, history_id, rules, next_session_id, multi_use) {
         const queryParams = new URLSearchParams({
             persona_id: parseInt(persona_id),
             task_id: parseInt(task_id),
             history_id: parseInt(history_id),
             rules: rules,
-            next_session_id: next_session_id
+            next_session_id: next_session_id,
+            multi_use: multi_use
         });
         fetch(`/admin/invite_codes/${inviteCode}?${queryParams}&token=${getToken()}`, {
             method: "PATCH", headers: {

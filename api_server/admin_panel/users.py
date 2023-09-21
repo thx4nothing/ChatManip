@@ -4,9 +4,9 @@ from fastapi import Query, HTTPException, APIRouter
 from sqlmodel import Session, select
 
 from api_server.database import User, engine
+from api_server.logger import logger as logger
 from .auth import check_authentication
 from .common import list_entities
-from api_server.logger import logger as logger
 
 router = APIRouter()
 
@@ -28,5 +28,5 @@ async def delete_user(user_id: int, token: str = Query(...)):
         logger.info("Deleting user: %s", user.__dict__)
         db_session.delete(user)
         db_session.commit()
-        
+
         return {"message": "User deleted successfully"}

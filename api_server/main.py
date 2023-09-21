@@ -14,8 +14,8 @@ Usage:
 Author: Marlon Beck
 Date: 17/08/2023
 """
-import os
 import json
+import os
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles

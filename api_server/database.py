@@ -123,6 +123,7 @@ class InviteCode(SQLModel, table=True):
     rules: str = Field(default='')
     next_session_id: Optional[str] = Field(default='none')
     history_id: Optional[int] = Field(default=None, nullable=True)
+    multi_use: Optional[bool] = Field(default=False)
 
 
 class Questionnaire(SQLModel, table=True):

@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (data.has_next) {
                 window.alert(translations.next_session_info)
             }
-            window.location.href = `/chat/${session_id}/next`;
+            window.location.href = `/${session_id}/next`;
         }
 
         if (response.ok) {

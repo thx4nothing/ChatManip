@@ -17,8 +17,8 @@ from starlette.responses import JSONResponse
 
 from api_server.database import engine, ChatSession, Questionnaire, Task, Messages, \
     get_session_language, InviteCode
-from api_server.templates import templates
 from api_server.logger import logger as logger
+from api_server.templates import templates
 
 router = APIRouter()
 

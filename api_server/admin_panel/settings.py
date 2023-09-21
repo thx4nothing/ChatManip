@@ -1,16 +1,15 @@
 import datetime
 import os
 import shutil
-
-from fastapi import Query, APIRouter
-from sqlalchemy import text
-from sqlmodel import Session, select, SQLModel
-from fastapi.responses import FileResponse
 from pathlib import Path
 
+from fastapi import Query, APIRouter
+from fastapi.responses import FileResponse
+from sqlmodel import Session, select, SQLModel
+
 from api_server.database import engine, Settings
-from .auth import check_authentication
 from api_server.logger import logger as logger
+from .auth import check_authentication
 
 router = APIRouter()
 

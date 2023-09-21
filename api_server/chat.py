@@ -6,13 +6,13 @@ from fastapi import APIRouter, Request
 from sqlmodel import Session, select
 from starlette.responses import RedirectResponse
 
-from api_server.chatgpt_interface import request_response, Ok, Err
-from api_server.database import engine, ChatSession, Persona, User, Messages, Task, InviteCode, \
-    History, get_session_language
+from api_server.chatgpt_interface import request_response, Err
+from api_server.database import engine, ChatSession, Persona, Messages, Task, History, \
+    get_session_language
+from api_server.logger import logger as logger
 from api_server.models import Message
 from api_server.rule import *
 from api_server.templates import templates
-from api_server.logger import logger as logger
 
 router = APIRouter()
 
@@ -142,46 +142,6 @@ async def end(session_id: str, request: Request):
             return templates.TemplateResponse("end.html",
                                               {"request": request,
                                                "translations": translation_data})
-
-
-@router.get("/{session_id}/next")
-async def next_session(session_id: str):
-    with Session(engine) as db_session:
-        statement = select(ChatSession).where(ChatSession.session_id == session_id)
-        current_session = db_session.exec(statement).first()
-        if current_session is not None:
-            statement = select(InviteCode).where(InviteCode.invite_code == session_id)
-            invite_code_obj = db_session.exec(statement).first()
-            next_session_id = invite_code_obj.next_session_id
-            statement = select(InviteCode).where(InviteCode.invite_code == next_session_id)
-            next_invite_code_obj = db_session.exec(statement).first()
-            if next_session_id != "none":
-                statement = select(ChatSession).where(ChatSession.session_id == next_session_id)
-                next_session_obj = db_session.exec(statement).first()
-                if next_session_obj is None:
-                    statement = select(User).where(User.user_id == current_session.user_id)
-                    current_user = db_session.exec(statement).first()
-                    current_user.available_tokens = 2000
-                    new_session = ChatSession(session_id=next_session_id,
-                                              user_id=current_user.user_id,
-                                              persona_id=next_invite_code_obj.persona_id,
-                                              task_id=next_invite_code_obj.task_id,
-                                              rules=next_invite_code_obj.rules,
-                                              history_id=invite_code_obj.history_id)
-                    db_session.add(new_session)
-                    db_session.add(current_user)
-                    db_session.commit()
-
-                    next_invite_code_obj.used = True
-                    next_invite_code_obj.user_id = current_user.user_id
-                    db_session.add(next_invite_code_obj)
-                    db_session.commit()
-
-                redirect_url = f"/chat/{next_session_id}"
-                return RedirectResponse(redirect_url)
-            # Default redirect to end
-            redirect_url = f"/chat/{session_id}/end"
-            return RedirectResponse(redirect_url)
 
 
 @router.post("/{session_id}")
