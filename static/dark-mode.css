@@ -1,0 +1,55 @@
+@media (prefers-color-scheme: dark) {
+    body, h1, h2, h3, h4, h5, h6, p, a {
+        color: #fff;
+    }
+
+    body {
+        background-color: #111;
+    }
+
+    .pure-g {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .pure-u-1 {
+        background-color: #333;
+        color: #fff;
+    }
+
+    table.pure-table.pure-table-bordered.pure-table-striped {
+        background-color: #222;
+        color: #fff;
+    }
+
+    table.pure-table.pure-table-bordered.pure-table-striped th,
+    table.pure-table.pure-table-bordered.pure-table-striped td {
+        border: 1px solid #444;
+        padding: 8px;
+    }
+
+    a {
+        color: #66c2ff;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .pure-button {
+        background-color: #444;
+        color: #fff;
+        border: 1px solid #555;
+    }
+
+    .pure-button:hover {
+        background-color: #333;
+    }
+
+    @media (max-width: 768px) {
+        .pure-g {
+            background-color: #222;
+        }
+    }
+
+}

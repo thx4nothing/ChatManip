@@ -1,3 +1,5 @@
+@import url('/static/dark-mode.css');
+
 .container {
     max-width: 800px;
     margin: 0 auto;

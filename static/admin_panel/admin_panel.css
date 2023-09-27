@@ -1,5 +1,6 @@
+@import url('/static/dark-mode.css');
+
 .container {
-    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -8,8 +9,12 @@ h1, h2 {
     text-align: center;
 }
 
-.persona-section, .invite-codes-section, .user-management-section {
-    margin-bottom: 30px;
+.persona-section, .invite-code-section, .user-management-section, .settings-section, .task-section, .history-section, .rules-section {
+    border: 1px solid #5b5b5b; /* Add a 1px solid black border */
+    border-radius: 10px; /* Make the edges round by setting border-radius */
+    padding: 10px; /* Add some padding for spacing */
+    margin: 10px; /* Add margin for spacing between sections */
+    overflow-x: auto;
 }
 
 .buttons {
