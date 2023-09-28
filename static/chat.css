@@ -24,11 +24,12 @@
     margin-top: 10px;
 }
 
-.chat-input input {
+.chat-input textarea {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    resize: none;
 }
 
 .chat-input button {
@@ -62,7 +63,7 @@
         margin-top: 5px;
     }
 
-    .chat-input input,
+    .chat-input textarea,
     .chat-input button {
         margin: 5px 0;
     }

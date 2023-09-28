@@ -1,10 +1,10 @@
-import {getSessionIdFromUrl} from "./common.js";
+import {getLanguage, getSessionIdFromUrl, getTranslation} from "./common.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     initializeChat()
 });
 
-function initializeChat() {
+async function initializeChat() {
     const chatMessages = document.getElementById("chat-messages");
     const userInput = document.getElementById("user-input");
     const sendButton = document.getElementById("send-button");
@@ -13,6 +13,8 @@ function initializeChat() {
     const timerDisplay = document.getElementById('timer-display');
     const messageCounter = document.getElementById('message-counter');
     const overlay = document.getElementById("loadingOverlay");
+    const charCount = document.getElementById("charCount");
+    const translations = await getTranslation(await getLanguage(), "chat");
 
     function sendMessage() {
         const message = userInput.value.trim();
@@ -20,6 +22,7 @@ function initializeChat() {
             userInput.disabled = true;
             displayMessage("user", message);
             userInput.value = "";
+            charCount.textContent = "200";
 
             // Send message to the server for processing
             // console.log(message);
@@ -64,7 +67,7 @@ function initializeChat() {
         userInput.disabled = true;
         sendButton.disabled = true;
         doneButton.disabled = true;
-        timerDisplay.textContent = "Chat session ended.";
+        timerDisplay.textContent = translations.chat_session_ended;
         overlay.style.display = "flex";
 
         try {
@@ -81,28 +84,32 @@ function initializeChat() {
         }
     }
 
-    async function checkSessionEnd() {
-        try {
-            const session_id = getSessionIdFromUrl("chat");
-            const response = await fetch(`/chat/${session_id}/check_done`);
-            const data = await response.json();
-            if (data.session_end) {
-                await endSession();
-            } else {
-                // Update timer display
-                const timeLeft = data.time_left;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = Math.floor(timeLeft % 60);
-                timerDisplay.textContent = `Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    function checkSessionEnd() {
+        const session_id = getSessionIdFromUrl("chat");
 
-                // Update messages left display
-                const messagesLeft = data.messages_left;
-                messageCounter.textContent = `Messages left: ${messagesLeft}`;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        fetch(`/chat/${session_id}/check_done`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.session_end) {
+                    return endSession();
+                } else {
+                    // Update timer display
+                    const timeLeft = data.time_left;
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = Math.floor(timeLeft % 60);
+                    timerDisplay.textContent = translations.time_remaining + `: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                    const available_tokens = data.available_tokens;
+                    if (available_tokens <= 0) {
+                        displayMessage("assistant", translations.rate_limit_reached);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
     }
+
 
     function loadChatHistory() {
         const session_id = getSessionIdFromUrl("chat")
@@ -160,9 +167,9 @@ function initializeChat() {
             .then(data => {
                 const modalContent = document.querySelector('#endChatModal .modal-body');
                 modalContent.innerHTML = '';
-                if (!data.session_end && data.messages_left > 0) {
+                if (!data.session_end && data.available_tokens > 0) {
                     const warningMessage = document.createElement('p');
-                    warningMessage.textContent = `Warning: You still have ${data.messages_left} messages left to send.`;
+                    warningMessage.textContent = translations.end_chat_warning;
                     modalContent.appendChild(warningMessage);
 
                     modal.classList.add('is-visible');
@@ -171,13 +178,13 @@ function initializeChat() {
                     endChatButton.classList.add('is-visible');
                     endChatButton.addEventListener('click', function () {
                         modal.classList.remove('is-visible');
-                        if (data.min_messages_reached) {
+                        if (data.can_end_session) {
                             endSession();
                         } else {
                             endChatButton.classList.remove('is-visible')
                         }
                     });
-                    if (!data.min_messages_reached) {
+                    if (!data.can_end_session) {
                         endChatButton.classList.remove('is-visible')
                     }
                     const closeButton = document.getElementById('endChatModalCancelButton');
@@ -198,6 +205,16 @@ function initializeChat() {
     userInput.addEventListener("keyup", function (event) {
         if (event.code === 'Enter') {
             sendMessage();
+        }
+    });
+    userInput.addEventListener("input", function (event) {
+        const currentLength = userInput.value.length;
+        const maxLimit = 200;
+        const remaining = maxLimit - currentLength;
+        charCount.textContent = remaining.toString();
+
+        if (currentLength > maxLimit) {
+            userInput.value = userInput.value.slice(0, maxLimit);
         }
     });
 

@@ -139,7 +139,8 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
                 current_user.api_prompt_tokens += completion.usage.prompt_tokens
                 current_user.api_completion_tokens += completion.usage.completion_tokens
                 current_user.api_total_tokens += completion.usage.total_tokens
-
+                logger.info("User used prompt tokens: %s", completion.usage.prompt_tokens)
+                
                 # Substract tokens from the bucket
                 current_user.available_tokens = max(
                     current_user.available_tokens - completion.usage.prompt_tokens, 0)

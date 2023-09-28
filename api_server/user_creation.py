@@ -161,7 +161,7 @@ async def next_session(session_id: str):
                 if next_session_obj is None:
                     statement = select(User).where(User.user_id == current_session.user_id)
                     current_user = db_session.exec(statement).first()
-                    current_user.available_tokens = 8000
+                    current_user.available_tokens = 10000
                     new_session = ChatSession(session_id=next_session_id,
                                               user_id=current_user.user_id,
                                               persona_id=next_invite_code_obj.persona_id,

@@ -8,7 +8,7 @@ from starlette.responses import RedirectResponse
 
 from api_server.chatgpt_interface import request_response, Err
 from api_server.database import engine, ChatSession, Persona, Messages, Task, History, \
-    get_session_language
+    get_session_language, User
 from api_server.logger import logger as logger
 from api_server.models import Message
 from api_server.rule import *
@@ -81,23 +81,26 @@ async def check_session_done(session_id: str):
         statement = select(ChatSession).where(ChatSession.session_id == session_id)
         current_session = db_session.exec(statement).first()
         if current_session is not None:
+            # time limit
             elapsed_time = datetime.now() - current_session.start_time
             time_limit_reached = elapsed_time >= current_session.time_limit
-            statement = select(Messages).where(Messages.session_id == session_id)
-            message_count = len(db_session.exec(statement).all())
-            message_limit_reached = message_count >= current_session.message_limit
-            min_messages_reached = message_count >= current_session.min_messages_needed
+
+            # message limit
+            statement = select(User).where(User.user_id == current_session.user_id)
+            current_user = db_session.exec(statement).first()
 
             time_left = (current_session.time_limit - elapsed_time).total_seconds()
-            messages_left = current_session.message_limit - message_count
 
-            if time_limit_reached or message_limit_reached or current_session.done:
-                return {"session_end": True, "time_left": 0, "messages_left": 0,
-                        "min_messages_reached": min_messages_reached}
-            else:
-                return {"session_end": False, "time_left": time_left,
-                        "messages_left": messages_left,
-                        "min_messages_reached": min_messages_reached}
+            can_end_session = current_user.available_tokens <= 9000
+
+            if time_limit_reached or current_session.done:
+                return {"session_end": True, "time_left": time_left,
+                        "available_tokens": current_user.available_tokens,
+                        "can_end_session": can_end_session}
+
+            return {"session_end": False, "time_left": time_left,
+                    "available_tokens": current_user.available_tokens,
+                    "can_end_session": can_end_session}
         else:
             return {"error": "Session not found."}
 

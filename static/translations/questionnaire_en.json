@@ -27,8 +27,8 @@
   "feedback_legend": "Open-Ended Feedback",
   "feedback_label": "Please provide any additional comments or feedback about your experience:",
   "submit_button_text": "Submit",
-  "intention_label": "Perceived intention of the user",
-  "accuracy_label_after": "How accurately does this interpretation describe your intentions?",
+  "intention_label": "We've requested the chatbot to provide an assessment of the topics covered in your conversation. Here's the response it provided:",
+  "accuracy_label_after": "How accurately does this assessment describe your intentions?",
   "convince_label_after": "How effectively do you believe you were able to persuade the ChatBot based on this description?",
   "next_session_info": "You will now be redirected to the next chat session."
 }

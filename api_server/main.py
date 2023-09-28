@@ -24,6 +24,7 @@ from sqlmodel import SQLModel, Session, select
 from api_server import chat, database, user_creation, questionnaire
 from api_server.admin_panel import router as admin_panel_router
 from api_server.database import engine, ChatSession
+from api_server.logger import logger as logger
 
 debug = int(os.getenv("CHATMANIP_DEBUG")) == 1
 
@@ -47,6 +48,8 @@ app.include_router(admin_panel_router, prefix="/admin", tags=["admin"])
 app.include_router(chat.router, prefix="/chat", tags=["chat"])
 app.include_router(questionnaire.router, prefix="/questionnaire", tags=["questionnaire"])
 app.include_router(user_creation.router, tags=["user_creation"])
+
+logger.info("Started Application")
 
 
 @app.get("/translations/{language}")

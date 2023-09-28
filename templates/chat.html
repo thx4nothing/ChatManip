@@ -14,7 +14,9 @@
 <div class="chat-container">
     <div id="chat-messages" class="chat-messages"></div>
     <div class="chat-input">
-        <input type="text" id="user-input" placeholder="{{ translations.user_input_placeholder }}"/>
+        <textarea id="user-input" rows="2" cols="100"
+                  placeholder="{{ translations.user_input_placeholder }}"
+                  maxlength="200"></textarea>
         <button id="send-button" class="pure-button pure-button-primary">{{
             translations.send_button_text }}
         </button>
@@ -25,8 +27,8 @@
                 style="background-color: #e53935;">{{ translations.end_chat_button_text }}
         </button>
     </div>
+    <p>{{ translations.characters_remaining }}: <span id="charCount">200</span></p>
     <div id="timer-display" class="timer-display">{{ translations.timer_display_text }}</div>
-    <div id="message-counter" class="message-counter">{{ translations.message_counter_text }}</div>
 </div>
 <div id="taskModal" class="modal">
     <div class="modal-dialog">
