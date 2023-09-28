@@ -122,7 +122,7 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
             min_tokens_required = num_tokens_from_messages(messages, model) + 50
             logger.debug("min tokens required: %s", min_tokens_required)
             logger.debug("currently available: %s", current_user.available_tokens)
-            if current_user.available_tokens >= min_tokens_required:
+            if current_user.available_tokens > 0:
                 # Update the last request time
                 current_user.last_request_time = current_time
 
@@ -142,7 +142,7 @@ def request_response(session_id: str, messages: list[dict[str, str]]):
 
                 # Substract tokens from the bucket
                 current_user.available_tokens = max(
-                    current_user.available_tokens - completion.usage.total_tokens, 0)
+                    current_user.available_tokens - completion.usage.prompt_tokens, 0)
                 db_session.add(current_user)
                 db_session.commit()
 
