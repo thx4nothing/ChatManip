@@ -40,15 +40,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (response.ok) {
             console.log("Form data submitted successfully!");
-            const response = await fetch(`/questionnaire/${session_id}/show_discussion`);
-            if (response.ok) {
-                const data = await response.json();
-                const show_discussion = data.show_discussion_section;
-                if (show_discussion && time !== "after") {
-                    window.location.href = `/questionnaire/${session_id}/after`;
-                } else {
-                    await getNextSession();
-                }
+            if (time !== "after") {
+                window.location.href = `/questionnaire/${session_id}/after`;
             } else {
                 await getNextSession();
             }

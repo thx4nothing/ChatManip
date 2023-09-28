@@ -566,50 +566,110 @@
             <legend>{{ translations.discussion_attributes_legend }}</legend>
             <p>{{ translations.discussion_attributes_description }}</p>
 
-            <div class="range-container">
-                <div class="rating">
-                    <label for="accuracy-before">{{ translations.accuracy_label_before }}</label>
-                    <input type="radio" id="accuracy-before-1" name="accuracy-before" value="1"
-                           required>
-                    <label for="accuracy-before-1">1</label>
-                    <input type="radio" id="accuracy-before-2" name="accuracy-before" value="2"
-                           required>
-                    <label for="accuracy-before-2">2</label>
-                    <input type="radio" id="accuracy-before-3" name="accuracy-before" value="3"
-                           required>
-                    <label for="accuracy-before-3">3</label>
-                    <input type="radio" id="accuracy-before-4" name="accuracy-before" value="4"
-                           required>
-                    <label for="accuracy-before-4">4</label>
-                    <input type="radio" id="accuracy-before-5" name="accuracy-before" value="5"
-                           required>
-                    <label for="accuracy-before-5">5</label>
-                </div>
-            </div>
+            <table>
+                <tr>
+                    <td>
+                        <label for="accuracy-before">{{ translations.accuracy_label_before
+                            }}</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-1" name="accuracy-before" value="1"
+                               required>
+                        <label for="accuracy-before-1">1</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-2" name="accuracy-before" value="2"
+                               required>
+                        <label for="accuracy-before-2">2</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-3" name="accuracy-before" value="3"
+                               required>
+                        <label for="accuracy-before-3">3</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-4" name="accuracy-before" value="4"
+                               required>
+                        <label for="accuracy-before-4">4</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-5" name="accuracy-before" value="5"
+                               required>
+                        <label for="accuracy-before-5">5</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
 
-            <div class="range-container">
-                <div class="rating">
-                    <label for="convince-before">{{ translations.convince_label_before }}</label>
-                    <input type="radio" id="convince-before-1" name="convince-before" value="1"
-                           required>
-                    <label for="convince-before-1">1</label>
-                    <input type="radio" id="convince-before-2" name="convince-before" value="2"
-                           required>
-                    <label for="convince-before-2">2</label>
-                    <input type="radio" id="convince-before-3" name="convince-before" value="3"
-                           required>
-                    <label for="convince-before-3">3</label>
-                    <input type="radio" id="convince-before-4" name="convince-before" value="4"
-                           required>
-                    <label for="convince-before-4">4</label>
-                    <input type="radio" id="convince-before-5" name="convince-before" value="5"
-                           required>
-                    <label for="convince-before-5">5</label>
-                </div>
-            </div>
+                        <label for="convince-before">{{ translations.convince_label_before
+                            }}</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-before-1" name="convince-before" value="1"
+                               required>
+                        <label for="convince-before-1">1</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-before-2" name="convince-before" value="2"
+                               required>
+                        <label for="convince-before-2">2</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-before-3" name="convince-before" value="3"
+                               required>
+                        <label for="convince-before-3">3</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-before-4" name="convince-before" value="4"
+                               required>
+                        <label for="convince-before-4">4</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-before-5" name="convince-before" value="5"
+                               required>
+                        <label for="convince-before-5">5</label>
+                    </td>
+                </tr>
+            </table>
         </fieldset>
         {% else %}
         <fieldset>
+            <legend>{{ translations.discussion_attributes_legend }}</legend>
+            <p>{{ translations.discussion_attributes_description }}</p>
+
+            <table>
+                <tr>
+                    <td>
+                        <label for="accuracy-before">{{ translations.accuracy_label_before
+                            }}</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-1" name="accuracy-before" value="1"
+                               required>
+                        <label for="accuracy-before-1">1</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-2" name="accuracy-before" value="2"
+                               required>
+                        <label for="accuracy-before-2">2</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-3" name="accuracy-before" value="3"
+                               required>
+                        <label for="accuracy-before-3">3</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-4" name="accuracy-before" value="4"
+                               required>
+                        <label for="accuracy-before-4">4</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-before-5" name="accuracy-before" value="5"
+                               required>
+                        <label for="accuracy-before-5">5</label>
+                    </td>
+                </tr>
+            </table>
             <legend>{{ translations.feedback_legend }}</legend>
             <label for="feedback">{{ translations.feedback_label }}:</label>
             <textarea id="feedback" name="feedback" rows="4"></textarea>

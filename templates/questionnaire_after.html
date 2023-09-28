@@ -26,49 +26,109 @@
 
             <label for="intention-label">{{ translations.intention_label }}</label>
             <em><span id="intention-label">{{ intention }}</span></em>
+            
+            <table>
+                <tr>
+                    <td>
+                        <label for="accuracy-after">{{ translations.accuracy_label_after }}</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-1" name="accuracy-after" value="1"
+                               required>
+                        <label for="accuracy-after-1">1</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-2" name="accuracy-after" value="2"
+                               required>
+                        <label for="accuracy-after-2">2</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-3" name="accuracy-after" value="3"
+                               required>
+                        <label for="accuracy-after-3">3</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-4" name="accuracy-after" value="4"
+                               required>
+                        <label for="accuracy-after-4">4</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-5" name="accuracy-after" value="5"
+                               required>
+                        <label for="accuracy-after-5">5</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="convince-after">{{ translations.convince_label_after }}</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-after-1" name="convince-after" value="1"
+                               required>
+                        <label for="convince-after-1">1</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-after-2" name="convince-after" value="2"
+                               required>
+                        <label for="convince-after-2">2</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-after-3" name="convince-after" value="3"
+                               required>
+                        <label for="convince-after-3">3</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-after-4" name="convince-after" value="4"
+                               required>
+                        <label for="convince-after-4">4</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="convince-after-5" name="convince-after" value="5"
+                               required>
+                        <label for="convince-after-5">5</label>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        {% else %}
+        <fieldset>
+            <legend>{{ translations.discussion_attributes_legend }}</legend>
+            <p>{{ translations.discussion_attributes_description }}</p>
 
-
-            <div class="range-container">
-                <div class="rating">
-                    <label for="accuracy-after">{{ translations.accuracy_label_after }}</label>
-                    <input type="radio" id="accuracy-after-1" name="accuracy-after" value="1"
-                           required>
-                    <label for="accuracy-after-1">1</label>
-                    <input type="radio" id="accuracy-after-2" name="accuracy-after" value="2"
-                           required>
-                    <label for="accuracy-after-2">2</label>
-                    <input type="radio" id="accuracy-after-3" name="accuracy-after" value="3"
-                           required>
-                    <label for="accuracy-after-3">3</label>
-                    <input type="radio" id="accuracy-after-4" name="accuracy-after" value="4"
-                           required>
-                    <label for="accuracy-after-4">4</label>
-                    <input type="radio" id="accuracy-after-5" name="accuracy-after" value="5"
-                           required>
-                    <label for="accuracy-after-5">5</label>
-                </div>
-            </div>
-
-            <div class="range-container">
-                <div class="rating">
-                    <label for="convince-after">{{ translations.convince_label_after }}</label>
-                    <input type="radio" id="convince-after-1" name="convince-after" value="1"
-                           required>
-                    <label for="convince-after-1">1</label>
-                    <input type="radio" id="convince-after-2" name="convince-after" value="2"
-                           required>
-                    <label for="convince-after-2">2</label>
-                    <input type="radio" id="convince-after-3" name="convince-after" value="3"
-                           required>
-                    <label for="convince-after-3">3</label>
-                    <input type="radio" id="convince-after-4" name="convince-after" value="4"
-                           required>
-                    <label for="convince-after-4">4</label>
-                    <input type="radio" id="convince-after-5" name="convince-after" value="5"
-                           required>
-                    <label for="convince-after-5">5</label>
-                </div>
-            </div>
+            <label for="intention-label">{{ translations.intention_label }}</label>
+            <em><span id="intention-label">{{ intention }}</span></em>
+            <table>
+                <tr>
+                    <td>
+                        <label for="accuracy-after">{{ translations.accuracy_label_after }}</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-1" name="accuracy-after" value="1"
+                               required>
+                        <label for="accuracy-after-1">1</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-2" name="accuracy-after" value="2"
+                               required>
+                        <label for="accuracy-after-2">2</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-3" name="accuracy-after" value="3"
+                               required>
+                        <label for="accuracy-after-3">3</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-4" name="accuracy-after" value="4"
+                               required>
+                        <label for="accuracy-after-4">4</label>
+                    </td>
+                    <td>
+                        <input type="radio" id="accuracy-after-5" name="accuracy-after" value="5"
+                               required>
+                        <label for="accuracy-after-5">5</label>
+                    </td>
+                </tr>
+            </table>
         </fieldset>
         {% endif %}
 
