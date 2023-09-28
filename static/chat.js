@@ -14,7 +14,7 @@ async function initializeChat() {
     const messageCounter = document.getElementById('message-counter');
     const overlay = document.getElementById("loadingOverlay");
     const charCount = document.getElementById("charCount");
-    const translations = await getTranslation(await getLanguage(), "chat");
+    const translations = await getTranslation(await getLanguage("chat"), "chat");
 
     function sendMessage() {
         const message = userInput.value.trim();
