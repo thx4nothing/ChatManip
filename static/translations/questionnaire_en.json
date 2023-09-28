@@ -1,7 +1,7 @@
 {
   "title": "Questionnaire",
   "rate_instructions": "Rate each statement on a scale from 1 (Strongly Disagree) to 5 (Strongly Agree)",
-  "social_attributes": "Perceived Social Attributes",
+  "social_attributes": "Perceived Social Attributes of the chatbot",
   "happy": "Happy",
   "feeling": "Feeling",
   "social": "Social",

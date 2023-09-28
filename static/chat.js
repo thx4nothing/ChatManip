@@ -136,8 +136,11 @@ function initializeChat() {
         fetch(`/chat/${session_id}/task`)
             .then(response => response.text())
             .then(data => {
+                data = data.replace(/^"(.*)"$/, '$1');
                 const modalContent = document.querySelector('#taskModal .modal-body');
-                modalContent.innerHTML = "<p>" + data + "</p>";
+                const paragraph = document.createElement('p');
+                paragraph.innerText = data;
+                modalContent.appendChild(paragraph);
             });
 
         modal.classList.add('is-visible');
