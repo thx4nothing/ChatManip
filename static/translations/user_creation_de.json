@@ -13,5 +13,9 @@
   "invite_code_label": "Einladungscode",
   "data_collection_label": "Hiermit erteile ich meine ausdrückliche Zustimmung zur Erhebung und Verarbeitung meiner persönlichen Daten gemäß der",
   "privacy_policy_link_text": "Datenschutzrichtlinie",
-  "create_user_button_text": "Fortfahren"
+  "create_user_button_text": "Fortfahren",
+  "invalid_invite_code_error": "Der Einladungscode ist ungültig oder bereits in Benutzung.",
+  "privacy_alert": "Bitte stimmen Sie den Datenschutzrichtlinien zu.",
+  "agree": "Zustimmen",
+  "disagree": "Ablehnen"
 }

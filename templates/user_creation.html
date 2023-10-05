@@ -64,14 +64,16 @@
 
             </div>
             <footer class="modal-footer">
-                <button id="agreeButton" class="pure-button pure-button-primary">Agree</button>
-                <button id="disagreeButton" class="pure-button">Disagree</button>
+                <button id="agreeButton" class="pure-button pure-button-primary">{{
+                    translations.agree }}
+                </button>
+                <button id="disagreeButton" class="pure-button">{{ translations.disagree }}</button>
             </footer>
         </div>
     </div>
 </div>
 
-
-<script src="/static/user_creation.js"></script>
+<script type="module" src="/static/common.js"></script>
+<script type="module" src="/static/user_creation.js"></script>
 </body>
 </html>

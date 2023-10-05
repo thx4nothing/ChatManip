@@ -1,14 +1,14 @@
-fastapi~=0.103.1
+fastapi~=0.103.2
 sqlmodel~=0.0.8
 starlette~=0.27.0
 pydantic~=1.10.12
 SQLAlchemy~=1.4.41
-openai~=0.28
+openai~=0.28.1
 python-multipart~=0.0.6
 uvicorn~=0.23.2
 Jinja2~=3.1.2
 python-jose~=3.3.0
-cryptography~=41.0.3
+cryptography~=41.0.4
 bcrypt~=4.0.1
 passlib~=1.7.4
 tiktoken~=0.4.0

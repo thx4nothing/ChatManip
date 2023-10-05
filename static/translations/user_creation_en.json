@@ -13,5 +13,9 @@
   "invite_code_label": "Invite Code",
   "data_collection_label": "I hereby grant my explicit consent for the collection and processing of my personal data in accordance with the",
   "privacy_policy_link_text": "privacy policy",
-  "create_user_button_text": "Create User"
+  "create_user_button_text": "Submit",
+  "invalid_invite_code_error": "The invite code you have entered is not valid or is already in use.",
+  "privacy_alert": "Please agree to the data collection terms.",
+  "agree": "Agree",
+  "disagree": "Disagree"
 }

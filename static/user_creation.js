@@ -1,13 +1,15 @@
+import {getLanguage, getTranslation} from "./common.js";
+
 document.addEventListener("DOMContentLoaded", function () {
-    initializeUserCreation()
+    initializeUserCreation().then()
     initializeLanguage()
 });
 
-function initializeLanguage() {
+async function initializeLanguage() {
     const languageDropdown = document.getElementById("languageSelect");
     const currentPath = window.location.pathname;
     const parts = currentPath.split("/");
-    const language = parts.length >= 2 ? parts[1] : "en";
+    const language = await getLanguage()
     const privacyPolicyFrame = document.getElementById('privacyPolicyFrame');
 
     if (language === "en" || language === "de") {
@@ -17,18 +19,21 @@ function initializeLanguage() {
 
     languageDropdown.addEventListener("change", function () {
         const selectedLanguage = languageDropdown.value;
-        console.log(selectedLanguage)
-        window.location.href = `/${selectedLanguage}`;
+        const inviteCodeInput = document.getElementById("invite_code");
+        const inviteCodeValue = inviteCodeInput.value;
+        window.location.href = `/${selectedLanguage}?invitecode=${encodeURIComponent(inviteCodeValue)}`;
+
     });
 }
 
-function initializeUserCreation() {
+async function initializeUserCreation() {
     const privacyPolicyLink = document.getElementById('privacyPolicyLink');
     const privacyPolicyModal = document.getElementById('privacyPolicyModal');
     const agreeButton = document.getElementById('agreeButton');
     const disagreeButton = document.getElementById('disagreeButton');
     const dataCollectionCheckbox = document.getElementById('dataCollectionCheckbox');
     const queryParams = new URLSearchParams(window.location.search);
+    const translations = await getTranslation(await getLanguage(), "user_creation");
 
     if (queryParams.has('invitecode')) {
         const inviteCodeValue = queryParams.get('invitecode');
@@ -42,7 +47,7 @@ function initializeUserCreation() {
         event.preventDefault(); // Prevent form submission
 
         if (!document.getElementById('dataCollectionCheckbox').checked) {
-            alert("Please agree to the data collection terms.");
+            alert(translations.privacy_alert);
             return false;
         }
 
@@ -72,6 +77,9 @@ function initializeUserCreation() {
             .then(response => {
                 if (response.redirected) {
                     window.location.href = response.url;
+                } else {
+                    alert(translations.invalid_invite_code_error);
+                    return false;
                 }
             })
             .catch(error => {
