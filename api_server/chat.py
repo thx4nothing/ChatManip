@@ -91,7 +91,7 @@ async def check_session_done(session_id: str):
 
             time_left = (current_session.time_limit - elapsed_time).total_seconds()
 
-            can_end_session = current_user.available_tokens <= 9000
+            can_end_session = current_user.available_tokens <= 7200
 
             if time_limit_reached or current_session.done:
                 return {"session_end": True, "time_left": time_left,

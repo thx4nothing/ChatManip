@@ -14,5 +14,7 @@
   "rate_limit_reached": "You have reached the maximum number of allowed messages. Thank you for your cooperation!",
   "end_chat_warning": "Warning! You have not reached the minimum number of messages yet. Please continue the conversation.",
   "chat_session_ended": "Chat Session ended",
-  "time_remaining": "Time available"
+  "time_remaining": "Time available",
+  "loading_message": "Chat Bot is thinking...",
+  "end_chat_message": "You can end the chat prematurely by clicking on the End button."
 }

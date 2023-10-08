@@ -14,5 +14,7 @@
   "rate_limit_reached": "Sie haben die maximale Anzahl an erlaubten Nachrichten erreicht. Vielen Dank für Ihre Mühen!",
   "end_chat_warning": "Achtung! Sie haben noch nicht das Minimum an benötigten Nachrichten geschrieben. Bitte führen Sie die Konversation fort.",
   "chat_session_ended": "Chat Sitzung vorbei.",
-  "time_remaining": "Verfügbare Zeit"
+  "time_remaining": "Verfügbare Zeit",
+  "loading_message": "Der Chat Bot denkt nach...",
+  "end_chat_message": "Sie können den Chat jetzt schon vorzeitig beenden, indem Sie auf den Beenden Button clicken."
 }
