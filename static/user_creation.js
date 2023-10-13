@@ -14,7 +14,7 @@ async function initializeLanguage() {
 
     if (language === "en" || language === "de") {
         languageDropdown.value = language;
-        privacyPolicyFrame.src = `/static/privacy_policy_${language}.html`;
+        privacyPolicyFrame.src = `/chatmanip/static/privacy_policy_${language}.html`;
     }
 
     languageDropdown.addEventListener("change", function () {
