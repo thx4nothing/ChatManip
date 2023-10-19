@@ -30,7 +30,7 @@ async function initializeLanguage() {
 
     languageDropdown.addEventListener("change", function () {
         const selectedLanguage = languageDropdown.value;
-        window.location.href = `/admin/${selectedLanguage}?token=${getToken()}`;
+        window.location.href = `/chatmanip/admin/${selectedLanguage}?token=${getToken()}`;
     });
 }
 

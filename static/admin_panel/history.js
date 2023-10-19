@@ -37,7 +37,7 @@ export function initializeHistorysSection() {
 
 
     function populateHistoryDropdown() {
-        fetch(`/admin/history?token=${getToken()}`)
+        fetch(`/chatmanip/admin/history?token=${getToken()}`)
             .then(response => response.json())
             .then(histories => {
                 historyDropdown.innerHTML = "";
@@ -67,7 +67,7 @@ export function initializeHistorysSection() {
     function handleEditSelectedHistoryClick() {
         const selectedHistoryId = historyDropdown.value;
         if (selectedHistoryId) {
-            fetch(`/admin/history/${selectedHistoryId}?token=${getToken()}`)
+            fetch(`/chatmanip/admin/history/${selectedHistoryId}?token=${getToken()}`)
                 .then(response => response.json())
                 .then(history => {
                     historyName.value = history.name;
@@ -137,7 +137,7 @@ export function initializeHistorysSection() {
     function handleDeleteSelectedHistoryClick() {
         const selectedHistoryId = historyDropdown.value;
         if (selectedHistoryId) {
-            fetch(`/admin/history/${selectedHistoryId}?token=${getToken()}`, {
+            fetch(`/chatmanip/admin/history/${selectedHistoryId}?token=${getToken()}`, {
                 method: "DELETE"
             })
                 .then(response => response.json())
@@ -193,7 +193,7 @@ export function initializeHistorysSection() {
             body: JSON.stringify(historyData)
         };
 
-        const url = selectedHistoryId ? `/admin/history/${selectedHistoryId}?token=${getToken()}` : `/admin/history?token=${getToken()}`;
+        const url = selectedHistoryId ? `/chatmanip/admin/history/${selectedHistoryId}?token=${getToken()}` : `/chatmanip/admin/history?token=${getToken()}`;
 
         fetch(url, fetchOptions)
             .then(response => response.json())
@@ -242,7 +242,7 @@ export function initializeHistorysSection() {
         editSelectedHistoryBtn.disabled = !isHistorySelected; // Enable/disable "Edit Selected" button
         deleteSelectedHistoryBtn.disabled = !isHistorySelected; // Enable/disable "Delete Selected" button
         if (selectedHistoryId) {
-            fetch(`/admin/history/${selectedHistoryId}?token=${getToken()}`)
+            fetch(`/chatmanip/admin/history/${selectedHistoryId}?token=${getToken()}`)
                 .then(response => response.json())
                 .then(history => {
                     populateHistoryDetails(history);
@@ -254,7 +254,7 @@ export function initializeHistorysSection() {
     }
 
     function exportHistoryDatabase() {
-        fetch(`/admin/history/export?token=${getToken()}`, {
+        fetch(`/chatmanip/admin/history/export?token=${getToken()}`, {
             method: 'GET',
         })
             .then(response => response.json())
@@ -279,7 +279,7 @@ export function initializeHistorysSection() {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch(`/admin/history/import?token=${getToken()}`, {
+        fetch(`/chatmanip/admin/history/import?token=${getToken()}`, {
             method: 'POST',
             body: formData,
         })

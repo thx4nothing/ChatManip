@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
         async function getNextSession() {
-            const response = await fetch(`/questionnaire/${session_id}/has_next`)
+            const response = await fetch(`/chatmanip/questionnaire/${session_id}/has_next`)
             const data = await response.json();
             console.log(data)
             if (data.has_next) {
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const session_id = getSessionIdFromUrl("questionnaire");
         const time = window.location.pathname.includes("before") ? "before" : "after";
 
-        const response = await fetch(`/questionnaire/${session_id}`, {
+        const response = await fetch(`/chatmanip/questionnaire/${session_id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (response.ok) {
             console.log("Form data submitted successfully!");
             if (time !== "after") {
-                window.location.href = `/questionnaire/${session_id}/after`;
+                window.location.href = `/chatmanip/questionnaire/${session_id}/after`;
             } else {
                 await getNextSession();
             }

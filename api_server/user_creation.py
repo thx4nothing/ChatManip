@@ -94,7 +94,7 @@ async def create_user(user: UserInformation):
         db_session.add(invite_code_obj)
         db_session.commit()
 
-        redirect_url = f"/chat/{user.invite_code}"
+        redirect_url = f"/chatmanip/chat/{user.invite_code}"
         logger.debug("Redirecting new user %s to: %s", new_user.user_id, redirect_url)
         return RedirectResponse(url=redirect_url, status_code=303)
 
@@ -177,8 +177,8 @@ async def next_session(session_id: str):
                     db_session.add(next_invite_code_obj)
                     db_session.commit()
 
-                redirect_url = f"/chat/{next_session_id}"
+                redirect_url = f"/chatmanip/chat/{next_session_id}"
                 return RedirectResponse(redirect_url)
             # Default redirect to end
-            redirect_url = f"/chat/{session_id}/end"
+            redirect_url = f"/chatmanip/chat/{session_id}/end"
             return RedirectResponse(redirect_url)

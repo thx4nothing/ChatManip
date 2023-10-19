@@ -67,7 +67,7 @@ async function initializeUserCreation() {
             invite_code: invite_code
         };
 
-        fetch("/create_user", {
+        fetch("/chatmanip/create_user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

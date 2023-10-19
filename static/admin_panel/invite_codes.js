@@ -25,7 +25,7 @@ export function initializeInviteCodeSection() {
 
             // Create dropdown for Persona
             const personaDropdown = document.createElement("select");
-            fetch(`/admin/personas?token=${getToken()}`)
+            fetch(`/chatmanip/admin/personas?token=${getToken()}`)
                 .then(response => response.json())
                 .then(personas => {
                     personas.forEach(persona => {
@@ -43,7 +43,7 @@ export function initializeInviteCodeSection() {
 
             // Create dropdown for Tasks
             const taskDropdown = document.createElement("select");
-            fetch(`/admin/tasks?token=${getToken()}`)
+            fetch(`/chatmanip/admin/tasks?token=${getToken()}`)
                 .then(response => response.json())
                 .then(tasks => {
                     tasks.forEach(task => {
@@ -61,7 +61,7 @@ export function initializeInviteCodeSection() {
 
             // Create dropdown for History
             const historyDropdown = document.createElement("select");
-            fetch(`/admin/history?token=${getToken()}`)
+            fetch(`/chatmanip/admin/history?token=${getToken()}`)
                 .then(response => response.json())
                 .then(histories => {
                     histories.forEach(history => {
@@ -86,7 +86,7 @@ export function initializeInviteCodeSection() {
 
             // Create dropdown for nextSessionID
             const nextSessionIDDropdown = document.createElement("select");
-            fetch(`/admin/invite_codes?token=${getToken()}`)
+            fetch(`/chatmanip/admin/invite_codes?token=${getToken()}`)
                 .then(response => response.json())
                 .then(invite_codes => {
                     const option = document.createElement("option");
@@ -144,7 +144,7 @@ export function initializeInviteCodeSection() {
 
     function generateInviteCodes() {
         const numCodes = numCodesInput.value;
-        fetch(`/admin/invite_codes?num_codes=${numCodes}&token=${getToken()}`, {
+        fetch(`/chatmanip/admin/invite_codes?num_codes=${numCodes}&token=${getToken()}`, {
             method: "POST"
         })
             .then(response => response.json())
@@ -158,7 +158,7 @@ export function initializeInviteCodeSection() {
     }
 
     function deleteInviteCode(inviteCode) {
-        fetch(`/admin/invite_codes/${inviteCode}?token=${getToken()}`, {
+        fetch(`/chatmanip/admin/invite_codes/${inviteCode}?token=${getToken()}`, {
             method: "DELETE"
         })
             .then(response => response.json())
@@ -172,7 +172,7 @@ export function initializeInviteCodeSection() {
     }
 
     function getInviteCodes() {
-        fetch(`/admin/invite_codes?token=${getToken()}`)
+        fetch(`/chatmanip/admin/invite_codes?token=${getToken()}`)
             .then(response => response.json())
             .then(data => {
                 console.log("Invite codes:", data);
@@ -192,7 +192,7 @@ export function initializeInviteCodeSection() {
             next_session_id: next_session_id,
             multi_use: multi_use
         });
-        fetch(`/admin/invite_codes/${inviteCode}?${queryParams}&token=${getToken()}`, {
+        fetch(`/chatmanip/admin/invite_codes/${inviteCode}?${queryParams}&token=${getToken()}`, {
             method: "PATCH", headers: {
                 "Content-Type": "application/json"
             },

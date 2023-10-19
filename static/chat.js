@@ -58,7 +58,7 @@ async function initializeChat() {
 
 
         // Make an HTTP request to the server
-        fetch(`/chat/${session_id}`, {
+        fetch(`/chatmanip/chat/${session_id}`, {
             method: "POST", headers: {
                 "Content-Type": "application/json"
             }, body: JSON.stringify({content: message})
@@ -87,11 +87,11 @@ async function initializeChat() {
         overlay.style.display = "flex";
 
         try {
-            const response = await fetch(`/chat/${session_id}/session_end`);
+            const response = await fetch(`/chatmanip/chat/${session_id}/session_end`);
 
             if (response.ok) {
                 console.log("API call successful");
-                window.location.href = `/questionnaire/${session_id}/before`;
+                window.location.href = `/chatmanip/questionnaire/${session_id}/before`;
             } else {
                 console.error("API call failed");
             }
@@ -103,7 +103,7 @@ async function initializeChat() {
     function checkSessionEnd() {
         const session_id = getSessionIdFromUrl("chat");
 
-        fetch(`/chat/${session_id}/check_done`)
+        fetch(`/chatmanip/chat/${session_id}/check_done`)
             .then(response => response.json())
             .then(data => {
                 if (data.session_end) {
@@ -131,7 +131,7 @@ async function initializeChat() {
         const session_id = getSessionIdFromUrl("chat")
         let first_time = true;
         // Make an HTTP request to the server
-        fetch(`/chat/${session_id}/history`, {})
+        fetch(`/chatmanip/chat/${session_id}/history`, {})
             .then(response => response.json())
             .then(history => {
                 history.forEach(chat => {
@@ -156,7 +156,7 @@ async function initializeChat() {
         const modal = document.getElementById('taskModal');
         const session_id = getSessionIdFromUrl("chat")
 
-        fetch(`/chat/${session_id}/task`)
+        fetch(`/chatmanip/chat/${session_id}/task`)
             .then(response => response.text())
             .then(data => {
                 data = data.replace(/^"(.*)"$/, '$1');
@@ -179,7 +179,7 @@ async function initializeChat() {
         const modal = document.getElementById('endChatModal');
         const session_id = getSessionIdFromUrl("chat")
 
-        fetch(`/chat/${session_id}/check_done`)
+        fetch(`/chatmanip/chat/${session_id}/check_done`)
             .then(response => response.json())
             .then(data => {
                 const modalContent = document.querySelector('#endChatModal .modal-body');

@@ -21,7 +21,7 @@ router.include_router(settings.router, prefix="/settings", tags=["settings"])
 
 @router.get("")
 async def read_root(request: Request, token: str = Query(...)):
-    redirect_url = f"/admin/en?token={token}"
+    redirect_url = f"/chatmanip/admin/en?token={token}"
     return RedirectResponse(url=redirect_url, status_code=303)
 
 

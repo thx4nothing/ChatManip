@@ -10,7 +10,7 @@ export function getSessionIdFromUrl(key) {
 }
 
 export async function getTranslation(language, site) {
-    const translationEndpoint = `/translations/${language}?site=${site}`;
+    const translationEndpoint = `/chatmanip/translations/${language}?site=${site}`;
 
     try {
         const response = await fetch(translationEndpoint);
@@ -29,7 +29,7 @@ export async function getLanguage(key = "") {
     } else {
         const session_id = getSessionIdFromUrl(key);
         if (session_id != null) {
-            const response = await fetch(`/language/${session_id}`)
+            const response = await fetch(`/chatmanip/language/${session_id}`)
             const data = await response.json()
             return data.language
         }
