@@ -21,7 +21,7 @@ async function initializeLanguage() {
         const selectedLanguage = languageDropdown.value;
         const inviteCodeInput = document.getElementById("invite_code");
         const inviteCodeValue = inviteCodeInput.value;
-        window.location.href = `/${selectedLanguage}?invitecode=${encodeURIComponent(inviteCodeValue)}`;
+        window.location.href = `/chatmanip/${selectedLanguage}?invitecode=${encodeURIComponent(inviteCodeValue)}`;
 
     });
 }

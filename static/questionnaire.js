@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (data.has_next) {
                 window.alert(translations.next_session_info)
             }
-            window.location.href = `/${session_id}/next`;
+            window.location.href = `/chatmanip/${session_id}/next`;
         }
 
         const session_id = getSessionIdFromUrl("questionnaire");

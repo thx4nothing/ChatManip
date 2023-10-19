@@ -47,7 +47,7 @@ app.mount("/chatmanip/static", StaticFiles(directory="static"), name="static")
 app.include_router(admin_panel_router, prefix="/chatmanip/admin", tags=["admin"])
 app.include_router(chat.router, prefix="/chatmanip/chat", tags=["chat"])
 app.include_router(questionnaire.router, prefix="/chatmanip/questionnaire", tags=["questionnaire"])
-app.include_router(user_creation.router, tags=["user_creation"])
+app.include_router(user_creation.router, prefix="/chatmanip", tags=["user_creation"])
 
 logger.info("Started Application")
 
